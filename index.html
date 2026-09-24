@@ -63,6 +63,8 @@ input[type=text],input[type=tel],input[type=email],input[type=date],input[type=n
 }
 textarea{resize:vertical;min-height:88px}
 input:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(38,53,140,.14)}
+input[readonly]{background:var(--bg);color:var(--muted);cursor:not-allowed}
+input[readonly]:focus{border-color:var(--line);box-shadow:none}
 input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .money{position:relative}
@@ -388,8 +390,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
             <input type="text" id="signName" name="signName" required autocomplete="name">
           </div>
           <div class="field">
-            <label for="signDate">Date <span class="req">*</span></label>
-            <input type="date" id="signDate" name="signDate" required>
+            <label for="signDate">Date <span class="hint">Set automatically to today’s date</span></label>
+            <input type="text" id="signDate" name="signDate" readonly aria-readonly="true">
           </div>
         </div>
         <div class="field consent" data-group="esignConsent" data-msg="Please confirm you agree to sign electronically">
@@ -630,6 +632,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
     var pc = document.getElementById('postcode');
     pc.value = pc.value.toUpperCase().trim();
+    stampToday();
 
     var answers = {};
     new FormData(form).forEach(function (v, k) { answers[k] = v; });
@@ -748,10 +751,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
   document.getElementById('printRecord').addEventListener('click', function () { window.print(); });
 
-  /* Default signing date to today */
-  var d = new Date();
-  document.getElementById('signDate').value = d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  /* Signing date is always today's date and cannot be edited.
+     It is set again at submission, so it reflects the day the form is sent. */
+  function stampToday() {
+    document.getElementById('signDate').value = new Date().toLocaleDateString('en-GB', {
+      timeZone: 'Europe/London', day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+  }
+  stampToday();
 }());
 </script>
 </body>
