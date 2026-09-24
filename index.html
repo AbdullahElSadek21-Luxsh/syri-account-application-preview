@@ -444,7 +444,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <div class="actions">
         <p id="formMsg" role="alert">Please complete the highlighted fields.</p>
         <div class="buttons">
-          <button type="button" class="btn secondary" id="printBtn">Print</button>
           <button type="submit" class="btn">Submit application</button>
         </div>
       </div>
@@ -1193,7 +1192,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     });
   }
 
-  document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
   document.getElementById('printRecord').addEventListener('click', function () { window.print(); });
 
   /* Signing date is always today's date and cannot be edited.
