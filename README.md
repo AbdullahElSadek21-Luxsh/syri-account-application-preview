@@ -6,6 +6,9 @@ print, sign and scan Word form.
 
 **Live:** https://abdullahelsadek21-luxsh.github.io/syri-account-application-preview/
 
+- `index.html`: entry page (name + email, front end only), which opens the form
+- `syri-account-application-form.html`: the application form
+
 - **Section A**: company details, business address, trade references, business type,
   account details and the signed declaration
 - **Section B**: any number of additional delivery addresses

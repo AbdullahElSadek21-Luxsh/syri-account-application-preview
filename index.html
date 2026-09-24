@@ -4,1204 +4,163 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Account Application Form &ndash; Syri Ltd.</title>
+<title>Account Application &ndash; Syri Ltd.</title>
 <style>
-/* Syri Ltd. — New Customer Account Application
-   Form F/SALE/0015/004/V4 · Parent SOP SOP/SALE/0015
-   Self-contained: no external files. */
+/* Syri Ltd. — entry page for the online Account Application Form.
+   Front end only: no account is created and nothing is sent anywhere.
+   A valid name and email simply open the form. */
 
 :root{
-  --navy:#26358C;
-  --navy-dark:#1C2870;
-  --navy-soft:#F1F3FA;
+  --navy:#1C2E7A;
+  --navy-dark:#15235F;
   --ink:#1A1D29;
-  --muted:#636A7E;
-  --line:#D9DDE7;
-  --bg:#F5F6FA;
+  --muted:#4A5B7F;
+  --line:#D6E0EE;
+  --sky-1:#E3F1FC;
+  --sky-2:#C7E0F6;
   --err:#B42318;
-  --ok:#1B6B47;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html,body{height:100%}
 body{
-  margin:0;background:var(--bg);color:var(--ink);
+  margin:0;color:var(--ink);
   font:400 15px/1.6 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  background:linear-gradient(135deg,var(--sky-1) 0%,var(--sky-2) 100%) fixed;
+  display:flex;flex-direction:column;min-height:100vh;
 }
-.page{max-width:1000px;margin:0 auto;padding:32px 16px 64px}
-.sheet{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 
-/* Header */
-header{padding:30px 36px 26px;border-top:4px solid var(--navy);border-bottom:1px solid var(--line)}
-.brand{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
-.brand img{width:140px;height:auto;display:block}
-.contact{font-size:12px;line-height:1.6;color:var(--muted);text-align:right}
-.contact a{color:var(--navy);text-decoration:none}
-h1{margin:24px 0 6px;font-size:26px;font-weight:600;letter-spacing:-.3px}
-.intro{margin:0;color:var(--muted);font-size:14.5px}
-.req{color:var(--err)}
-
-/* Sections */
-fieldset{border:0;margin:0;padding:28px 36px 4px;min-width:0}
-fieldset + fieldset{border-top:1px solid var(--line)}
-legend{
-  float:left;width:100%;padding:0;margin:0 0 4px;
-  font-size:17px;font-weight:600;color:var(--navy);
+/* Top bar */
+.topbar{
+  background:rgba(255,255,255,.9);
+  border-bottom:1px solid rgba(28,46,122,.08);
+  box-shadow:0 2px 14px rgba(28,46,122,.08);
 }
-legend + *{clear:both}
-.note{margin:0 0 18px;font-size:13.5px;color:var(--muted)}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
-.row.three{grid-template-columns:1fr 1fr 1fr}
-.sub{margin:6px 0 10px;font-size:13px;font-weight:600;color:var(--muted)}
+.topbar .inner{max-width:920px;margin:0 auto;padding:12px 16px;display:flex;align-items:center}
+.topbar img{height:40px;width:auto;display:block}
 
-/* Fields */
-.field{margin-bottom:20px;min-width:0}
-label,.label{display:block;margin-bottom:6px;font-size:13.5px;font-weight:600}
-.hint{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
-input[type=text],input[type=tel],input[type=email],input[type=date],input[type=number],textarea{
-  width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;
-  border:1px solid var(--line);border-radius:6px;padding:10px 12px;
+/* Content */
+main{flex:1}
+.inner{max-width:920px;margin:0 auto;padding:0 16px}
+.content{display:flex;gap:48px;align-items:flex-start;justify-content:space-between;padding-top:34px}
+.intro{flex:1;max-width:520px}
+.intro h1{margin:4px 0 12px;font-size:28px;font-weight:600;letter-spacing:-.3px;color:var(--navy)}
+.intro p{margin:0;font-size:15.5px;color:var(--muted)}
+
+/* Register card */
+.card{
+  flex:0 0 300px;background:#fff;border:1px solid var(--line);border-radius:6px;
+  box-shadow:0 8px 28px rgba(28,46,122,.12);
 }
-textarea{resize:vertical;min-height:88px}
-input:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(38,53,140,.14)}
-input[readonly]{background:var(--bg);color:var(--muted);cursor:not-allowed}
-input[readonly]:focus{border-color:var(--line);box-shadow:none}
-input[type=number]{-moz-appearance:textfield}
-input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
-.money{position:relative}
-.money span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
-.money input{padding-left:26px}
-
-/* Radio / checkbox */
-.options{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
-.options.inline{display:flex;gap:24px}
-.opt{display:flex;align-items:center;gap:10px;font-weight:400;font-size:14.5px;margin:0;padding:4px 0;cursor:pointer}
-.opt input{width:18px;height:18px;margin:0;accent-color:var(--navy);cursor:pointer;flex:none}
-#otherWrap{display:none;margin-top:12px}
-#otherWrap.show{display:block}
-
-/* Errors */
-.error{display:none;margin-top:6px;font-size:13px;color:var(--err)}
+.card-head{padding:14px 18px;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600}
+.card-head em{font-weight:400;color:#3D7BC8}
+.card-body{padding:18px}
+.field{margin-bottom:18px}
+label{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600}
+input{
+  width:100%;font:inherit;font-size:14px;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:4px;padding:9px 11px;
+}
+input::placeholder{color:#9AA5BA}
+input:focus{outline:none;border-color:#3D7BC8;box-shadow:0 0 0 3px rgba(61,123,200,.18)}
+.error{display:none;margin-top:5px;font-size:12.5px;color:var(--err)}
+.invalid input{border-color:var(--err)}
 .invalid .error{display:block}
-.invalid input:not([type=radio]):not([type=checkbox]),.invalid textarea,.invalid .sig-preview{border-color:var(--err)}
-
-/* Declaration */
-.declaration{
-  background:var(--navy-soft);border-radius:8px;padding:18px 20px;margin-bottom:22px;
-  font-size:14px;line-height:1.65;color:#343A4D;
-}
-.declaration p{margin:0 0 10px}
-.declaration ul{margin:4px 0 0;padding-left:20px}
-
-/* Signature (typed, confirmed with a timestamp) */
-.sign-row{display:flex;gap:10px}
-.sign-row input{flex:1;min-width:0}
-.sign-row .btn{white-space:nowrap;padding:10px 20px}
-.btn:disabled{opacity:.55;cursor:default}
-.btn:disabled:hover{background:var(--navy)}
-.sig-preview{
-  margin-top:10px;min-height:78px;padding:8px 18px;display:flex;align-items:center;
-  border:1px dashed #AEB5C7;border-radius:6px;background:#fff;overflow:hidden;white-space:nowrap;
-  font-family:"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive;
-  font-size:30px;color:var(--ink);
-}
-.sig-preview.empty{font-family:inherit;font-size:13.5px;color:#9AA1B4}
-.sig-preview.signed{border-style:solid;border-color:var(--navy)}
-.sig-stamp{
-  display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding:9px 12px;
-  background:#EEF7F2;border:1px solid #BFE0CD;border-radius:6px;font-size:13px;color:var(--ok);font-weight:600;
-}
-.sig-stamp.show{display:flex}
-.sig-stamp .link{margin-left:auto}
-.sig-foot{display:flex;justify-content:space-between;margin-top:6px;font-size:12.5px;color:var(--muted)}
-.link{background:none;border:0;padding:0;font:inherit;font-size:13px;color:var(--navy);cursor:pointer;text-decoration:underline}
-.small{font-size:12.5px;color:var(--muted);margin:0 0 22px}
-.consent .opt{align-items:flex-start;font-size:14px}
-.consent .opt input{margin-top:2px}
-.evidence-note{
-  margin:-6px 0 20px;padding:12px 14px;border-left:3px solid var(--navy);
-  background:var(--navy-soft);border-radius:0 6px 6px 0;font-size:12.8px;color:#343A4D;
-}
-
-/* Additional addresses */
-.depot{border:1px solid var(--line);border-radius:8px;padding:18px 18px 0;margin-bottom:16px}
-.depot-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.depot-head strong{font-size:14px}
-.link.remove{color:var(--err)}
-.btn-add{
-  font:inherit;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;
-  background:#fff;border:1px solid var(--line);border-radius:6px;padding:9px 16px;margin-bottom:24px;
-}
-.btn-add:hover{border-color:var(--navy)}
-
-/* Footer + actions */
-.actions{
-  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
-  padding:22px 36px;border-top:1px solid var(--line);background:#FAFBFD;
-}
-.actions p{margin:0;font-size:13.5px;color:var(--err);display:none}
-.actions p.show{display:block}
-.buttons{display:flex;gap:10px;margin-left:auto}
 .btn{
-  font:inherit;font-size:15px;font-weight:600;cursor:pointer;
-  background:var(--navy);color:#fff;border:0;border-radius:6px;padding:11px 24px;
+  font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+  background:var(--navy);color:#fff;border:0;border-radius:4px;padding:10px 20px;
+  box-shadow:0 2px 6px rgba(28,46,122,.25);
 }
 .btn:hover{background:var(--navy-dark)}
-.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
-.btn.secondary:hover{border-color:var(--navy);color:var(--navy)}
-.docfoot{margin-top:18px;text-align:center;font-size:11.5px;color:var(--muted);line-height:1.7}
-
-/* Thank-you */
-#done{display:none;padding:56px 36px;text-align:center}
-#done.show{display:block}
-#done h2{margin:0 0 10px;font-size:23px;font-weight:600;color:var(--ok)}
-#done p{margin:0 auto 10px;max-width:48ch;color:var(--muted)}
-.record{max-width:640px;margin:28px auto 0;text-align:left;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.record h3{margin:0;padding:12px 16px;font-size:14px;font-weight:600;color:var(--navy);background:var(--navy-soft);border-bottom:1px solid var(--line)}
-.record dl{margin:0;display:grid;grid-template-columns:180px 1fr}
-.record dt,.record dd{margin:0;padding:9px 16px;border-bottom:1px solid var(--line);font-size:13px}
-.record dt{color:var(--muted)}
-.record dd{word-break:break-all}
-.record dd img{max-height:60px;display:block}
-.record p{margin:0;padding:10px 16px;font-size:12px;max-width:none;color:var(--muted)}
-#done .btn{margin-top:22px}
-@media (max-width:640px){.record dl{grid-template-columns:1fr}.record dt{border-bottom:0;padding-bottom:0}}
-
 :focus-visible{outline:2px solid var(--navy);outline-offset:2px}
 
-@media (max-width:640px){
-  .page{padding:12px 10px 40px}
-  header,fieldset,.actions{padding-left:20px;padding-right:20px}
-  .contact{text-align:left}
-  .row,.row.three,.options{grid-template-columns:1fr}
-  .sign-row{flex-direction:column}
-  .buttons{width:100%;flex-direction:column-reverse}
-  .btn{width:100%}
-}
+footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
 
-@page{size:A4;margin:14mm}
-@media print{
-  body{background:#fff;font-size:10pt}
-  .page{max-width:none;padding:0}
-  .sheet{border:0}
-  .actions,.btn-add,.link,#printRecord,#downloadPdf,#pdfStatus,#confirmSig{display:none!important}
-  fieldset,.depot{break-inside:avoid}
-  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@media (max-width:720px){
+  .content{flex-direction:column;gap:24px;padding-top:24px}
+  .card{flex:none;width:100%}
+  .intro h1{font-size:24px}
 }
 </style>
 </head>
 <body>
-<div class="page">
-  <div class="sheet">
 
-    <header>
-      <div class="brand">
-        <img src="data:image/png;base64,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" alt="SyriMed – Syri Ltd.">
-        <div class="contact">
-          Syri Ltd. · Unit 4, Bradfield Road<br>
-          Ruislip, Middlesex, HA4 0NU<br>
-          Tel 0208 728 7800<br>
-          <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>
-        </div>
-      </div>
+<header class="topbar">
+  <div class="inner">
+    <img src="data:image/png;base64,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" alt="SyriMed">
+  </div>
+</header>
+
+<main>
+  <div class="inner content">
+    <div class="intro">
       <h1>Account Application Form</h1>
-      <p class="intro">Fields marked <span class="req">*</span> are mandatory.</p>
-    </header>
-
-    <form id="form" novalidate>
-
-      <!-- Company details -->
-      <fieldset>
-        <legend>Company details</legend>
-        <div class="row">
-          <div class="field">
-            <label for="companyRegNo">Company Registration Number <span class="req">*</span></label>
-            <input type="text" id="companyRegNo" name="companyRegNo" required>
-          </div>
-          <div class="field">
-            <label for="companyRegName">Company Registered Name <span class="req">*</span></label>
-            <input type="text" id="companyRegName" name="companyRegName" required autocomplete="organization">
-          </div>
-          <div class="field">
-            <label for="vatNumber">VAT Number <span class="req">*</span></label>
-            <input type="text" id="vatNumber" name="vatNumber" required>
-          </div>
-          <div class="field">
-            <label for="buyingGroup">Buying Group <span class="req">*</span></label>
-            <input type="text" id="buyingGroup" name="buyingGroup" required placeholder="Enter “None” if not applicable">
-          </div>
-          <div class="field">
-            <label for="dateCommenced">Date Business Commenced</label>
-            <input type="date" id="dateCommenced" name="dateCommenced">
-          </div>
-          <div class="field">
-            <label for="cdLicenceNo">CD Licence No. <span class="req">*</span></label>
-            <input type="text" id="cdLicenceNo" name="cdLicenceNo" required>
-          </div>
-          <div class="field">
-            <label for="gdpNo">GDP No. <span class="req">*</span></label>
-            <input type="text" id="gdpNo" name="gdpNo" required>
-          </div>
-          <div class="field">
-            <label for="wdaNo">WDA No. <span class="req">*</span></label>
-            <input type="text" id="wdaNo" name="wdaNo" required>
-          </div>
-          <div class="field">
-            <label for="gphcNo">GPhC Premises No. <span class="req">*</span> <span class="hint">For pharmacy accounts</span></label>
-            <input type="text" id="gphcNo" name="gphcNo" required>
-          </div>
-          <div class="field">
-            <label for="directorName">Director / Sole Trader / Partner <span class="req">*</span> <span class="hint">Full name</span></label>
-            <input type="text" id="directorName" name="directorName" required autocomplete="name">
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- Business address -->
-      <fieldset>
-        <legend>Business address</legend>
-        <div class="field">
-          <label for="addr1">Address Line 1 <span class="req">*</span></label>
-          <input type="text" id="addr1" name="addr1" required autocomplete="address-line1">
-        </div>
-        <div class="field">
-          <label for="addr2">Address Line 2 <span class="req">*</span></label>
-          <input type="text" id="addr2" name="addr2" required autocomplete="address-line2">
-        </div>
-        <div class="row three">
-          <div class="field">
-            <label for="town">Town <span class="req">*</span></label>
-            <input type="text" id="town" name="town" required autocomplete="address-level2">
-          </div>
-          <div class="field">
-            <label for="county">County <span class="req">*</span></label>
-            <input type="text" id="county" name="county" required autocomplete="address-level1">
-          </div>
-          <div class="field">
-            <label for="postcode">Post Code <span class="req">*</span></label>
-            <input type="text" id="postcode" name="postcode" required autocomplete="postal-code" style="text-transform:uppercase">
-          </div>
-        </div>
-        <div class="row">
-          <div class="field">
-            <label for="phone">Phone No. <span class="req">*</span></label>
-            <input type="tel" id="phone" name="phone" required autocomplete="tel">
-          </div>
-          <div class="field">
-            <label for="email">Email <span class="req">*</span></label>
-            <input type="email" id="email" name="email" required autocomplete="email">
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- Trade references -->
-      <fieldset>
-        <legend>Trade references</legend>
-        <p class="note">Please provide two trade references. <span class="req">*</span></p>
-
-        <p class="sub">Reference 1</p>
-        <div class="row three">
-          <div class="field">
-            <label for="ref1Company">Company Name <span class="req">*</span></label>
-            <input type="text" id="ref1Company" name="ref1Company" required>
-          </div>
-          <div class="field">
-            <label for="ref1Phone">Telephone No. <span class="req">*</span></label>
-            <input type="tel" id="ref1Phone" name="ref1Phone" required>
-          </div>
-          <div class="field">
-            <label for="ref1Contact">Contact Person <span class="req">*</span></label>
-            <input type="text" id="ref1Contact" name="ref1Contact" required>
-          </div>
-        </div>
-
-        <p class="sub">Reference 2</p>
-        <div class="row three">
-          <div class="field">
-            <label for="ref2Company">Company Name <span class="req">*</span></label>
-            <input type="text" id="ref2Company" name="ref2Company" required>
-          </div>
-          <div class="field">
-            <label for="ref2Phone">Telephone No. <span class="req">*</span></label>
-            <input type="tel" id="ref2Phone" name="ref2Phone" required>
-          </div>
-          <div class="field">
-            <label for="ref2Contact">Contact Person <span class="req">*</span></label>
-            <input type="text" id="ref2Contact" name="ref2Contact" required>
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- Business type -->
-      <fieldset>
-        <legend>Business type <span class="req">*</span></legend>
-        <div class="field" data-group="businessType" data-msg="Select your business type">
-          <div class="options" role="radiogroup" aria-label="Business type">
-            <label class="opt"><input type="radio" name="businessType" value="Sole trader"> Sole trader</label>
-            <label class="opt"><input type="radio" name="businessType" value="Partnership"> Partnership</label>
-            <label class="opt"><input type="radio" name="businessType" value="Private Limited Company"> Private Limited Company</label>
-            <label class="opt"><input type="radio" name="businessType" value="Public Limited Company"> Public Limited Company</label>
-            <label class="opt"><input type="radio" name="businessType" value="Limited Liability Partnership"> Limited Liability Partnership</label>
-            <label class="opt"><input type="radio" name="businessType" value="Other" id="btOther"> Other</label>
-          </div>
-          <div id="otherWrap">
-            <label for="businessTypeOther">Please specify <span class="req">*</span></label>
-            <input type="text" id="businessTypeOther" name="businessTypeOther">
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- Account details -->
-      <fieldset>
-        <legend>Account details</legend>
-        <div class="row">
-          <div class="field">
-            <label for="estMonthlyPurchases">Estimated Monthly Purchases from Syri Ltd. <span class="req">*</span></label>
-            <div class="money"><span>£</span><input type="number" id="estMonthlyPurchases" name="estMonthlyPurchases" min="0" step="1" inputmode="numeric" required></div>
-          </div>
-          <div class="field">
-            <label for="creditLimitRequest">Credit Limit Request</label>
-            <div class="money"><span>£</span><input type="number" id="creditLimitRequest" name="creditLimitRequest" min="0" step="1" inputmode="numeric"></div>
-          </div>
-          <div class="field">
-            <label for="paymentTerms">Payment Terms</label>
-            <input type="text" id="paymentTerms" name="paymentTerms">
-          </div>
-          <div class="field" data-group="eStatements" data-msg="Choose Yes or No">
-            <span class="label">E-Statements <span class="req">*</span></span>
-            <div class="options inline" role="radiogroup" aria-label="E-Statements">
-              <label class="opt"><input type="radio" name="eStatements" value="Yes"> Yes</label>
-              <label class="opt"><input type="radio" name="eStatements" value="No"> No</label>
-            </div>
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- Declaration -->
-      <fieldset>
-        <legend>Declaration</legend>
-        <p class="note">To be completed by a company director or partner.</p>
-        <div class="declaration">
-          <p>I am authorised to apply to open an account with Syri Ltd and I confirm that the information contained in this account application is accurate and correct. I confirm that I have read and accept the terms &amp; conditions of sale. I understand that all orders will be placed on those terms (or any terms later adopted by Syri Ltd and notified in writing). I/we agree that all contracts made with Syri Ltd will be governed by your terms and conditions in force from time to time.</p>
-          <p style="margin:0">We will use your data to:</p>
-          <ul>
-            <li>Comply with laws and regulations for the supply of pharmaceutical products.</li>
-            <li>Form a trading relationship with you which will entail, amongst other things, forming a credit opinion.</li>
-            <li>Keep accounting records of the transactions with you.</li>
-          </ul>
-        </div>
-
-        <div class="field consent" data-group="esignConsent" data-msg="Please tick this box before confirming your signature">
-          <label class="opt"><input type="checkbox" name="esignConsent" value="Yes">
-            <span>I agree to sign this application electronically. By typing my name and selecting “Confirm signature” I intend to sign and authenticate this application, and I understand this has the same effect as a handwritten signature. <span class="req">*</span></span>
-          </label>
-        </div>
-
-        <div class="field" data-group="signature" data-msg="Type your full name and select Confirm signature">
-          <label for="typedSignature">Proprietor’s / Director’s Signature <span class="req">*</span></label>
-          <div class="sign-row">
-            <input type="text" id="typedSignature" name="typedSignature" autocomplete="name"
-                   placeholder="Type your full name" aria-describedby="sigHelp">
-            <button type="button" class="btn" id="confirmSig">Confirm signature</button>
-          </div>
-          <div class="sig-preview empty" id="sigPreview" aria-hidden="true">Your signature will appear here</div>
-          <div class="sig-stamp" id="sigStamp" role="status">
-            <span id="sigStampText"></span>
-            <button type="button" class="link" id="changeSig">Change</button>
-          </div>
-          <div class="sig-foot" id="sigHelp">Type your full name, then select Confirm signature. The date and time are recorded when you confirm.</div>
-          <input type="hidden" id="signatureData" name="signatureData">
-          <input type="hidden" id="signatureConfirmedAt" name="signatureConfirmedAt">
-        </div>
-        <div class="row">
-          <div class="field">
-            <label for="signName">Name</label>
-            <input type="text" id="signName" name="signName" readonly aria-readonly="true" aria-describedby="signNameHint">
-            <div class="sig-foot" id="signNameHint">Taken from your confirmed signature</div>
-          </div>
-          <div class="field">
-            <label for="signDate">Date</label>
-            <input type="text" id="signDate" name="signDate" readonly aria-readonly="true" aria-describedby="signDateHint">
-            <div class="sig-foot" id="signDateHint">Set automatically to today’s date</div>
-          </div>
-        </div>
-        <p class="evidence-note">When you confirm your signature and submit, we record the date and time, your IP address and your browser/device details. This is used only as evidence that you signed this application and is kept with your account records.</p>
-        <p class="small">Under the Data Protection Act 1998 you have the right to request the information that we possess about you; there is a small fee payable by you to us in the sum of £10.</p>
-      </fieldset>
-
-      <!-- Additional delivery addresses (Section B) -->
-      <fieldset>
-        <legend>Additional delivery addresses</legend>
-        <p class="note">Only needed if you have more than one depot or branch. Add one for each extra address.</p>
-        <div id="depots"></div>
-        <button type="button" class="btn-add" id="addDepot">+ Add an address</button>
-
-        <div class="field">
-          <label for="additionalInfo">Anything else we should know? <span class="hint">Optional</span></label>
-          <textarea id="additionalInfo" name="additionalInfo" rows="3"></textarea>
-        </div>
-      </fieldset>
-
-      <div class="actions">
-        <p id="formMsg" role="alert">Please complete the highlighted fields.</p>
-        <div class="buttons">
-          <button type="submit" class="btn">Submit application</button>
-        </div>
-      </div>
-    </form>
-
-    <div id="done" tabindex="-1">
-      <h2>Thank you – application submitted</h2>
-      <p>Our credit control team will review your details and be in touch.</p>
-      <p>Questions? Email <a href="mailto:credit.control@syrimed.co.uk" style="color:#26358C">credit.control@syrimed.co.uk</a> or call 0208 728 7800.</p>
-
-      <div class="record">
-        <h3>Electronic signature record</h3>
-        <dl id="recordList"></dl>
-        <p>This record is logically associated with your signed application (Electronic Communications Act 2000, s.7; UK eIDAS Art. 25).</p>
-      </div>
-      <p id="pdfStatus" style="margin-top:22px">Preparing your completed application form (PDF)…</p>
-      <button type="button" class="btn" id="downloadPdf" disabled>Download completed form (PDF)</button>
-      <button type="button" class="btn secondary" id="printRecord">Print this record</button>
+      <p>Please enter your name and email address to access the Account Application Form.</p>
     </div>
 
+    <section class="card" aria-labelledby="registerTitle">
+      <div class="card-head" id="registerTitle">Register <em>Panel</em></div>
+      <form class="card-body" id="registerForm" novalidate>
+        <div class="field">
+          <label for="regName">Name</label>
+          <input type="text" id="regName" name="name" placeholder="Name" autocomplete="name" required
+                 aria-describedby="regNameErr">
+          <div class="error" id="regNameErr">Please enter your name</div>
+        </div>
+        <div class="field">
+          <label for="regEmail">Email</label>
+          <input type="email" id="regEmail" name="email" placeholder="Email" autocomplete="email" required
+                 aria-describedby="regEmailErr">
+          <div class="error" id="regEmailErr">Please enter a valid email address</div>
+        </div>
+        <button type="submit" class="btn">Submit</button>
+      </form>
+    </section>
   </div>
+</main>
 
-  <div class="docfoot">
-    Parent SOP: SOP/SALE/0015 · Form Number: F/SALE/0015/004/V4 · Effective Date: 05 Dec 2025 · Review Date: 03 Dec 2027
-  </div>
-</div>
+<footer>
+  Syri Ltd. · Unit 4, Bradfield Road, Ruislip, Middlesex, HA4 0NU · Tel 0208 728 7800
+</footer>
 
-<script src="assets/pdf-lib.min.js"></script>
-<script src="assets/form-template.js"></script>
 <script>
 (function () {
   'use strict';
-  var form = document.getElementById('form');
-  var msg  = document.getElementById('formMsg');
+  var form = document.getElementById('registerForm');
+  var nameInput = document.getElementById('regName');
+  var emailInput = document.getElementById('regEmail');
+  var FORM_PAGE = 'syri-account-application-form.html';
 
-  /* ---------- Signature: typed name, confirmed with a timestamp ----------
-     The signer ticks consent, types their full name and selects
-     "Confirm signature". That click is the act of signing: the time is
-     recorded, the signature is locked and the printed Name is filled in. */
-  var typedSig   = document.getElementById('typedSignature');
-  var confirmBtn = document.getElementById('confirmSig');
-  var preview    = document.getElementById('sigPreview');
-  var stamp      = document.getElementById('sigStamp');
-  var sigInput   = document.getElementById('signatureData');
-  var sigAtInput = document.getElementById('signatureConfirmedAt');
-  var nameInput  = document.getElementById('signName');
-  var consentBox = form.querySelector('input[name=esignConsent]');
-  var SIG_FONT = '"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive';
-  var PREVIEW_EMPTY = 'Your signature will appear here';
-  var signed = false;
-  var signedAt = null; /* when the signer confirmed the signature (UTC) */
-
-  function cleanName(v) { return v.replace(/\s+/g, ' ').trim(); }
-
-  typedSig.addEventListener('input', function () {
-    var v = cleanName(typedSig.value);
-    preview.textContent = v || PREVIEW_EMPTY;
-    preview.classList.toggle('empty', !v);
-  });
-
-  /* Enter confirms the signature instead of submitting the whole form */
-  typedSig.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') { e.preventDefault(); if (!signed) { confirmBtn.click(); } }
-  });
-
-  /* The typed name drawn in a script face, used as the signature image in the PDF */
-  function renderSignature(text) {
-    var c = document.createElement('canvas');
-    c.width = 900; c.height = 180;
-    var g = c.getContext('2d');
-    var size = 84;
-    g.font = size + 'px ' + SIG_FONT;
-    while (g.measureText(text).width > c.width - 40 && size > 30) {
-      size -= 4;
-      g.font = size + 'px ' + SIG_FONT;
-    }
-    g.fillStyle = '#1A1D29';
-    g.textBaseline = 'middle';
-    g.fillText(text, 20, c.height / 2);
-    return c.toDataURL('image/png');
-  }
-
-  confirmBtn.addEventListener('click', function () {
-    var v = cleanName(typedSig.value);
-    var sigField = typedSig.closest('.field');
-    var okConsent = consentBox.checked;
-    var okName = (v.match(/\p{L}/gu) || []).length >= 2;
-    mark(consentBox.closest('.field'), okConsent);
-    mark(sigField, okName);
-    if (!okConsent) { consentBox.focus(); return; }
-    if (!okName) { typedSig.focus(); return; }
-
-    signedAt = new Date();
-    signed = true;
-    typedSig.value = v;
-    typedSig.readOnly = true;
-    confirmBtn.disabled = true;
-    confirmBtn.textContent = 'Signed';
-    preview.classList.add('signed');
-    sigInput.value = renderSignature(v);
-    sigAtInput.value = signedAt.toISOString();
-    nameInput.value = v;
-    document.getElementById('sigStampText').textContent =
-      '✓ Signed electronically by ' + v + ' on ' + ukTime(sigAtInput.value, true);
-    stamp.classList.add('show');
-    if (!form.querySelector('.invalid')) { msg.classList.remove('show'); }
-  });
-
-  function resetSignature() {
-    signed = false;
-    signedAt = null;
-    typedSig.readOnly = false;
-    confirmBtn.disabled = false;
-    confirmBtn.textContent = 'Confirm signature';
-    preview.classList.remove('signed');
-    sigInput.value = '';
-    sigAtInput.value = '';
-    nameInput.value = '';
-    stamp.classList.remove('show');
-  }
-
-  document.getElementById('changeSig').addEventListener('click', function () {
-    resetSignature();
-    typedSig.focus();
-  });
-
-  /* Withdrawing consent withdraws the signature */
-  consentBox.addEventListener('change', function () {
-    if (!consentBox.checked && signed) { resetSignature(); }
-  });
-
-  /* ---------- "Other" business type ---------- */
-  var otherWrap = document.getElementById('otherWrap');
-  var otherInput = document.getElementById('businessTypeOther');
-  form.querySelectorAll('input[name=businessType]').forEach(function (r) {
-    r.addEventListener('change', function () {
-      var on = document.getElementById('btOther').checked;
-      otherWrap.classList.toggle('show', on);
-      if (!on) { otherInput.value = ''; }
-    });
-  });
-
-  /* ---------- Additional addresses ---------- */
-  var depots = document.getElementById('depots');
-  var seq = 0;
-
-  function depotHTML(n) {
-    var p = 'depot' + n;
-    return '<div class="depot-head"><strong>Address</strong>' +
-      '<button type="button" class="link remove">Remove</button></div>' +
-      '<div class="field"><label for="' + p + 'Name">Depot Address / Trading Name</label>' +
-      '<input type="text" id="' + p + 'Name" name="' + p + 'Name"></div>' +
-      '<div class="field"><label for="' + p + 'Address">Trading Address <span class="hint">Including postcode</span></label>' +
-      '<textarea id="' + p + 'Address" name="' + p + 'Address" rows="2"></textarea></div>' +
-      '<div class="row">' +
-        '<div class="field"><label for="' + p + 'Phone">Business Telephone Number <span class="hint">If different to above</span></label>' +
-        '<input type="tel" id="' + p + 'Phone" name="' + p + 'Phone"></div>' +
-        '<div class="field"><label for="' + p + 'Email">Business Email <span class="hint">If different to above</span></label>' +
-        '<input type="email" id="' + p + 'Email" name="' + p + 'Email"></div>' +
-        '<div class="field"><label for="' + p + 'Gphc">Pharmacy Premises Registration Number</label>' +
-        '<input type="text" id="' + p + 'Gphc" name="' + p + 'Gphc"></div>' +
-        '<div class="field"><label for="' + p + 'Wda">Wholesale Dealers Authority Number (if applicable)</label>' +
-        '<input type="text" id="' + p + 'Wda" name="' + p + 'Wda"></div>' +
-      '</div>' +
-      '<div class="field"><div class="options">' +
-        '<label class="opt"><input type="checkbox" name="' + p + 'GdpSupplied" value="Yes"> Copy of GDP supplied</label>' +
-        '<label class="opt"><input type="checkbox" name="' + p + 'CdSupplied" value="Yes"> Copy of CD licence supplied (if applicable)</label>' +
-      '</div></div>';
-  }
-
-  function renumber() {
-    depots.querySelectorAll('.depot').forEach(function (d, i) {
-      d.querySelector('strong').textContent = 'Additional address ' + (i + 1);
-    });
-  }
-
-  document.getElementById('addDepot').addEventListener('click', function () {
-    seq += 1;
-    var d = document.createElement('div');
-    d.className = 'depot';
-    d.innerHTML = depotHTML(seq);
-    depots.appendChild(d);
-    renumber();
-    d.querySelector('input').focus();
-  });
-  depots.addEventListener('click', function (e) {
-    if (!e.target.classList.contains('remove')) { return; }
-    e.target.closest('.depot').remove();
-    renumber();
-  });
-
-  /* ---------- Validation ---------- */
-  function isValid(field) {
-    var group = field.getAttribute('data-group');
-    if (group === 'signature') { return signed; }
-    if (group) {
-      var picked = field.querySelector('input[name=' + group + ']:checked');
-      if (!picked) { return false; }
-      if (group === 'businessType' && picked.value === 'Other') { return otherInput.value.trim() !== ''; }
-      return true;
-    }
-    var ok = true;
-    field.querySelectorAll('input,textarea').forEach(function (c) {
-      if (!c.checkValidity() || (c.required && !c.value.trim())) { ok = false; }
-    });
+  function check(input, ok) {
+    input.closest('.field').classList.toggle('invalid', !ok);
+    input.setAttribute('aria-invalid', ok ? 'false' : 'true');
     return ok;
   }
+  function nameOk() { return nameInput.value.trim().length >= 2; }
+  function emailOk() { return emailInput.value.trim() !== '' && emailInput.checkValidity(); }
 
-  function message(field) {
-    if (field.getAttribute('data-msg')) { return field.getAttribute('data-msg'); }
-    var c = field.querySelector('input,textarea');
-    if (c && c.type === 'email' && c.value.trim()) { return 'Enter a valid email address'; }
-    return 'This field is required';
-  }
-
-  function mark(field, ok) {
-    field.classList.toggle('invalid', !ok);
-    var err = field.querySelector(':scope > .error');
-    if (!ok) {
-      if (!err) { err = document.createElement('div'); err.className = 'error'; field.appendChild(err); }
-      err.textContent = message(field);
-    }
-    field.querySelectorAll('input,textarea').forEach(function (c) { c.setAttribute('aria-invalid', ok ? 'false' : 'true'); });
-  }
-
-  function recheck(field) {
-    if (field && field.classList.contains('invalid')) { mark(field, isValid(field)); }
-    if (!form.querySelector('.invalid')) { msg.classList.remove('show'); }
-  }
-  form.addEventListener('input', function (e) { recheck(e.target.closest('.field')); });
-  form.addEventListener('change', function (e) { recheck(e.target.closest('.field')); });
-
-  document.getElementById('postcode').addEventListener('blur', function () {
-    this.value = this.value.toUpperCase().trim();
+  [nameInput, emailInput].forEach(function (input) {
+    input.addEventListener('input', function () {
+      if (input.closest('.field').classList.contains('invalid')) {
+        check(input, input === nameInput ? nameOk() : emailOk());
+      }
+    });
   });
 
-  /* ---------- Submit ---------- */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var first = null;
-    form.querySelectorAll('.field').forEach(function (field) {
-      var needsCheck = field.hasAttribute('data-group') || field.querySelector('[required],[type=email]');
-      if (!needsCheck) { return; }
-      var ok = isValid(field);
-      mark(field, ok);
-      if (!ok && !first) { first = field; }
-    });
+    var okName = check(nameInput, nameOk());
+    var okEmail = check(emailInput, emailOk());
+    if (!okName) { nameInput.focus(); return; }
+    if (!okEmail) { emailInput.focus(); return; }
 
-    if (first) {
-      msg.classList.add('show');
-      first.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      var f = first.querySelector('input:not([type=hidden]),textarea');
-      if (f) { f.focus({ preventScroll: true }); }
-      return;
-    }
-
-    var submitBtn = form.querySelector('button[type=submit]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting…';
-
-    var pc = document.getElementById('postcode');
-    pc.value = pc.value.toUpperCase().trim();
-    stampToday();
-
-    var answers = {};
-    new FormData(form).forEach(function (v, k) { answers[k] = v; });
-
-    var depotList = collectDepots();
-
-    buildEvidence(answers).then(function (evidence) {
-      /* Not yet connected to a destination. `application` holds every
-         answer plus the signature evidence, ready to send to a backend. */
-      var application = { answers: answers, depots: depotList, evidence: evidence };
-      console.log('Syri account application', application);
-
-      showRecord(evidence);
-      form.style.display = 'none';
-      var done = document.getElementById('done');
-      done.classList.add('show');
-      done.focus();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-
-      makeFilledPdf(answers, depotList, evidence).then(function (result) {
-        application.pdfFileName = result.name;
-        offerPdf(result);
-      }).catch(function (err) {
-        console.error('PDF generation failed', err);
-        document.getElementById('pdfStatus').textContent =
-          'Your application was submitted, but the PDF copy could not be created in this browser.';
-      });
-    });
+    /* No backend yet: keep the details for this browser tab only, then open the form. */
+    try {
+      sessionStorage.setItem('syri.registrant', JSON.stringify({
+        name: nameInput.value.trim(), email: emailInput.value.trim(), at: new Date().toISOString()
+      }));
+    } catch (err) { /* storage unavailable: carry on */ }
+    window.location.href = FORM_PAGE;
   });
-
-  /* ---------- Section B values, one object per added address ---------- */
-  function collectDepots() {
-    return Array.prototype.map.call(depots.querySelectorAll('.depot'), function (card) {
-      function val(suffix) {
-        var el = card.querySelector('[name$="' + suffix + '"]');
-        if (!el) { return ''; }
-        return el.type === 'checkbox' ? el.checked : el.value.trim();
-      }
-      return {
-        name: val('Name'), address: val('Address'), phone: val('Phone'), email: val('Email'),
-        gphc: val('Gphc'), wda: val('Wda'), gdpSupplied: val('GdpSupplied'), cdSupplied: val('CdSupplied')
-      };
-    });
-  }
-
-  /* =====================================================================
-     Completed-application PDF
-     The controlled Word form (exported to PDF, assets/form-template.js)
-     is the background; answers are written into its cells. Coordinates
-     are in PDF points measured from the TOP-LEFT of an A4 page, taken
-     from the exported template. If the Word form layout changes,
-     re-export the template and re-measure these boxes.
-     ===================================================================== */
-  var PAGE_H = 841.92;
-  var LAYOUT = {
-    p1: {                                 /* page 1: Section A */
-      companyRegNo:   [169.1, 167.2, 560.4, 191.8],
-      companyRegName: [169.1, 191.8, 560.4, 216.4],
-      vatNumber:      [169.1, 216.4, 560.4, 241.0],
-      buyingGroup:    [169.1, 241.0, 560.4, 265.6],
-      dateCommenced:  [169.1, 265.6, 560.4, 290.2],
-      cdLicenceNo:    [169.1, 290.2, 560.4, 314.8],
-      gdpNo:          [169.1, 314.8, 560.4, 339.4],
-      wdaNo:          [169.1, 339.4, 560.4, 364.0],
-      gphcNo:         [169.1, 364.0, 560.4, 388.5],
-      addr1:          [169.1, 414.7, 560.4, 439.3],
-      addr2:          [169.1, 439.3, 560.4, 463.9],
-      town:           [169.1, 463.9, 560.4, 488.5],
-      county:         [169.1, 488.5, 353.4, 513.1],
-      postcode:       [417.2, 488.5, 560.4, 513.1],
-      phone:          [169.1, 513.1, 353.4, 537.7],
-      email:          [417.2, 513.1, 560.4, 537.7],
-      directorName:   [169.1, 555.1, 560.4, 580.1],
-      ref1Company:    [169.1, 597.8, 285.0, 622.9],
-      ref1Phone:      [169.1, 622.9, 285.0, 647.9],
-      ref1Contact:    [169.1, 647.9, 285.0, 672.5],
-      ref2Company:    [353.4, 597.8, 560.4, 622.9],
-      ref2Phone:      [353.4, 622.9, 560.4, 647.9],
-      ref2Contact:    [353.4, 647.9, 560.4, 672.5]
-    },
-    p2: {                                 /* page 2: business type, other info, signature */
-      businessType: {
-        'Sole trader':                   [154.9, 130.2, 282.6, 155.3],
-        'Partnership':                   [154.9, 155.3, 282.6, 180.3],
-        'Private Limited Company':       [154.9, 180.3, 282.6, 205.2],
-        'Public Limited Company':        [154.9, 205.2, 282.6, 230.3],
-        'Limited Liability Partnership': [154.9, 230.3, 282.6, 255.3],
-        'Other':                         [154.9, 255.3, 282.6, 279.9]
-      },
-      paymentTerms:        [485.8, 130.2, 560.5, 155.3],
-      eStatementsYes:      [486.1, 162.9, 500.0, 172.7],
-      eStatementsNo:       [514.9, 162.9, 525.8, 172.7],
-      estMonthlyPurchases: [485.8, 180.3, 560.5, 205.2],
-      creditLimitRequest:  [485.8, 205.2, 560.5, 230.3],
-      signature:           [154.9, 467.6, 297.8, 510.9],
-      signName:            [340.4, 467.6, 439.5, 510.9],
-      signDate:            [475.1, 467.6, 552.9, 510.9]
-    },
-    p3: {                                 /* page 3: Section B, one page per address */
-      name:        [20.9, 285.8, 545.8, 317.3],
-      address:     [20.9, 330.6, 545.8, 362.2],
-      phone:       [20.9, 376.4, 545.8, 407.9],
-      email:       [20.9, 422.1, 545.8, 453.7],
-      gphc:        [20.9, 467.9, 545.8, 499.5],
-      wda:         [20.9, 513.7, 545.8, 545.2],
-      gdpBox:      [267.0, 551.1, 282.6, 560.2],
-      cdBox:       [266.9, 574.7, 282.5, 583.9],
-      officeBlock: [15, 94, 552, 204],     /* A/C no., rejection + DPA text: hidden on repeated pages */
-      pageNo:      [430, 750, 546, 768]
-    },
-    p4: { notes: [57.1, 132.6, 507.6, 742.3] }   /* page 4: additional information box */
-  };
-
-  function makeFilledPdf(answers, depotList, evidence) {
-    if (!window.PDFLib || !window.SYRI_FORM_TEMPLATE) {
-      return Promise.reject(new Error('PDF library or template not loaded'));
-    }
-    var L = window.PDFLib;
-    var INK = L.rgb(0.05, 0.05, 0.12);
-    var NAVY = L.rgb(0.149, 0.208, 0.549);
-    var WHITE = L.rgb(1, 1, 1);
-    var tplBytes = Uint8Array.from(atob(window.SYRI_FORM_TEMPLATE), function (c) { return c.charCodeAt(0); });
-
-    return L.PDFDocument.load(tplBytes).then(function (pdf) {
-      return Promise.all([
-        pdf.embedFont(L.StandardFonts.Helvetica),
-        pdf.embedFont(L.StandardFonts.HelveticaBold),
-        sigInput.value ? pdf.embedPng(sigInput.value) : null,
-        pdf.embedPng(document.querySelector('.brand img').src)
-      ]).then(function (res) {
-        var font = res[0], bold = res[1], sigImg = res[2], logo = res[3];
-
-        /* Only characters the standard PDF font can encode */
-        function safe(s) {
-          return Array.from(String(s == null ? '' : s)).map(function (ch) {
-            if (ch === '\n') { return ch; }
-            try { font.encodeText(ch); return ch; } catch (e) { return '?'; }
-          }).join('');
-        }
-
-        /* Text in a cell: vertically centred, shrinks to fit, wraps up to maxLines */
-        function put(page, box, text, maxLines, f) {
-          f = f || font;
-          text = safe(text).replace(/\s*\n\s*/g, maxLines > 1 ? '\n' : ', ').trim();
-          if (!text) { return; }
-          var x = box[0] + 5, w = box[2] - box[0] - 10, h = box[3] - box[1];
-          var size = 9.5, lines;
-          for (;;) {
-            lines = wrap(text, f, size, w);
-            var fits = lines.length <= (maxLines || 1) && lines.every(function (ln) {
-              return f.widthOfTextAtSize(ln, size) <= w;
-            });
-            if (fits || size <= 6) { break; }
-            size -= 0.5;
-          }
-          lines = lines.slice(0, maxLines || 1);
-          lines = lines.map(function (ln) {
-            while (f.widthOfTextAtSize(ln, size) > w && ln.length > 1) { ln = ln.slice(0, -2) + '…'; }
-            return ln;
-          });
-          var lh = size * 1.25, blockH = lh * (lines.length - 1) + size * 0.72;
-          var top = box[1] + (h - blockH) / 2 + size * 0.72;
-          lines.forEach(function (ln, i) {
-            page.drawText(ln, { x: x, y: PAGE_H - (top + i * lh), size: size, font: f, color: INK });
-          });
-        }
-
-        function wrap(text, f, size, width) {
-          var out = [];
-          text.split('\n').forEach(function (para) {
-            var line = '';
-            para.split(/\s+/).forEach(function (word) {
-              var tryLine = line ? line + ' ' + word : word;
-              if (f.widthOfTextAtSize(tryLine, size) <= width || !line) { line = tryLine; }
-              else { out.push(line); line = word; }
-            });
-            out.push(line);
-          });
-          return out;
-        }
-
-        function tick(page, cx, cy, s) {
-          s = s || 5;
-          var y = function (v) { return PAGE_H - v; };
-          page.drawLine({ start: { x: cx - s, y: y(cy) }, end: { x: cx - s * 0.3, y: y(cy + s * 0.75) }, thickness: 1.5, color: INK });
-          page.drawLine({ start: { x: cx - s * 0.3, y: y(cy + s * 0.75) }, end: { x: cx + s, y: y(cy - s * 0.9) }, thickness: 1.5, color: INK });
-        }
-
-        function ring(page, box) {
-          page.drawEllipse({
-            x: (box[0] + box[2]) / 2, y: PAGE_H - (box[1] + box[3]) / 2,
-            xScale: (box[2] - box[0]) / 2 + 3, yScale: (box[3] - box[1]) / 2 + 1.5,
-            borderColor: INK, borderWidth: 1
-          });
-        }
-
-        function whiteOut(page, box) {
-          page.drawRectangle({ x: box[0], y: PAGE_H - box[3], width: box[2] - box[0], height: box[3] - box[1], color: WHITE });
-        }
-
-        function ukDate(iso) {
-          if (!iso) { return ''; }
-          var p = iso.split('-');
-          return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
-        }
-        function money(v) { return v === '' || v == null ? '' : '£' + Number(v).toLocaleString('en-GB'); }
-
-        var pages = pdf.getPages();
-
-        /* ---- Page 1 ---- */
-        var p1 = pages[0];
-        Object.keys(LAYOUT.p1).forEach(function (k) {
-          var v = k === 'dateCommenced' ? ukDate(answers[k]) : answers[k];
-          put(p1, LAYOUT.p1[k], v, 1);
-        });
-
-        /* ---- Page 2 ---- */
-        var p2 = pages[1], P2 = LAYOUT.p2;
-        var bt = P2.businessType[answers.businessType];
-        if (bt) {
-          var cy = (bt[1] + bt[3]) / 2;
-          tick(p2, bt[0] + 12, cy);
-          if (answers.businessType === 'Other' && answers.businessTypeOther) {
-            put(p2, [bt[0] + 20, bt[1], bt[2], bt[3]], answers.businessTypeOther, 2);
-          }
-        }
-        put(p2, P2.paymentTerms, answers.paymentTerms, 2);
-        if (answers.eStatements === 'Yes') { ring(p2, P2.eStatementsYes); }
-        if (answers.eStatements === 'No') { ring(p2, P2.eStatementsNo); }
-        put(p2, P2.estMonthlyPurchases, money(answers.estMonthlyPurchases), 1);
-        put(p2, P2.creditLimitRequest, money(answers.creditLimitRequest), 1);
-        if (sigImg) {
-          /* Typed signature in the upper part of the cell, e-sign timestamp beneath */
-          var sb = P2.signature, pad = 4, stampH = 9;
-          var dims = sigImg.scaleToFit(sb[2] - sb[0] - pad * 2, sb[3] - sb[1] - pad * 2 - stampH);
-          p2.drawImage(sigImg, {
-            x: sb[0] + pad,
-            y: PAGE_H - (sb[1] + pad + dims.height),
-            width: dims.width, height: dims.height
-          });
-          p2.drawText(safe('E-signed ' + ukTime(evidence.signatureCapturedAt, true)), {
-            x: sb[0] + pad + 1, y: PAGE_H - (sb[3] - 4), size: 5.5, font: font, color: INK
-          });
-        }
-        put(p2, P2.signName, answers.signName, 2);
-        put(p2, P2.signDate, answers.signDate, 1);
-
-        /* ---- Page 3: Section B, repeated for every extra address ---- */
-        var P3 = LAYOUT.p3;
-        function fillDepot(page, dep) {
-          put(page, P3.name, dep.name, 2);
-          put(page, P3.address, dep.address, 2);
-          put(page, P3.phone, dep.phone, 1);
-          put(page, P3.email, dep.email, 1);
-          put(page, P3.gphc, dep.gphc, 1);
-          put(page, P3.wda, dep.wda, 1);
-          if (dep.gdpSupplied) { tick(page, (P3.gdpBox[0] + P3.gdpBox[2]) / 2, (P3.gdpBox[1] + P3.gdpBox[3]) / 2, 4.5); }
-          if (dep.cdSupplied) { tick(page, (P3.cdBox[0] + P3.cdBox[2]) / 2, (P3.cdBox[1] + P3.cdBox[3]) / 2, 4.5); }
-        }
-
-        /* Copy the blank Section B page for extra addresses BEFORE filling
-           the first one, so each copy starts clean. */
-        var chain = Promise.resolve();
-        if (depotList.length > 1) {
-          var extra = depotList.slice(1);
-          chain = pdf.copyPages(pdf, extra.map(function () { return 2; })).then(function (copies) {
-            copies.forEach(function (pg, i) {
-              pdf.insertPage(3 + i, pg);
-              whiteOut(pg, P3.officeBlock);
-              whiteOut(pg, P3.pageNo);
-              pg.drawText('Section B continued (' + (i + 2) + ' of ' + depotList.length + ')', {
-                x: P3.pageNo[0] + 2, y: PAGE_H - 764, size: 9, font: font, color: NAVY
-              });
-              fillDepot(pg, extra[i]);
-            });
-          });
-        }
-        chain = chain.then(function () {
-          if (depotList.length) { fillDepot(pages[2], depotList[0]); }
-        });
-
-        return chain.then(function () {
-          /* ---- Page 4: additional information (last template page) ---- */
-          var all = pdf.getPages();
-          var p4 = all[all.length - 1];
-          if (answers.additionalInfo) {
-            var nb = LAYOUT.p4.notes;
-            var lines = wrap(safe(answers.additionalInfo), font, 9.5, nb[2] - nb[0] - 16);
-            lines.slice(0, 44).forEach(function (ln, i) {
-              p4.drawText(ln, { x: nb[0] + 8, y: PAGE_H - (nb[1] + 18 + i * 13), size: 9.5, font: font, color: INK });
-            });
-          }
-
-          /* ---- Appendix: electronic signature record ---- */
-          var rec = pdf.addPage([595.32, PAGE_H]);
-          var ld = logo.scaleToFit(110, 40);
-          rec.drawImage(logo, { x: 50, y: PAGE_H - 50 - ld.height, width: ld.width, height: ld.height });
-          rec.drawText('Electronic Signature Record', { x: 50, y: PAGE_H - 120, size: 16, font: bold, color: NAVY });
-          rec.drawText(safe('Appendix to Account Application Form ' + evidence.formNumber + ', generated automatically on submission.'),
-            { x: 50, y: PAGE_H - 138, size: 9, font: font, color: INK });
-
-          var rows = [
-            ['Signed by', evidence.signerName + (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
-            ['Signature method', evidence.signatureMethod],
-            ['Typed signature', evidence.typedSignature],
-            ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
-            ['Submitted', ukTime(evidence.submittedAt)],
-            ['Signer time zone', evidence.timeZone],
-            ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
-            ['Browser / device', evidence.userAgent],
-            ['Screen / language', evidence.screen + ' / ' + evidence.language],
-            ['Page', evidence.pageUrl],
-            ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
-            ['Integrity hash (SHA-256)', evidence.sha256]
-          ];
-          var y = 165, labelW = 130, valW = 545 - 50 - labelW - 10;
-          rows.forEach(function (r) {
-            var vl = wrap(safe(r[1]), font, 9, valW);
-            var hh = Math.max(1, vl.length) * 12 + 10;
-            rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
-            rec.drawText(r[0], { x: 50, y: PAGE_H - (y + 15), size: 9, font: bold, color: NAVY });
-            vl.forEach(function (ln, i) {
-              rec.drawText(ln, { x: 50 + labelW + 10, y: PAGE_H - (y + 15 + i * 12), size: 9, font: font, color: INK });
-            });
-            y += hh;
-          });
-          rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
-
-          if (sigImg) {
-            rec.drawText('Signature', { x: 50, y: PAGE_H - (y + 24), size: 9, font: bold, color: NAVY });
-            var sd = sigImg.scaleToFit(260, 90);
-            rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: L.rgb(0.8, 0.82, 0.88), borderWidth: 0.5 });
-            rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105), width: sd.width, height: sd.height });
-            y += 125;
-          }
-
-          var legal = 'This document was signed electronically. The signer consented to sign electronically, typed their name ' +
-            'and confirmed it as their signature at the time shown; a name applied with the intention to authenticate is a ' +
-            'valid electronic signature in England and Wales. The signature is logically associated with the application data ' +
-            'above and is admissible as evidence under section 7 of the Electronic Communications Act 2000; under Article 25(1) ' +
-            'of UK eIDAS it may not be denied legal effect solely because it is in electronic form. The integrity hash is ' +
-            'calculated over the submitted answers and this record, so any later alteration can be detected.';
-          wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
-            rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: L.rgb(0.35, 0.37, 0.45) });
-          });
-          rec.drawText('Parent SOP: SOP/SALE/0015  |  Form Number: F/SALE/0015/004/V4  |  Appendix: signature record',
-            { x: 50, y: 40, size: 8, font: font, color: L.rgb(0.35, 0.37, 0.45) });
-
-          pdf.setTitle('Account Application Form - ' + safe(answers.companyRegName));
-          pdf.setSubject('Syri Ltd. new customer account application (F/SALE/0015/004/V4)');
-          pdf.setAuthor(safe(answers.signName));
-          pdf.setCreator('Syri Ltd. online account application');
-          pdf.setProducer('pdf-lib');
-          pdf.setCreationDate(new Date(evidence.submittedAt));
-
-          return pdf.save();
-        }).then(function (bytes) {
-          var company = (answers.companyRegName || 'Application').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
-          return {
-            name: 'Syri-Account-Application_' + company + '_' + evidence.submittedAt.slice(0, 10) + '.pdf',
-            blob: new Blob([bytes], { type: 'application/pdf' })
-          };
-        });
-      });
-    });
-  }
-
-  function offerPdf(result) {
-    var url = URL.createObjectURL(result.blob);
-    var btn = document.getElementById('downloadPdf');
-    function download() {
-      var a = document.createElement('a');
-      a.href = url; a.download = result.name;
-      document.body.appendChild(a); a.click(); a.remove();
-    }
-    btn.disabled = false;
-    btn.onclick = download;
-    document.getElementById('pdfStatus').textContent =
-      'Your completed application form (' + result.name + ') has been downloaded. Keep it for your records.';
-    download();
-  }
-
-  /* ---------- Signature evidence ----------
-     A typed name confirmed by the signer is a simple electronic signature.
-     It is valid where applied with intent to authenticate (Law Commission
-     2019), admissible (ECA 2000 s.7) and cannot be denied legal effect for
-     being electronic (UK eIDAS Art. 25). Its weight depends on showing who
-     signed, when, what they signed and that they intended to sign, so we
-     record that.
-     NOTE: a browser cannot see its own public IP. Here it is looked up
-     from a third-party service at submit time (client-reported). Once
-     submissions go to a server, record the IP and time server-side as
-     the authoritative values. */
-  var IP_LOOKUP_URL = 'https://api.ipify.org?format=json';
-
-  function lookupIp() {
-    var timeout = new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 4000); });
-    var lookup = fetch(IP_LOOKUP_URL, { cache: 'no-store' })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { return j && j.ip ? j.ip : null; })
-      .catch(function () { return null; });
-    return Promise.race([lookup, timeout]);
-  }
-
-  function sha256(text) {
-    if (!(window.crypto && crypto.subtle && window.TextEncoder)) { return Promise.resolve(null); }
-    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (buf) {
-      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
-        return b.toString(16).padStart(2, '0');
-      }).join('');
-    }).catch(function () { return null; });
-  }
-
-  function canonical(obj) {
-    return JSON.stringify(Object.keys(obj).sort().reduce(function (o, k) { o[k] = obj[k]; return o; }, {}));
-  }
-
-  function buildEvidence(answers) {
-    var submittedAt = new Date();
-    return lookupIp().then(function (ip) {
-      var evidence = {
-        signerName: answers.signName,
-        signerCompany: answers.companyRegName,
-        signatureMethod: 'Typed name, confirmed by the signer ("Confirm signature")',
-        typedSignature: answers.typedSignature,
-        signatureCapturedAt: (signedAt || submittedAt).toISOString(),
-        submittedAt: submittedAt.toISOString(),
-        timeZone: (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'unknown',
-        ipAddress: ip || 'unavailable',
-        ipSource: ip ? 'client-reported via api.ipify.org' : 'lookup failed',
-        userAgent: navigator.userAgent,
-        language: navigator.language,
-        screen: screen.width + 'x' + screen.height,
-        pageUrl: location.href,
-        formNumber: 'F/SALE/0015/004/V4',
-        consentToSignElectronically: answers.esignConsent === 'Yes',
-        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim()
-      };
-      /* Hash of the answers + evidence, so any later change to the record is detectable */
-      return sha256(canonical(answers) + canonical(evidence)).then(function (hash) {
-        evidence.sha256 = hash || 'unavailable';
-        return evidence;
-      });
-    });
-  }
-
-  /* UK local time; the full form also shows the exact UTC value */
-  function ukTime(iso, short) {
-    var d = new Date(iso);
-    var local = d.toLocaleString('en-GB', {
-      timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
-    });
-    return short ? local : local + ' (' + iso + ')';
-  }
-
-  function showRecord(ev) {
-    var rows = [
-      ['Signed by', ev.signerName + (ev.signerCompany ? ', ' + ev.signerCompany : '')],
-      ['Signature', null],
-      ['Signature method', ev.signatureMethod],
-      ['Signature confirmed', ukTime(ev.signatureCapturedAt)],
-      ['Submitted', ukTime(ev.submittedAt)],
-      ['IP address', ev.ipAddress],
-      ['Browser / device', ev.userAgent],
-      ['Consent to e-sign', ev.consentToSignElectronically ? 'Given' : 'Not given'],
-      ['Form', ev.formNumber],
-      ['Integrity hash (SHA-256)', ev.sha256]
-    ];
-    var dl = document.getElementById('recordList');
-    dl.innerHTML = '';
-    rows.forEach(function (row) {
-      var dt = document.createElement('dt'); dt.textContent = row[0];
-      var dd = document.createElement('dd');
-      if (row[1] === null) {
-        var img = document.createElement('img');
-        img.src = sigInput.value; img.alt = 'Captured signature';
-        dd.appendChild(img);
-      } else {
-        dd.textContent = row[1];
-      }
-      dl.appendChild(dt); dl.appendChild(dd);
-    });
-  }
-
-  document.getElementById('printRecord').addEventListener('click', function () { window.print(); });
-
-  /* Signing date is always today's date and cannot be edited.
-     It is set again at submission, so it reflects the day the form is sent. */
-  function stampToday() {
-    document.getElementById('signDate').value = new Date().toLocaleDateString('en-GB', {
-      timeZone: 'Europe/London', day: '2-digit', month: '2-digit', year: 'numeric'
-    });
-  }
-  stampToday();
 }());
 </script>
 </body>
