@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Account Application Form &ndash; Syri Ltd.</title>
+<style>
+/* Syri Ltd. — New Customer Account Application
+   Form F/SALE/0015/004/V4 · Parent SOP SOP/SALE/0015
+   Self-contained: no external files. */
+
+:root{
+  --navy:#26358C;
+  --navy-dark:#1C2870;
+  --navy-soft:#F1F3FA;
+  --ink:#1A1D29;
+  --muted:#636A7E;
+  --line:#D9DDE7;
+  --bg:#F5F6FA;
+  --err:#B42318;
+  --ok:#1B6B47;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font:400 15px/1.6 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+.page{max-width:920px;margin:0 auto;padding:32px 16px 64px}
+.sheet{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+
+/* Header */
+header{padding:30px 36px 26px;border-top:4px solid var(--navy);border-bottom:1px solid var(--line)}
+.brand{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.brand img{width:140px;height:auto;display:block}
+.contact{font-size:12px;line-height:1.6;color:var(--muted);text-align:right}
+.contact a{color:var(--navy);text-decoration:none}
+h1{margin:24px 0 6px;font-size:26px;font-weight:600;letter-spacing:-.3px}
+.intro{margin:0;color:var(--muted);font-size:14.5px}
+.req{color:var(--err)}
+
+/* Sections */
+fieldset{border:0;margin:0;padding:28px 36px 4px;min-width:0}
+fieldset + fieldset{border-top:1px solid var(--line)}
+legend{
+  float:left;width:100%;padding:0;margin:0 0 4px;
+  font-size:17px;font-weight:600;color:var(--navy);
+}
+legend + *{clear:both}
+.note{margin:0 0 18px;font-size:13.5px;color:var(--muted)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+.row.three{grid-template-columns:1fr 1fr 1fr}
+.sub{margin:6px 0 10px;font-size:13px;font-weight:600;color:var(--muted)}
+
+/* Fields */
+.field{margin-bottom:20px;min-width:0}
+label,.label{display:block;margin-bottom:6px;font-size:13.5px;font-weight:600}
+.hint{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
+input[type=text],input[type=tel],input[type=email],input[type=date],input[type=number],textarea{
+  width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:6px;padding:10px 12px;
+}
+textarea{resize:vertical;min-height:88px}
+input:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(38,53,140,.14)}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.money{position:relative}
+.money span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.money input{padding-left:26px}
+
+/* Radio / checkbox */
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.options.inline{display:flex;gap:24px}
+.opt{display:flex;align-items:center;gap:10px;font-weight:400;font-size:14.5px;margin:0;padding:4px 0;cursor:pointer}
+.opt input{width:18px;height:18px;margin:0;accent-color:var(--navy);cursor:pointer;flex:none}
+#otherWrap{display:none;margin-top:12px}
+#otherWrap.show{display:block}
+
+/* Errors */
+.error{display:none;margin-top:6px;font-size:13px;color:var(--err)}
+.invalid .error{display:block}
+.invalid input:not([type=radio]):not([type=checkbox]),.invalid textarea,.invalid .sig{border-color:var(--err)}
+
+/* Declaration */
+.declaration{
+  background:var(--navy-soft);border-radius:8px;padding:18px 20px;margin-bottom:22px;
+  font-size:14px;line-height:1.65;color:#343A4D;
+}
+.declaration p{margin:0 0 10px}
+.declaration ul{margin:4px 0 0;padding-left:20px}
+
+/* Signature */
+.sig{
+  display:block;width:100%;height:140px;background:#fff;
+  border:1px dashed #AEB5C7;border-radius:6px;touch-action:none;cursor:crosshair;
+}
+.sig.signed{border-style:solid;border-color:var(--navy)}
+.sig-foot{display:flex;justify-content:space-between;margin-top:6px;font-size:12.5px;color:var(--muted)}
+.link{background:none;border:0;padding:0;font:inherit;font-size:13px;color:var(--navy);cursor:pointer;text-decoration:underline}
+.small{font-size:12.5px;color:var(--muted);margin:0 0 22px}
+.consent .opt{align-items:flex-start;font-size:14px}
+.consent .opt input{margin-top:2px}
+.evidence-note{
+  margin:-6px 0 20px;padding:12px 14px;border-left:3px solid var(--navy);
+  background:var(--navy-soft);border-radius:0 6px 6px 0;font-size:12.8px;color:#343A4D;
+}
+
+/* Additional addresses */
+.depot{border:1px solid var(--line);border-radius:8px;padding:18px 18px 0;margin-bottom:16px}
+.depot-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.depot-head strong{font-size:14px}
+.link.remove{color:var(--err)}
+.btn-add{
+  font:inherit;font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;
+  background:#fff;border:1px solid var(--line);border-radius:6px;padding:9px 16px;margin-bottom:24px;
+}
+.btn-add:hover{border-color:var(--navy)}
+
+/* Footer + actions */
+.actions{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:22px 36px;border-top:1px solid var(--line);background:#FAFBFD;
+}
+.actions p{margin:0;font-size:13.5px;color:var(--err);display:none}
+.actions p.show{display:block}
+.buttons{display:flex;gap:10px;margin-left:auto}
+.btn{
+  font:inherit;font-size:15px;font-weight:600;cursor:pointer;
+  background:var(--navy);color:#fff;border:0;border-radius:6px;padding:11px 24px;
+}
+.btn:hover{background:var(--navy-dark)}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.secondary:hover{border-color:var(--navy);color:var(--navy)}
+.docfoot{margin-top:18px;text-align:center;font-size:11.5px;color:var(--muted);line-height:1.7}
+
+/* Thank-you */
+#done{display:none;padding:56px 36px;text-align:center}
+#done.show{display:block}
+#done h2{margin:0 0 10px;font-size:23px;font-weight:600;color:var(--ok)}
+#done p{margin:0 auto 10px;max-width:48ch;color:var(--muted)}
+.record{max-width:640px;margin:28px auto 0;text-align:left;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.record h3{margin:0;padding:12px 16px;font-size:14px;font-weight:600;color:var(--navy);background:var(--navy-soft);border-bottom:1px solid var(--line)}
+.record dl{margin:0;display:grid;grid-template-columns:180px 1fr}
+.record dt,.record dd{margin:0;padding:9px 16px;border-bottom:1px solid var(--line);font-size:13px}
+.record dt{color:var(--muted)}
+.record dd{word-break:break-all}
+.record dd img{max-height:60px;display:block}
+.record p{margin:0;padding:10px 16px;font-size:12px;max-width:none;color:var(--muted)}
+#done .btn{margin-top:22px}
+@media (max-width:640px){.record dl{grid-template-columns:1fr}.record dt{border-bottom:0;padding-bottom:0}}
+
+:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+@media (max-width:640px){
+  .page{padding:12px 10px 40px}
+  header,fieldset,.actions{padding-left:20px;padding-right:20px}
+  .contact{text-align:left}
+  .row,.row.three,.options{grid-template-columns:1fr}
+  .buttons{width:100%;flex-direction:column-reverse}
+  .btn{width:100%}
+}
+
+@page{size:A4;margin:14mm}
+@media print{
+  body{background:#fff;font-size:10pt}
+  .page{max-width:none;padding:0}
+  .sheet{border:0}
+  .actions,.btn-add,.link,#printRecord{display:none!important}
+  fieldset,.depot{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="sheet">
+
+    <header>
+      <div class="brand">
+        <img src="data:image/png;base64,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" alt="SyriMed – Syri Ltd.">
+        <div class="contact">
+          Syri Ltd. · Unit 4, Bradfield Road<br>
+          Ruislip, Middlesex, HA4 0NU<br>
+          Tel 0208 728 7800 · Fax 0208 728 7525<br>
+          <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>
+        </div>
+      </div>
+      <h1>Account Application Form</h1>
+      <p class="intro">Fields marked <span class="req">*</span> are mandatory, or your application may be delayed.</p>
+    </header>
+
+    <form id="form" novalidate>
+
+      <!-- Company details -->
+      <fieldset>
+        <legend>Company details</legend>
+        <div class="row">
+          <div class="field">
+            <label for="companyRegNo">Company Registration Number <span class="req">*</span></label>
+            <input type="text" id="companyRegNo" name="companyRegNo" required>
+          </div>
+          <div class="field">
+            <label for="companyRegName">Company Registered Name <span class="req">*</span></label>
+            <input type="text" id="companyRegName" name="companyRegName" required autocomplete="organization">
+          </div>
+          <div class="field">
+            <label for="vatNumber">VAT Number <span class="req">*</span></label>
+            <input type="text" id="vatNumber" name="vatNumber" required>
+          </div>
+          <div class="field">
+            <label for="buyingGroup">Buying Group <span class="req">*</span></label>
+            <input type="text" id="buyingGroup" name="buyingGroup" required placeholder="Enter “None” if not applicable">
+          </div>
+          <div class="field">
+            <label for="dateCommenced">Date Business Commenced</label>
+            <input type="date" id="dateCommenced" name="dateCommenced">
+          </div>
+          <div class="field">
+            <label for="cdLicenceNo">CD Licence No. <span class="req">*</span></label>
+            <input type="text" id="cdLicenceNo" name="cdLicenceNo" required>
+          </div>
+          <div class="field">
+            <label for="gdpNo">GDP No. <span class="req">*</span></label>
+            <input type="text" id="gdpNo" name="gdpNo" required>
+          </div>
+          <div class="field">
+            <label for="wdaNo">WDA No. <span class="req">*</span></label>
+            <input type="text" id="wdaNo" name="wdaNo" required>
+          </div>
+          <div class="field">
+            <label for="gphcNo">GPhC Premises No. <span class="req">*</span> <span class="hint">For pharmacy accounts</span></label>
+            <input type="text" id="gphcNo" name="gphcNo" required>
+          </div>
+          <div class="field">
+            <label for="directorName">Director / Sole Trader / Partner <span class="req">*</span> <span class="hint">Full name</span></label>
+            <input type="text" id="directorName" name="directorName" required autocomplete="name">
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Business address -->
+      <fieldset>
+        <legend>Business address</legend>
+        <div class="field">
+          <label for="addr1">Address Line 1 <span class="req">*</span></label>
+          <input type="text" id="addr1" name="addr1" required autocomplete="address-line1">
+        </div>
+        <div class="field">
+          <label for="addr2">Address Line 2 <span class="req">*</span></label>
+          <input type="text" id="addr2" name="addr2" required autocomplete="address-line2">
+        </div>
+        <div class="row three">
+          <div class="field">
+            <label for="town">Town <span class="req">*</span></label>
+            <input type="text" id="town" name="town" required autocomplete="address-level2">
+          </div>
+          <div class="field">
+            <label for="county">County <span class="req">*</span></label>
+            <input type="text" id="county" name="county" required autocomplete="address-level1">
+          </div>
+          <div class="field">
+            <label for="postcode">Post Code <span class="req">*</span></label>
+            <input type="text" id="postcode" name="postcode" required autocomplete="postal-code" style="text-transform:uppercase">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="phone">Phone No. <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" required autocomplete="tel">
+          </div>
+          <div class="field">
+            <label for="email">Email <span class="req">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email">
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Trade references -->
+      <fieldset>
+        <legend>Trade references</legend>
+        <p class="note">Please provide two trade references. <span class="req">*</span></p>
+
+        <p class="sub">Reference 1</p>
+        <div class="row three">
+          <div class="field">
+            <label for="ref1Company">Company Name <span class="req">*</span></label>
+            <input type="text" id="ref1Company" name="ref1Company" required>
+          </div>
+          <div class="field">
+            <label for="ref1Phone">Telephone No. <span class="req">*</span></label>
+            <input type="tel" id="ref1Phone" name="ref1Phone" required>
+          </div>
+          <div class="field">
+            <label for="ref1Contact">Contact Person <span class="req">*</span></label>
+            <input type="text" id="ref1Contact" name="ref1Contact" required>
+          </div>
+        </div>
+
+        <p class="sub">Reference 2</p>
+        <div class="row three">
+          <div class="field">
+            <label for="ref2Company">Company Name <span class="req">*</span></label>
+            <input type="text" id="ref2Company" name="ref2Company" required>
+          </div>
+          <div class="field">
+            <label for="ref2Phone">Telephone No. <span class="req">*</span></label>
+            <input type="tel" id="ref2Phone" name="ref2Phone" required>
+          </div>
+          <div class="field">
+            <label for="ref2Contact">Contact Person <span class="req">*</span></label>
+            <input type="text" id="ref2Contact" name="ref2Contact" required>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Business type -->
+      <fieldset>
+        <legend>Business type <span class="req">*</span></legend>
+        <div class="field" data-group="businessType" data-msg="Select your business type">
+          <div class="options" role="radiogroup" aria-label="Business type">
+            <label class="opt"><input type="radio" name="businessType" value="Sole trader"> Sole trader</label>
+            <label class="opt"><input type="radio" name="businessType" value="Partnership"> Partnership</label>
+            <label class="opt"><input type="radio" name="businessType" value="Private Limited Company"> Private Limited Company</label>
+            <label class="opt"><input type="radio" name="businessType" value="Public Limited Company"> Public Limited Company</label>
+            <label class="opt"><input type="radio" name="businessType" value="Limited Liability Partnership"> Limited Liability Partnership</label>
+            <label class="opt"><input type="radio" name="businessType" value="Other" id="btOther"> Other</label>
+          </div>
+          <div id="otherWrap">
+            <label for="businessTypeOther">Please specify <span class="req">*</span></label>
+            <input type="text" id="businessTypeOther" name="businessTypeOther">
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Account details -->
+      <fieldset>
+        <legend>Account details</legend>
+        <div class="row">
+          <div class="field">
+            <label for="estMonthlyPurchases">Estimated Monthly Purchases from Syri Ltd. <span class="req">*</span></label>
+            <div class="money"><span>£</span><input type="number" id="estMonthlyPurchases" name="estMonthlyPurchases" min="0" step="1" inputmode="numeric" required></div>
+          </div>
+          <div class="field">
+            <label for="creditLimitRequest">Credit Limit Request</label>
+            <div class="money"><span>£</span><input type="number" id="creditLimitRequest" name="creditLimitRequest" min="0" step="1" inputmode="numeric"></div>
+          </div>
+          <div class="field">
+            <label for="paymentTerms">Payment Terms</label>
+            <input type="text" id="paymentTerms" name="paymentTerms">
+          </div>
+          <div class="field" data-group="eStatements" data-msg="Choose Yes or No">
+            <span class="label">E-Statements <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="E-Statements">
+              <label class="opt"><input type="radio" name="eStatements" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="eStatements" value="No"> No</label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Declaration -->
+      <fieldset>
+        <legend>Declaration</legend>
+        <p class="note">To be completed by a company director or partner.</p>
+        <div class="declaration">
+          <p>I am authorised to apply to open an account with Syri Ltd and I confirm that the information contained in this account application is accurate and correct. I confirm that I have read and accept the terms &amp; conditions of sale. I understand that all orders will be placed on those terms (or any terms later adopted by Syri Ltd and notified in writing). I/we agree that all contracts made with Syri Ltd will be governed by your terms and conditions in force from time to time.</p>
+          <p style="margin:0">We will use your data to:</p>
+          <ul>
+            <li>Comply with laws and regulations for the supply of pharmaceutical products.</li>
+            <li>Form a trading relationship with you which will entail, amongst other things, forming a credit opinion.</li>
+            <li>Keep accounting records of the transactions with you.</li>
+          </ul>
+        </div>
+
+        <div class="field" data-group="signature" data-msg="Please sign in the box">
+          <span class="label">Proprietor’s / Director’s Signature <span class="req">*</span></span>
+          <canvas id="sig" class="sig" aria-label="Signature box – draw your signature here"></canvas>
+          <input type="hidden" id="signatureData" name="signatureData">
+          <div class="sig-foot">
+            <span>Sign using your mouse or finger</span>
+            <button type="button" class="link" id="clearSig">Clear</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="signName">Name <span class="req">*</span></label>
+            <input type="text" id="signName" name="signName" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="signDate">Date <span class="req">*</span></label>
+            <input type="date" id="signDate" name="signDate" required>
+          </div>
+        </div>
+        <div class="field consent" data-group="esignConsent" data-msg="Please confirm you agree to sign electronically">
+          <label class="opt"><input type="checkbox" name="esignConsent" value="Yes">
+            <span>I agree to sign this application electronically and intend my signature above to authenticate it. I understand it has the same effect as a handwritten signature. <span class="req">*</span></span>
+          </label>
+        </div>
+        <p class="evidence-note">When you submit, we record the date and time, your IP address and your browser/device details alongside your signature. This is used only as evidence that you signed this application and is kept with your account records.</p>
+        <p class="small">Under the Data Protection Act 1998 you have the right to request the information that we possess about you; there is a small fee payable by you to us in the sum of £10.</p>
+      </fieldset>
+
+      <!-- Additional delivery addresses (Section B) -->
+      <fieldset>
+        <legend>Additional delivery addresses</legend>
+        <p class="note">Only needed if you have more than one depot or branch. Add one for each extra address.</p>
+        <div id="depots"></div>
+        <button type="button" class="btn-add" id="addDepot">+ Add an address</button>
+
+        <div class="field">
+          <label for="additionalInfo">Anything else we should know? <span class="hint">Optional</span></label>
+          <textarea id="additionalInfo" name="additionalInfo" rows="3"></textarea>
+        </div>
+      </fieldset>
+
+      <div class="actions">
+        <p id="formMsg" role="alert">Please complete the highlighted fields.</p>
+        <div class="buttons">
+          <button type="button" class="btn secondary" id="printBtn">Print</button>
+          <button type="submit" class="btn">Submit application</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="done" tabindex="-1">
+      <h2>Thank you – application submitted</h2>
+      <p>Our credit control team will review your details and be in touch.</p>
+      <p>Questions? Email <a href="mailto:credit.control@syrimed.co.uk" style="color:#26358C">credit.control@syrimed.co.uk</a> or call 0208 728 7800.</p>
+
+      <div class="record">
+        <h3>Electronic signature record</h3>
+        <dl id="recordList"></dl>
+        <p>This record is logically associated with your signed application (Electronic Communications Act 2000, s.7; UK eIDAS Art. 25).</p>
+      </div>
+      <button type="button" class="btn secondary" id="printRecord">Print / save this record</button>
+    </div>
+
+  </div>
+
+  <div class="docfoot">
+    Parent SOP: SOP/SALE/0015 · Form Number: F/SALE/0015/004/V4 · Effective Date: 05 Dec 2025 · Review Date: 03 Dec 2027
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var form = document.getElementById('form');
+  var msg  = document.getElementById('formMsg');
+
+  /* ---------- Signature ---------- */
+  var canvas = document.getElementById('sig');
+  var ctx = canvas.getContext('2d');
+  var sigInput = document.getElementById('signatureData');
+  var drawing = false, signed = false;
+  var signedAt = null; /* when the signature was last completed (UTC) */
+
+  function setup() {
+    var r = window.devicePixelRatio || 1, box = canvas.getBoundingClientRect();
+    if (!box.width) { return; }
+    var keep = signed ? canvas.toDataURL() : null;
+    canvas.width = box.width * r;
+    canvas.height = box.height * r;
+    ctx.setTransform(r, 0, 0, r, 0, 0);
+    ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1A1D29';
+    if (keep) {
+      var img = new Image();
+      img.onload = function () { ctx.drawImage(img, 0, 0, box.width, box.height); };
+      img.src = keep;
+    }
+  }
+  function pos(e) { var b = canvas.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; }
+
+  canvas.addEventListener('pointerdown', function (e) {
+    drawing = true; canvas.setPointerCapture(e.pointerId);
+    var p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault();
+  });
+  canvas.addEventListener('pointermove', function (e) {
+    if (!drawing) { return; }
+    var p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke();
+    if (!signed) { signed = true; canvas.classList.add('signed'); }
+    e.preventDefault();
+  });
+  ['pointerup', 'pointercancel'].forEach(function (t) {
+    canvas.addEventListener(t, function () {
+      if (!drawing) { return; }
+      drawing = false;
+      sigInput.value = signed ? canvas.toDataURL('image/png') : '';
+      if (signed) { signedAt = new Date(); }
+      recheck(canvas.closest('.field'));
+    });
+  });
+  document.getElementById('clearSig').addEventListener('click', function () {
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.restore();
+    signed = false; signedAt = null; sigInput.value = ''; canvas.classList.remove('signed');
+  });
+  window.addEventListener('resize', setup);
+  setup();
+
+  /* ---------- "Other" business type ---------- */
+  var otherWrap = document.getElementById('otherWrap');
+  var otherInput = document.getElementById('businessTypeOther');
+  form.querySelectorAll('input[name=businessType]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      var on = document.getElementById('btOther').checked;
+      otherWrap.classList.toggle('show', on);
+      if (!on) { otherInput.value = ''; }
+    });
+  });
+
+  /* ---------- Additional addresses ---------- */
+  var depots = document.getElementById('depots');
+  var seq = 0;
+
+  function depotHTML(n) {
+    var p = 'depot' + n;
+    return '<div class="depot-head"><strong>Address</strong>' +
+      '<button type="button" class="link remove">Remove</button></div>' +
+      '<div class="field"><label for="' + p + 'Name">Depot Address / Trading Name</label>' +
+      '<input type="text" id="' + p + 'Name" name="' + p + 'Name"></div>' +
+      '<div class="field"><label for="' + p + 'Address">Trading Address <span class="hint">Including postcode</span></label>' +
+      '<textarea id="' + p + 'Address" name="' + p + 'Address" rows="2"></textarea></div>' +
+      '<div class="row">' +
+        '<div class="field"><label for="' + p + 'Phone">Business Telephone Number <span class="hint">If different to above</span></label>' +
+        '<input type="tel" id="' + p + 'Phone" name="' + p + 'Phone"></div>' +
+        '<div class="field"><label for="' + p + 'Email">Business Email <span class="hint">If different to above</span></label>' +
+        '<input type="email" id="' + p + 'Email" name="' + p + 'Email"></div>' +
+        '<div class="field"><label for="' + p + 'Gphc">Pharmacy Premises Registration Number</label>' +
+        '<input type="text" id="' + p + 'Gphc" name="' + p + 'Gphc"></div>' +
+        '<div class="field"><label for="' + p + 'Wda">Wholesale Dealers Authority Number <span class="hint">If applicable</span></label>' +
+        '<input type="text" id="' + p + 'Wda" name="' + p + 'Wda"></div>' +
+      '</div>' +
+      '<div class="field"><div class="options">' +
+        '<label class="opt"><input type="checkbox" name="' + p + 'GdpSupplied" value="Yes"> Copy of GDP supplied</label>' +
+        '<label class="opt"><input type="checkbox" name="' + p + 'CdSupplied" value="Yes"> Copy of CD licence supplied (if applicable)</label>' +
+      '</div></div>';
+  }
+
+  function renumber() {
+    depots.querySelectorAll('.depot').forEach(function (d, i) {
+      d.querySelector('strong').textContent = 'Additional address ' + (i + 1);
+    });
+  }
+
+  document.getElementById('addDepot').addEventListener('click', function () {
+    seq += 1;
+    var d = document.createElement('div');
+    d.className = 'depot';
+    d.innerHTML = depotHTML(seq);
+    depots.appendChild(d);
+    renumber();
+    d.querySelector('input').focus();
+  });
+  depots.addEventListener('click', function (e) {
+    if (!e.target.classList.contains('remove')) { return; }
+    e.target.closest('.depot').remove();
+    renumber();
+  });
+
+  /* ---------- Validation ---------- */
+  function isValid(field) {
+    var group = field.getAttribute('data-group');
+    if (group === 'signature') { return signed; }
+    if (group) {
+      var picked = field.querySelector('input[name=' + group + ']:checked');
+      if (!picked) { return false; }
+      if (group === 'businessType' && picked.value === 'Other') { return otherInput.value.trim() !== ''; }
+      return true;
+    }
+    var ok = true;
+    field.querySelectorAll('input,textarea').forEach(function (c) {
+      if (!c.checkValidity() || (c.required && !c.value.trim())) { ok = false; }
+    });
+    return ok;
+  }
+
+  function message(field) {
+    if (field.getAttribute('data-msg')) { return field.getAttribute('data-msg'); }
+    var c = field.querySelector('input,textarea');
+    if (c && c.type === 'email' && c.value.trim()) { return 'Enter a valid email address'; }
+    return 'This field is required';
+  }
+
+  function mark(field, ok) {
+    field.classList.toggle('invalid', !ok);
+    var err = field.querySelector(':scope > .error');
+    if (!ok) {
+      if (!err) { err = document.createElement('div'); err.className = 'error'; field.appendChild(err); }
+      err.textContent = message(field);
+    }
+    field.querySelectorAll('input,textarea').forEach(function (c) { c.setAttribute('aria-invalid', ok ? 'false' : 'true'); });
+  }
+
+  function recheck(field) {
+    if (field && field.classList.contains('invalid')) { mark(field, isValid(field)); }
+    if (!form.querySelector('.invalid')) { msg.classList.remove('show'); }
+  }
+  form.addEventListener('input', function (e) { recheck(e.target.closest('.field')); });
+  form.addEventListener('change', function (e) { recheck(e.target.closest('.field')); });
+
+  document.getElementById('postcode').addEventListener('blur', function () {
+    this.value = this.value.toUpperCase().trim();
+  });
+
+  /* ---------- Submit ---------- */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var first = null;
+    form.querySelectorAll('.field').forEach(function (field) {
+      var needsCheck = field.hasAttribute('data-group') || field.querySelector('[required],[type=email]');
+      if (!needsCheck) { return; }
+      var ok = isValid(field);
+      mark(field, ok);
+      if (!ok && !first) { first = field; }
+    });
+
+    if (first) {
+      msg.classList.add('show');
+      first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var f = first.querySelector('input:not([type=hidden]),textarea');
+      if (f) { f.focus({ preventScroll: true }); }
+      return;
+    }
+
+    var submitBtn = form.querySelector('button[type=submit]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting…';
+
+    var pc = document.getElementById('postcode');
+    pc.value = pc.value.toUpperCase().trim();
+
+    var answers = {};
+    new FormData(form).forEach(function (v, k) { answers[k] = v; });
+
+    buildEvidence(answers).then(function (evidence) {
+      /* Not yet connected to a destination. `application` holds every
+         answer plus the signature evidence, ready to send to a backend. */
+      var application = { answers: answers, evidence: evidence };
+      console.log('Syri account application', application);
+
+      showRecord(evidence);
+      form.style.display = 'none';
+      var done = document.getElementById('done');
+      done.classList.add('show');
+      done.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  /* ---------- Signature evidence ----------
+     A drawn signature is a simple electronic signature. It is admissible
+     and cannot be denied legal effect for being electronic (ECA 2000 s.7;
+     UK eIDAS Art. 25). Its weight depends on showing who signed, when,
+     what they signed and that they intended to sign, so we record that.
+     NOTE: a browser cannot see its own public IP. Here it is looked up
+     from a third-party service at submit time (client-reported). Once
+     submissions go to a server, record the IP and time server-side as
+     the authoritative values. */
+  var IP_LOOKUP_URL = 'https://api.ipify.org?format=json';
+
+  function lookupIp() {
+    var timeout = new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 4000); });
+    var lookup = fetch(IP_LOOKUP_URL, { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return j && j.ip ? j.ip : null; })
+      .catch(function () { return null; });
+    return Promise.race([lookup, timeout]);
+  }
+
+  function sha256(text) {
+    if (!(window.crypto && crypto.subtle && window.TextEncoder)) { return Promise.resolve(null); }
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+    }).catch(function () { return null; });
+  }
+
+  function canonical(obj) {
+    return JSON.stringify(Object.keys(obj).sort().reduce(function (o, k) { o[k] = obj[k]; return o; }, {}));
+  }
+
+  function buildEvidence(answers) {
+    var submittedAt = new Date();
+    return lookupIp().then(function (ip) {
+      var evidence = {
+        signerName: answers.signName,
+        signerCompany: answers.companyRegName,
+        signatureCapturedAt: (signedAt || submittedAt).toISOString(),
+        submittedAt: submittedAt.toISOString(),
+        timeZone: (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'unknown',
+        ipAddress: ip || 'unavailable',
+        ipSource: ip ? 'client-reported via api.ipify.org' : 'lookup failed',
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        screen: screen.width + 'x' + screen.height,
+        pageUrl: location.href,
+        formNumber: 'F/SALE/0015/004/V4',
+        consentToSignElectronically: answers.esignConsent === 'Yes',
+        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim()
+      };
+      /* Hash of the answers + evidence, so any later change to the record is detectable */
+      return sha256(canonical(answers) + canonical(evidence)).then(function (hash) {
+        evidence.sha256 = hash || 'unavailable';
+        return evidence;
+      });
+    });
+  }
+
+  function ukTime(iso) {
+    var d = new Date(iso);
+    return d.toLocaleString('en-GB', {
+      timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
+    }) + ' (' + iso + ')';
+  }
+
+  function showRecord(ev) {
+    var rows = [
+      ['Signed by', ev.signerName + (ev.signerCompany ? ', ' + ev.signerCompany : '')],
+      ['Signature', null],
+      ['Signature captured', ukTime(ev.signatureCapturedAt)],
+      ['Submitted', ukTime(ev.submittedAt)],
+      ['IP address', ev.ipAddress],
+      ['Browser / device', ev.userAgent],
+      ['Consent to e-sign', ev.consentToSignElectronically ? 'Given' : 'Not given'],
+      ['Form', ev.formNumber],
+      ['Integrity hash (SHA-256)', ev.sha256]
+    ];
+    var dl = document.getElementById('recordList');
+    dl.innerHTML = '';
+    rows.forEach(function (row) {
+      var dt = document.createElement('dt'); dt.textContent = row[0];
+      var dd = document.createElement('dd');
+      if (row[1] === null) {
+        var img = document.createElement('img');
+        img.src = sigInput.value; img.alt = 'Captured signature';
+        dd.appendChild(img);
+      } else {
+        dd.textContent = row[1];
+      }
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+  }
+
+  document.getElementById('printBtn').addEventListener('click', function () { window.print(); });
+  document.getElementById('printRecord').addEventListener('click', function () { window.print(); });
+
+  /* Default signing date to today */
+  var d = new Date();
+  document.getElementById('signDate').value = d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}());
+</script>
+</body>
+</html>
