@@ -9,8 +9,8 @@ print, sign and scan Word form.
 - **Section A**: company details, business address, trade references, business type,
   account details and the signed declaration
 - **Section B**: any number of additional delivery addresses
-- **Electronic signature**: drawn signature with explicit consent to sign electronically,
-  plus a signature record (UTC and UK timestamps, IP address, browser/device, SHA-256
+- **Electronic signature**: typed name, confirmed by the signer with a timestamp, after
+  explicit consent to sign electronically, plus a signature record (UTC and UK timestamps, IP address, browser/device, SHA-256
   integrity hash) shown on submission
 - **Completed PDF**: on submission the answers are written into the real Word form
   (exported to PDF) and downloaded, with the signature record appended as a final page

@@ -82,7 +82,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 /* Errors */
 .error{display:none;margin-top:6px;font-size:13px;color:var(--err)}
 .invalid .error{display:block}
-.invalid input:not([type=radio]):not([type=checkbox]),.invalid textarea,.invalid .sig{border-color:var(--err)}
+.invalid input:not([type=radio]):not([type=checkbox]),.invalid textarea,.invalid .sig-preview{border-color:var(--err)}
 
 /* Declaration */
 .declaration{
@@ -92,12 +92,26 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .declaration p{margin:0 0 10px}
 .declaration ul{margin:4px 0 0;padding-left:20px}
 
-/* Signature */
-.sig{
-  display:block;width:100%;height:140px;background:#fff;
-  border:1px dashed #AEB5C7;border-radius:6px;touch-action:none;cursor:crosshair;
+/* Signature (typed, confirmed with a timestamp) */
+.sign-row{display:flex;gap:10px}
+.sign-row input{flex:1;min-width:0}
+.sign-row .btn{white-space:nowrap;padding:10px 20px}
+.btn:disabled{opacity:.55;cursor:default}
+.btn:disabled:hover{background:var(--navy)}
+.sig-preview{
+  margin-top:10px;min-height:78px;padding:8px 18px;display:flex;align-items:center;
+  border:1px dashed #AEB5C7;border-radius:6px;background:#fff;overflow:hidden;white-space:nowrap;
+  font-family:"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive;
+  font-size:30px;color:var(--ink);
 }
-.sig.signed{border-style:solid;border-color:var(--navy)}
+.sig-preview.empty{font-family:inherit;font-size:13.5px;color:#9AA1B4}
+.sig-preview.signed{border-style:solid;border-color:var(--navy)}
+.sig-stamp{
+  display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding:9px 12px;
+  background:#EEF7F2;border:1px solid #BFE0CD;border-radius:6px;font-size:13px;color:var(--ok);font-weight:600;
+}
+.sig-stamp.show{display:flex}
+.sig-stamp .link{margin-left:auto}
 .sig-foot{display:flex;justify-content:space-between;margin-top:6px;font-size:12.5px;color:var(--muted)}
 .link{background:none;border:0;padding:0;font:inherit;font-size:13px;color:var(--navy);cursor:pointer;text-decoration:underline}
 .small{font-size:12.5px;color:var(--muted);margin:0 0 22px}
@@ -159,6 +173,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   header,fieldset,.actions{padding-left:20px;padding-right:20px}
   .contact{text-align:left}
   .row,.row.three,.options{grid-template-columns:1fr}
+  .sign-row{flex-direction:column}
   .buttons{width:100%;flex-direction:column-reverse}
   .btn{width:100%}
 }
@@ -168,7 +183,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   body{background:#fff;font-size:10pt}
   .page{max-width:none;padding:0}
   .sheet{border:0}
-  .actions,.btn-add,.link,#printRecord,#downloadPdf,#pdfStatus{display:none!important}
+  .actions,.btn-add,.link,#printRecord,#downloadPdf,#pdfStatus,#confirmSig{display:none!important}
   fieldset,.depot{break-inside:avoid}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -375,19 +390,33 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
           </ul>
         </div>
 
-        <div class="field" data-group="signature" data-msg="Please sign in the box">
-          <span class="label">Proprietor’s / Director’s Signature <span class="req">*</span></span>
-          <canvas id="sig" class="sig" aria-label="Signature box – draw your signature here"></canvas>
-          <input type="hidden" id="signatureData" name="signatureData">
-          <div class="sig-foot">
-            <span>Sign using your mouse or finger</span>
-            <button type="button" class="link" id="clearSig">Clear</button>
+        <div class="field consent" data-group="esignConsent" data-msg="Please tick this box before confirming your signature">
+          <label class="opt"><input type="checkbox" name="esignConsent" value="Yes">
+            <span>I agree to sign this application electronically. By typing my name and selecting “Confirm signature” I intend to sign and authenticate this application, and I understand this has the same effect as a handwritten signature. <span class="req">*</span></span>
+          </label>
+        </div>
+
+        <div class="field" data-group="signature" data-msg="Type your full name and select Confirm signature">
+          <label for="typedSignature">Proprietor’s / Director’s Signature <span class="req">*</span></label>
+          <div class="sign-row">
+            <input type="text" id="typedSignature" name="typedSignature" autocomplete="name"
+                   placeholder="Type your full name" aria-describedby="sigHelp">
+            <button type="button" class="btn" id="confirmSig">Confirm signature</button>
           </div>
+          <div class="sig-preview empty" id="sigPreview" aria-hidden="true">Your signature will appear here</div>
+          <div class="sig-stamp" id="sigStamp" role="status">
+            <span id="sigStampText"></span>
+            <button type="button" class="link" id="changeSig">Change</button>
+          </div>
+          <div class="sig-foot" id="sigHelp">Type your full name, then select Confirm signature. The date and time are recorded when you confirm.</div>
+          <input type="hidden" id="signatureData" name="signatureData">
+          <input type="hidden" id="signatureConfirmedAt" name="signatureConfirmedAt">
         </div>
         <div class="row">
           <div class="field">
-            <label for="signName">Name <span class="req">*</span></label>
-            <input type="text" id="signName" name="signName" required autocomplete="name">
+            <label for="signName">Name</label>
+            <input type="text" id="signName" name="signName" readonly aria-readonly="true" aria-describedby="signNameHint">
+            <div class="sig-foot" id="signNameHint">Taken from your confirmed signature</div>
           </div>
           <div class="field">
             <label for="signDate">Date</label>
@@ -395,12 +424,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
             <div class="sig-foot" id="signDateHint">Set automatically to today’s date</div>
           </div>
         </div>
-        <div class="field consent" data-group="esignConsent" data-msg="Please confirm you agree to sign electronically">
-          <label class="opt"><input type="checkbox" name="esignConsent" value="Yes">
-            <span>I agree to sign this application electronically and intend my signature above to authenticate it. I understand it has the same effect as a handwritten signature. <span class="req">*</span></span>
-          </label>
-        </div>
-        <p class="evidence-note">When you submit, we record the date and time, your IP address and your browser/device details alongside your signature. This is used only as evidence that you signed this application and is kept with your account records.</p>
+        <p class="evidence-note">When you confirm your signature and submit, we record the date and time, your IP address and your browser/device details. This is used only as evidence that you signed this application and is kept with your account records.</p>
         <p class="small">Under the Data Protection Act 1998 you have the right to request the information that we possess about you; there is a small fee payable by you to us in the sum of £10.</p>
       </fieldset>
 
@@ -456,55 +480,101 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   var form = document.getElementById('form');
   var msg  = document.getElementById('formMsg');
 
-  /* ---------- Signature ---------- */
-  var canvas = document.getElementById('sig');
-  var ctx = canvas.getContext('2d');
-  var sigInput = document.getElementById('signatureData');
-  var drawing = false, signed = false;
-  var signedAt = null; /* when the signature was last completed (UTC) */
+  /* ---------- Signature: typed name, confirmed with a timestamp ----------
+     The signer ticks consent, types their full name and selects
+     "Confirm signature". That click is the act of signing: the time is
+     recorded, the signature is locked and the printed Name is filled in. */
+  var typedSig   = document.getElementById('typedSignature');
+  var confirmBtn = document.getElementById('confirmSig');
+  var preview    = document.getElementById('sigPreview');
+  var stamp      = document.getElementById('sigStamp');
+  var sigInput   = document.getElementById('signatureData');
+  var sigAtInput = document.getElementById('signatureConfirmedAt');
+  var nameInput  = document.getElementById('signName');
+  var consentBox = form.querySelector('input[name=esignConsent]');
+  var SIG_FONT = '"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive';
+  var PREVIEW_EMPTY = 'Your signature will appear here';
+  var signed = false;
+  var signedAt = null; /* when the signer confirmed the signature (UTC) */
 
-  function setup() {
-    var r = window.devicePixelRatio || 1, box = canvas.getBoundingClientRect();
-    if (!box.width) { return; }
-    var keep = signed ? canvas.toDataURL() : null;
-    canvas.width = box.width * r;
-    canvas.height = box.height * r;
-    ctx.setTransform(r, 0, 0, r, 0, 0);
-    ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1A1D29';
-    if (keep) {
-      var img = new Image();
-      img.onload = function () { ctx.drawImage(img, 0, 0, box.width, box.height); };
-      img.src = keep;
+  function cleanName(v) { return v.replace(/\s+/g, ' ').trim(); }
+
+  typedSig.addEventListener('input', function () {
+    var v = cleanName(typedSig.value);
+    preview.textContent = v || PREVIEW_EMPTY;
+    preview.classList.toggle('empty', !v);
+  });
+
+  /* Enter confirms the signature instead of submitting the whole form */
+  typedSig.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (!signed) { confirmBtn.click(); } }
+  });
+
+  /* The typed name drawn in a script face, used as the signature image in the PDF */
+  function renderSignature(text) {
+    var c = document.createElement('canvas');
+    c.width = 900; c.height = 180;
+    var g = c.getContext('2d');
+    var size = 84;
+    g.font = size + 'px ' + SIG_FONT;
+    while (g.measureText(text).width > c.width - 40 && size > 30) {
+      size -= 4;
+      g.font = size + 'px ' + SIG_FONT;
     }
+    g.fillStyle = '#1A1D29';
+    g.textBaseline = 'middle';
+    g.fillText(text, 20, c.height / 2);
+    return c.toDataURL('image/png');
   }
-  function pos(e) { var b = canvas.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; }
 
-  canvas.addEventListener('pointerdown', function (e) {
-    drawing = true; canvas.setPointerCapture(e.pointerId);
-    var p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); e.preventDefault();
+  confirmBtn.addEventListener('click', function () {
+    var v = cleanName(typedSig.value);
+    var sigField = typedSig.closest('.field');
+    var okConsent = consentBox.checked;
+    var okName = (v.match(/\p{L}/gu) || []).length >= 2;
+    mark(consentBox.closest('.field'), okConsent);
+    mark(sigField, okName);
+    if (!okConsent) { consentBox.focus(); return; }
+    if (!okName) { typedSig.focus(); return; }
+
+    signedAt = new Date();
+    signed = true;
+    typedSig.value = v;
+    typedSig.readOnly = true;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Signed';
+    preview.classList.add('signed');
+    sigInput.value = renderSignature(v);
+    sigAtInput.value = signedAt.toISOString();
+    nameInput.value = v;
+    document.getElementById('sigStampText').textContent =
+      '✓ Signed electronically by ' + v + ' on ' + ukTime(sigAtInput.value, true);
+    stamp.classList.add('show');
+    if (!form.querySelector('.invalid')) { msg.classList.remove('show'); }
   });
-  canvas.addEventListener('pointermove', function (e) {
-    if (!drawing) { return; }
-    var p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke();
-    if (!signed) { signed = true; canvas.classList.add('signed'); }
-    e.preventDefault();
+
+  function resetSignature() {
+    signed = false;
+    signedAt = null;
+    typedSig.readOnly = false;
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Confirm signature';
+    preview.classList.remove('signed');
+    sigInput.value = '';
+    sigAtInput.value = '';
+    nameInput.value = '';
+    stamp.classList.remove('show');
+  }
+
+  document.getElementById('changeSig').addEventListener('click', function () {
+    resetSignature();
+    typedSig.focus();
   });
-  ['pointerup', 'pointercancel'].forEach(function (t) {
-    canvas.addEventListener(t, function () {
-      if (!drawing) { return; }
-      drawing = false;
-      sigInput.value = signed ? canvas.toDataURL('image/png') : '';
-      if (signed) { signedAt = new Date(); }
-      recheck(canvas.closest('.field'));
-    });
+
+  /* Withdrawing consent withdraws the signature */
+  consentBox.addEventListener('change', function () {
+    if (!consentBox.checked && signed) { resetSignature(); }
   });
-  document.getElementById('clearSig').addEventListener('click', function () {
-    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.restore();
-    signed = false; signedAt = null; sigInput.value = ''; canvas.classList.remove('signed');
-  });
-  window.addEventListener('resize', setup);
-  setup();
 
   /* ---------- "Other" business type ---------- */
   var otherWrap = document.getElementById('otherWrap');
@@ -870,12 +940,16 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
         put(p2, P2.estMonthlyPurchases, money(answers.estMonthlyPurchases), 1);
         put(p2, P2.creditLimitRequest, money(answers.creditLimitRequest), 1);
         if (sigImg) {
-          var sb = P2.signature, pad = 4;
-          var dims = sigImg.scaleToFit(sb[2] - sb[0] - pad * 2, sb[3] - sb[1] - pad * 2);
+          /* Typed signature in the upper part of the cell, e-sign timestamp beneath */
+          var sb = P2.signature, pad = 4, stampH = 9;
+          var dims = sigImg.scaleToFit(sb[2] - sb[0] - pad * 2, sb[3] - sb[1] - pad * 2 - stampH);
           p2.drawImage(sigImg, {
-            x: sb[0] + (sb[2] - sb[0] - dims.width) / 2,
-            y: PAGE_H - sb[3] + (sb[3] - sb[1] - dims.height) / 2,
+            x: sb[0] + pad,
+            y: PAGE_H - (sb[1] + pad + dims.height),
             width: dims.width, height: dims.height
+          });
+          p2.drawText(safe('E-signed ' + ukTime(evidence.signatureCapturedAt, true)), {
+            x: sb[0] + pad + 1, y: PAGE_H - (sb[3] - 4), size: 5.5, font: font, color: INK
           });
         }
         put(p2, P2.signName, answers.signName, 2);
@@ -937,7 +1011,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
           var rows = [
             ['Signed by', evidence.signerName + (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
-            ['Signature captured', ukTime(evidence.signatureCapturedAt)],
+            ['Signature method', evidence.signatureMethod],
+            ['Typed signature', evidence.typedSignature],
+            ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
             ['Submitted', ukTime(evidence.submittedAt)],
             ['Signer time zone', evidence.timeZone],
             ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
@@ -968,10 +1044,12 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
             y += 125;
           }
 
-          var legal = 'This document was signed electronically. The drawn signature is logically associated with the application ' +
-            'data above and is admissible as evidence under section 7 of the Electronic Communications Act 2000; under ' +
-            'Article 25(1) of UK eIDAS it may not be denied legal effect solely because it is in electronic form. The ' +
-            'integrity hash is calculated over the submitted answers and this record, so any later alteration can be detected.';
+          var legal = 'This document was signed electronically. The signer consented to sign electronically, typed their name ' +
+            'and confirmed it as their signature at the time shown; a name applied with the intention to authenticate is a ' +
+            'valid electronic signature in England and Wales. The signature is logically associated with the application data ' +
+            'above and is admissible as evidence under section 7 of the Electronic Communications Act 2000; under Article 25(1) ' +
+            'of UK eIDAS it may not be denied legal effect solely because it is in electronic form. The integrity hash is ' +
+            'calculated over the submitted answers and this record, so any later alteration can be detected.';
           wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
             rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: L.rgb(0.35, 0.37, 0.45) });
           });
@@ -1013,10 +1091,12 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   }
 
   /* ---------- Signature evidence ----------
-     A drawn signature is a simple electronic signature. It is admissible
-     and cannot be denied legal effect for being electronic (ECA 2000 s.7;
-     UK eIDAS Art. 25). Its weight depends on showing who signed, when,
-     what they signed and that they intended to sign, so we record that.
+     A typed name confirmed by the signer is a simple electronic signature.
+     It is valid where applied with intent to authenticate (Law Commission
+     2019), admissible (ECA 2000 s.7) and cannot be denied legal effect for
+     being electronic (UK eIDAS Art. 25). Its weight depends on showing who
+     signed, when, what they signed and that they intended to sign, so we
+     record that.
      NOTE: a browser cannot see its own public IP. Here it is looked up
      from a third-party service at submit time (client-reported). Once
      submissions go to a server, record the IP and time server-side as
@@ -1051,6 +1131,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       var evidence = {
         signerName: answers.signName,
         signerCompany: answers.companyRegName,
+        signatureMethod: 'Typed name, confirmed by the signer ("Confirm signature")',
+        typedSignature: answers.typedSignature,
         signatureCapturedAt: (signedAt || submittedAt).toISOString(),
         submittedAt: submittedAt.toISOString(),
         timeZone: (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'unknown',
@@ -1072,19 +1154,22 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     });
   }
 
-  function ukTime(iso) {
+  /* UK local time; the full form also shows the exact UTC value */
+  function ukTime(iso, short) {
     var d = new Date(iso);
-    return d.toLocaleString('en-GB', {
+    var local = d.toLocaleString('en-GB', {
       timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric',
       hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
-    }) + ' (' + iso + ')';
+    });
+    return short ? local : local + ' (' + iso + ')';
   }
 
   function showRecord(ev) {
     var rows = [
       ['Signed by', ev.signerName + (ev.signerCompany ? ', ' + ev.signerCompany : '')],
       ['Signature', null],
-      ['Signature captured', ukTime(ev.signatureCapturedAt)],
+      ['Signature method', ev.signatureMethod],
+      ['Signature confirmed', ukTime(ev.signatureCapturedAt)],
       ['Submitted', ukTime(ev.submittedAt)],
       ['IP address', ev.ipAddress],
       ['Browser / device', ev.userAgent],
