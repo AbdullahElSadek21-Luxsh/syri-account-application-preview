@@ -27,7 +27,7 @@ body{
   margin:0;background:var(--bg);color:var(--ink);
   font:400 15px/1.6 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
 }
-.page{max-width:920px;margin:0 auto;padding:32px 16px 64px}
+.page{max-width:1000px;margin:0 auto;padding:32px 16px 64px}
 .sheet{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 
 /* Header */
@@ -390,8 +390,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
             <input type="text" id="signName" name="signName" required autocomplete="name">
           </div>
           <div class="field">
-            <label for="signDate">Date <span class="hint">Set automatically to today’s date</span></label>
-            <input type="text" id="signDate" name="signDate" readonly aria-readonly="true">
+            <label for="signDate">Date</label>
+            <input type="text" id="signDate" name="signDate" readonly aria-readonly="true" aria-describedby="signDateHint">
+            <div class="sig-foot" id="signDateHint">Set automatically to today’s date</div>
           </div>
         </div>
         <div class="field consent" data-group="esignConsent" data-msg="Please confirm you agree to sign electronically">
@@ -535,7 +536,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
         '<input type="email" id="' + p + 'Email" name="' + p + 'Email"></div>' +
         '<div class="field"><label for="' + p + 'Gphc">Pharmacy Premises Registration Number</label>' +
         '<input type="text" id="' + p + 'Gphc" name="' + p + 'Gphc"></div>' +
-        '<div class="field"><label for="' + p + 'Wda">Wholesale Dealers Authority Number <span class="hint">If applicable</span></label>' +
+        '<div class="field"><label for="' + p + 'Wda">Wholesale Dealers Authority Number (if applicable)</label>' +
         '<input type="text" id="' + p + 'Wda" name="' + p + 'Wda"></div>' +
       '</div>' +
       '<div class="field"><div class="options">' +
