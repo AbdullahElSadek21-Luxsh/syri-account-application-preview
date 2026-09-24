@@ -12,8 +12,11 @@ print, sign and scan Word form.
 - **Electronic signature**: drawn signature with explicit consent to sign electronically,
   plus a signature record (UTC and UK timestamps, IP address, browser/device, SHA-256
   integrity hash) shown on submission
+- **Completed PDF**: on submission the answers are written into the real Word form
+  (exported to PDF) and downloaded, with the signature record appended as a final page
 
-Self-contained static page. No build step, no backend. Submission is not wired to a
+Static page. No build step, no backend. `assets/` holds pdf-lib 1.17.1 (MIT) and the
+PDF export of the Word form used as the background for the completed PDF. Submission is not wired to a
 destination yet; completed answers are logged to the browser console only. The IP address
 is client-reported via api.ipify.org. Once a backend exists it should be captured
 server-side. The controlled Word original is kept private.
