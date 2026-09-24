@@ -132,6 +132,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   background:#fff;border:1px solid var(--line);border-radius:6px;padding:9px 16px;margin-bottom:24px;
 }
 .btn-add:hover{border-color:var(--navy)}
+.btn-add[hidden]{display:none}
+.depot-limit{display:none;margin:0 0 24px;font-size:13px;color:var(--muted)}
+.depot-limit.show{display:block}
 
 /* Footer + actions */
 .actions{
@@ -431,9 +434,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       <!-- Additional delivery addresses (Section B) -->
       <fieldset>
         <legend>Additional delivery addresses</legend>
-        <p class="note">Only needed if you have more than one depot or branch. Add one for each extra address.</p>
+        <p class="note">Only needed if you have more than one depot or branch. You can add up to 2 additional addresses.</p>
         <div id="depots"></div>
         <button type="button" class="btn-add" id="addDepot">+ Add an address</button>
+        <p class="depot-limit" id="depotLimit" role="status">You have added the maximum of 2 additional addresses. Please list any further addresses in the box below.</p>
 
         <div class="field">
           <label for="additionalInfo">Anything else we should know? <span class="hint">Optional</span></label>
@@ -614,13 +618,21 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       '</div></div>';
   }
 
+  var MAX_DEPOTS = 2; /* additional delivery addresses allowed */
+  var addDepotBtn = document.getElementById('addDepot');
+
   function renumber() {
-    depots.querySelectorAll('.depot').forEach(function (d, i) {
+    var cards = depots.querySelectorAll('.depot');
+    cards.forEach(function (d, i) {
       d.querySelector('strong').textContent = 'Additional address ' + (i + 1);
     });
+    var full = cards.length >= MAX_DEPOTS;
+    addDepotBtn.hidden = full;
+    document.getElementById('depotLimit').classList.toggle('show', full);
   }
 
-  document.getElementById('addDepot').addEventListener('click', function () {
+  addDepotBtn.addEventListener('click', function () {
+    if (depots.querySelectorAll('.depot').length >= MAX_DEPOTS) { return; }
     seq += 1;
     var d = document.createElement('div');
     d.className = 'depot';
@@ -633,6 +645,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     if (!e.target.classList.contains('remove')) { return; }
     e.target.closest('.depot').remove();
     renumber();
+    addDepotBtn.focus();
   });
 
   /* ---------- Validation ---------- */
