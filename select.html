@@ -64,6 +64,18 @@ h1{margin:4px 0 8px;font-size:28px;font-weight:600;letter-spacing:-.3px;color:va
   align-self:flex-start;margin-top:4px;padding:2px 8px;border-radius:99px;
   background:#EEF1F7;color:var(--muted);font-size:11.5px;font-weight:600;
 }
+.q-prompt{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  margin-top:22px;padding:16px 20px;border:1px dashed #A9C3E6;border-radius:8px;background:rgba(255,255,255,.55);
+}
+.q-prompt strong{display:block;font-size:15px;font-weight:600;color:var(--navy)}
+.q-prompt span{font-size:13px;color:var(--muted)}
+.q-btn{
+  font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+  background:#fff;color:var(--navy);border:1px solid var(--navy);border-radius:4px;padding:9px 16px;
+}
+.q-btn:hover{background:#EEF3FB}
+.lede a{color:var(--navy)}
 .back{
   display:inline-block;margin-bottom:10px;padding:0;border:0;background:none;cursor:pointer;
   font:inherit;font-size:13.5px;color:var(--navy);text-decoration:underline;
@@ -96,11 +108,44 @@ footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
         <strong>Customer account</strong>
         <span>You want to buy products from Syri Ltd.</span>
       </button>
-      <button type="button" class="choice" disabled aria-describedby="supplierSoon">
+      <a class="choice" data-type="supplier" href="form-supplier.html">
         <strong>Supplier account</strong>
         <span>You want to supply goods or services to Syri Ltd.</span>
-        <em class="tag" id="supplierSoon">Coming soon</em>
-      </button>
+        <small>Form F/SALE/0017/003</small>
+      </a>
+    </div>
+
+    <div class="q-prompt">
+      <div>
+        <strong>Have you been asked by Syri to complete a questionnaire?</strong>
+        <span>Questionnaires are only needed if our team has asked you for one.</span>
+      </div>
+      <button type="button" class="q-btn" id="pickQuestionnaire">Yes, complete a questionnaire</button>
+    </div>
+  </section>
+
+  <!-- Questionnaires: a separate, optional route -->
+  <section class="inner step" id="stepQuestionnaire" aria-labelledby="questionnaireTitle" hidden>
+    <button type="button" class="back" id="backFromQuestionnaire">&larr; Back</button>
+    <h1 id="questionnaireTitle">Which questionnaire have you been asked to complete?</h1>
+    <p class="lede">If you&rsquo;re not sure, check the email from Syri or contact
+      <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>.</p>
+    <div class="cards">
+      <a class="choice" data-type="q-wda" href="questionnaire-wda.html">
+        <strong>Licensed wholesaler (WDA)</strong>
+        <span>Supplier and Manufacturer Assessment Questionnaire under WDA(H).</span>
+        <small>Form F/SALE/0017/004</small>
+      </a>
+      <a class="choice" data-type="q-manufacturer" href="questionnaire-manufacturer.html">
+        <strong>Manufacturer</strong>
+        <span>API, raw material or finished product manufacturers.</span>
+        <small>Form F/QA/0014/008</small>
+      </a>
+      <a class="choice" data-type="q-supplier" href="questionnaire-supplier.html">
+        <strong>Other supplier or service provider</strong>
+        <span>For example laboratory testing or other goods and services.</span>
+        <small>Form F/QA/0014/005</small>
+      </a>
     </div>
   </section>
 
@@ -139,7 +184,11 @@ footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
   var FORMS = {
     uk: 'syri-account-application-form.html',
     hospital: 'form-hospital.html',
-    export: 'form-export.html'
+    export: 'form-export.html',
+    supplier: 'form-supplier.html',
+    'q-wda': 'questionnaire-wda.html',
+    'q-manufacturer': 'questionnaire-manufacturer.html',
+    'q-supplier': 'questionnaire-supplier.html'
   };
   var params = new URLSearchParams(window.location.search);
   var sentBy = params.get('sentBy');
@@ -159,18 +208,22 @@ footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
 
   var stepAccount = document.getElementById('stepAccount');
   var stepCustomer = document.getElementById('stepCustomer');
+  var stepQuestionnaire = document.getElementById('stepQuestionnaire');
 
-  document.getElementById('pickCustomer').addEventListener('click', function () {
-    stepAccount.hidden = true;
-    stepCustomer.hidden = false;
-    stepCustomer.querySelector('h1').setAttribute('tabindex', '-1');
-    stepCustomer.querySelector('h1').focus();
-  });
-  document.getElementById('backToAccount').addEventListener('click', function () {
-    stepCustomer.hidden = true;
-    stepAccount.hidden = false;
-    document.getElementById('pickCustomer').focus();
-  });
+  function show(step) {
+    [stepAccount, stepCustomer, stepQuestionnaire].forEach(function (s) { s.hidden = s !== step; });
+    var h = step.querySelector('h1');
+    h.setAttribute('tabindex', '-1');
+    h.focus();
+  }
+
+  document.getElementById('pickCustomer').addEventListener('click', function () { show(stepCustomer); });
+  document.getElementById('pickQuestionnaire').addEventListener('click', function () { show(stepQuestionnaire); });
+  document.getElementById('backToAccount').addEventListener('click', function () { show(stepAccount); });
+  document.getElementById('backFromQuestionnaire').addEventListener('click', function () { show(stepAccount); });
+
+  /* Questionnaire pages link back here with ?view=questionnaires */
+  if (params.get('view') === 'questionnaires') { show(stepQuestionnaire); }
 }());
 </script>
 </body>

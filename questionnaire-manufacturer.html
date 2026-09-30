@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Manufacturer Assessment Questionnaire &ndash; Syri Ltd.</title>
+<style>
+/* Syri Ltd. — Manufacturer Assessment Questionnaire
+   Web version of the controlled form F/QA/0014/008/v7 · Parent SOP SOP/QA/0014
+   Six short steps: company details, the 28 questions in four groups,
+   then Completed by + typed e-signature. */
+
+:root{
+  --navy:#26358C;
+  --navy-dark:#1C2870;
+  --navy-soft:#F1F3FA;
+  --ink:#1A1D29;
+  --muted:#636A7E;
+  --line:#D9DDE7;
+  --bg:#F5F6FA;
+  --err:#B42318;
+  --ok:#1B6B47;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font:400 15px/1.6 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+.page{max-width:1000px;margin:0 auto;padding:32px 16px 64px}
+.sheet{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.back-link{display:inline-block;margin:0 0 12px;font-size:13.5px;color:var(--navy);text-decoration:none}
+.back-link:hover{text-decoration:underline}
+
+/* Header */
+header{padding:30px 36px 26px;border-top:4px solid var(--navy);border-bottom:1px solid var(--line)}
+.brand{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.brand img{width:140px;height:auto;display:block}
+.contact{font-size:12px;line-height:1.6;color:var(--muted);text-align:right}
+.contact a{color:var(--navy);text-decoration:none}
+h1{margin:24px 0 6px;font-size:26px;font-weight:600;letter-spacing:-.3px}
+.intro{margin:0;color:var(--muted);font-size:14.5px}
+.req{color:var(--err)}
+
+/* Steps: one short step visible at a time */
+.step{display:none}
+.step.active{display:block}
+.step-label{margin:0;padding:22px 36px 0;font-size:13.5px;font-weight:600;color:var(--muted)}
+.step-label:focus,.step-label:focus-visible{outline:none}
+
+/* Sections */
+fieldset{border:0;margin:0;padding:28px 36px 4px;min-width:0}
+fieldset + fieldset{border-top:1px solid var(--line)}
+.step > fieldset:first-child{padding-top:14px}
+legend{
+  float:left;width:100%;padding:0;margin:0 0 4px;
+  font-size:17px;font-weight:600;color:var(--navy);
+}
+legend + *{clear:both}
+.note{margin:0 0 18px;font-size:13.5px;color:var(--muted)}
+.note a{color:var(--navy)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+.sub{margin:6px 0 10px;font-size:13px;font-weight:600;color:var(--muted)}
+
+/* Fields */
+.field{margin-bottom:20px;min-width:0}
+label,.label{display:block;margin-bottom:6px;font-size:13.5px;font-weight:600}
+.hint{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
+input[type=text],input[type=tel],input[type=email],input[type=number],textarea{
+  width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:6px;padding:10px 12px;
+}
+textarea{resize:vertical;min-height:88px}
+textarea.short{min-height:60px}
+input:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(38,53,140,.14)}
+input[readonly]{background:var(--bg);color:var(--muted);cursor:not-allowed}
+input[readonly]:focus{border-color:var(--line);box-shadow:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+
+/* Radio / checkbox */
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.options.inline{display:flex;gap:28px;flex-wrap:wrap}
+.opt{display:flex;align-items:center;gap:10px;font-weight:400;font-size:14.5px;margin:0;padding:4px 0;cursor:pointer}
+.opt input{width:18px;height:18px;margin:0;accent-color:var(--navy);cursor:pointer;flex:none}
+
+/* Follow-up questions shown only for some answers ("Other", a comment once answered) */
+.cond{display:none;margin-top:12px}
+.cond.show{display:block}
+
+/* Questions: number, wording, Yes / No / N/A, then a comment box */
+.question{padding:16px 0 4px}
+.question + .question{border-top:1px solid #ECEEF4}
+.question .field{margin-bottom:8px}
+.question .cond{margin-top:4px}
+.question .q-text{font-size:14.5px;line-height:1.5}
+.question .q-text .hint{margin-top:2px;font-size:13px}
+.question textarea{min-height:60px}
+
+/* Manufacturing sites (one box per site) */
+.site-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.site-head label{margin-bottom:6px}
+.site .link{font-size:12.5px}
+#addSite{margin:-6px 0 20px}
+
+/* Errors */
+.error{display:none;margin-top:6px;font-size:13px;color:var(--err)}
+.invalid .error{display:block}
+.invalid input:not([type=radio]):not([type=checkbox]),.invalid textarea,.invalid .sig-preview{border-color:var(--err)}
+
+/* Signature (typed, confirmed with a timestamp) */
+.sign-row{display:flex;gap:10px}
+.sign-row input{flex:1;min-width:0}
+.sign-row .btn{white-space:nowrap;padding:10px 20px}
+.btn:disabled{opacity:.55;cursor:default}
+.btn:disabled:hover{background:var(--navy)}
+.sig-preview{
+  margin-top:10px;min-height:78px;padding:8px 18px;display:flex;align-items:center;
+  border:1px dashed #AEB5C7;border-radius:6px;background:#fff;overflow:hidden;white-space:nowrap;
+  font-family:"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive;
+  font-size:30px;color:var(--ink);
+}
+.sig-preview.empty{font-family:inherit;font-size:13.5px;color:#9AA1B4}
+.sig-preview.signed{border-style:solid;border-color:var(--navy)}
+.sig-stamp{
+  display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding:9px 12px;
+  background:#EEF7F2;border:1px solid #BFE0CD;border-radius:6px;font-size:13px;color:var(--ok);font-weight:600;
+}
+.sig-stamp.show{display:flex}
+.sig-stamp .link{margin-left:auto}
+.sig-foot{display:flex;justify-content:space-between;margin-top:6px;font-size:12.5px;color:var(--muted)}
+.link{background:none;border:0;padding:0;font:inherit;font-size:13px;color:var(--navy);cursor:pointer;text-decoration:underline}
+.consent .opt{align-items:flex-start;font-size:14px}
+.consent .opt input{margin-top:2px}
+.evidence-note{
+  margin:-6px 0 20px;padding:12px 14px;border-left:3px solid var(--navy);
+  background:var(--navy-soft);border-radius:0 6px 6px 0;font-size:12.8px;color:#343A4D;
+}
+
+/* Footer + actions */
+.actions{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:22px 36px;border-top:1px solid var(--line);background:#FAFBFD;
+}
+.actions p{margin:0;font-size:13.5px;color:var(--err);display:none}
+.actions p.show{display:block}
+.buttons{display:flex;gap:10px;margin-left:auto}
+.btn{
+  font:inherit;font-size:15px;font-weight:600;cursor:pointer;
+  background:var(--navy);color:#fff;border:0;border-radius:6px;padding:11px 24px;
+}
+.btn:hover{background:var(--navy-dark)}
+.btn[hidden]{display:none}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.secondary:hover{border-color:var(--navy);color:var(--navy)}
+.docfoot{margin-top:18px;text-align:center;font-size:11.5px;color:var(--muted);line-height:1.7}
+
+/* Thank-you */
+#done{display:none;padding:56px 36px;text-align:center}
+#done.show{display:block}
+#done h2{margin:0 0 10px;font-size:23px;font-weight:600;color:var(--ok)}
+#done p{margin:0 auto 10px;max-width:48ch;color:var(--muted)}
+.record{max-width:640px;margin:28px auto 0;text-align:left;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.record h3{margin:0;padding:12px 16px;font-size:14px;font-weight:600;color:var(--navy);background:var(--navy-soft);border-bottom:1px solid var(--line)}
+.record dl{margin:0;display:grid;grid-template-columns:180px 1fr}
+.record dt,.record dd{margin:0;padding:9px 16px;border-bottom:1px solid var(--line);font-size:13px}
+.record dt{color:var(--muted)}
+.record dd{word-break:break-all}
+.record dd img{max-height:60px;display:block}
+.record p{margin:0;padding:10px 16px;font-size:12px;max-width:none;color:var(--muted)}
+#done .btn{margin-top:22px}
+@media (max-width:640px){.record dl{grid-template-columns:1fr}.record dt{border-bottom:0;padding-bottom:0}}
+
+:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+@media (max-width:640px){
+  .page{padding:12px 10px 40px}
+  header,fieldset,.actions{padding-left:20px;padding-right:20px}
+  .step-label{padding-left:20px;padding-right:20px}
+  .contact{text-align:left}
+  .row,.options{grid-template-columns:1fr}
+  .sign-row{flex-direction:column}
+  .buttons{width:100%;flex-direction:column-reverse}
+  .btn{width:100%}
+}
+
+@page{size:A4;margin:14mm}
+@media print{
+  body{background:#fff;font-size:10pt}
+  .page{max-width:none;padding:0}
+  .sheet{border:0}
+  .back-link,.actions,.link,#printRecord,#downloadPdf,#pdfStatus,#confirmSig{display:none!important}
+  fieldset{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="select.html?view=questionnaires">&larr; Choose a different form</a>
+  <div class="sheet">
+
+    <header>
+      <div class="brand">
+        <img src="data:image/png;base64,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" alt="SyriMed – Syri Ltd.">
+        <div class="contact">
+          Syri Ltd. · Unit 4, Bradfield Road<br>
+          Ruislip, Middlesex, HA4 0NU<br>
+          Tel 0208 728 7800<br>
+          <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>
+        </div>
+      </div>
+      <h1>Manufacturer Assessment Questionnaire</h1>
+      <p class="intro">Only complete this questionnaire if Syri Ltd has asked you to. Fields marked <span class="req">*</span> are mandatory.</p>
+    </header>
+
+    <form id="form" novalidate>
+
+      <p class="step-label" id="stepLabel" tabindex="-1">Step 1 of 6 – Company details</p>
+
+      <!-- ===== Step 1: Company details (form page 1) ===== -->
+      <div class="step active" data-title="Company details">
+        <fieldset>
+          <legend>Company details</legend>
+          <p class="note">This is a general questionnaire sent to B &amp; S Group manufacturers /providers of goods and services. This questionnaire may be used as an alternative or support for a formal quality audit. Please answer the questions relevant to your business. If you answer No or N/A, please provide enough justification.</p>
+          <div class="field">
+            <label for="companyName">Company name <span class="req">*</span></label>
+            <input type="text" id="companyName" name="companyName" required autocomplete="organization" maxlength="150">
+          </div>
+          <div class="field">
+            <label for="headOffice">Head office Address <span class="req">*</span></label>
+            <textarea id="headOffice" name="headOffice" rows="3" class="short" required maxlength="400"></textarea>
+          </div>
+
+          <span class="label">Manufacturing site Address <span class="req">*</span>
+            <span class="hint">(Please list down all your manufacturing site(s) for those this signed form is valid)</span></span>
+          <div id="sites"></div>
+          <button type="button" class="link" id="addSite">+ Add another manufacturing site</button>
+
+          <div class="row">
+            <div class="field">
+              <label for="employees">Total No of Employees <span class="req">*</span></label>
+              <input type="number" id="employees" name="employees" min="0" step="1" inputmode="numeric" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Raw material</legend>
+          <div class="field" data-group="rawMaterial" data-msg="Tick at least one type of raw material">
+            <span class="label">What type of Raw Material do you manufacture/supply? <span class="req">*</span>
+              <span class="hint">Tick all that apply</span></span>
+            <div class="options" role="group" aria-label="What type of Raw Material do you manufacture/supply?">
+              <label class="opt"><input type="checkbox" name="rawMaterial" value="API"> API</label>
+              <label class="opt"><input type="checkbox" name="rawMaterial" value="Excipient"> Excipient (i.e.: preservative, flavours)</label>
+              <label class="opt"><input type="checkbox" name="rawMaterial" value="Primary packaging"> Primary packaging (i.e.: bottles, caps)</label>
+              <label class="opt"><input type="checkbox" name="rawMaterial" value="Secondary packaging"> Secondary packaging (i.e.: leaflets, cartons, syringes, spoons)</label>
+              <label class="opt"><input type="checkbox" name="rawMaterial" value="Other"> Other</label>
+            </div>
+            <div class="cond" data-show-when="rawMaterial=Other">
+              <label for="rawMaterialOther">Please specify <span class="req">*</span></label>
+              <input type="text" id="rawMaterialOther" name="rawMaterialOther" data-other-for="rawMaterial" maxlength="150">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Role in the industry</legend>
+          <div class="field" data-group="role" data-msg="Select your role in the industry">
+            <span class="label">What is your role in the Industry? <span class="req">*</span></span>
+            <div class="options" role="radiogroup" aria-label="What is your role in the Industry?">
+              <label class="opt"><input type="radio" name="role" value="Manufacturer Only"> Manufacturer Only</label>
+              <label class="opt"><input type="radio" name="role" value="Manufacturer as well as Supplier for B&amp;S"> Manufacturer as well as Supplier for B&amp;S.</label>
+              <label class="opt"><input type="radio" name="role" value="Other"> Other</label>
+            </div>
+            <div class="cond" data-show-when="role=Other">
+              <label for="roleOther">Please specify <span class="req">*</span></label>
+              <input type="text" id="roleOther" name="roleOther" data-other-for="role" maxlength="150">
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Steps 2–5: questions 1–28 (form pages 2–6).
+           The questions are written into these blocks from QUESTIONS below. ===== -->
+      <div class="step" data-title="Quality system">
+        <fieldset>
+          <legend>Quality system</legend>
+          <p class="note">Please answer the questions relevant to your business. If you answer No or N/A, please provide enough justification.</p>
+          <div data-questions="1-9"></div>
+        </fieldset>
+      </div>
+
+      <div class="step" data-title="Suppliers, subcontractors &amp; traceability">
+        <fieldset>
+          <legend>Suppliers, subcontractors &amp; traceability</legend>
+          <p class="note">If you answer No or N/A, please provide enough justification.</p>
+          <div data-questions="10-15"></div>
+        </fieldset>
+      </div>
+
+      <div class="step" data-title="QC, QA &amp; B&amp;S agreements">
+        <fieldset>
+          <legend>QC, QA &amp; B&amp;S agreements</legend>
+          <p class="note">If you answer No or N/A, please provide enough justification.</p>
+          <div data-questions="16-20"></div>
+        </fieldset>
+      </div>
+
+      <div class="step" data-title="Premises, storage &amp; delivery">
+        <fieldset>
+          <legend>Premises, storage &amp; delivery</legend>
+          <p class="note">If you answer No or N/A, please provide enough justification.</p>
+          <div data-questions="21-28"></div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 6: Completed by & signature ===== -->
+      <div class="step" data-title="Completed by &amp; signature">
+        <fieldset>
+          <legend>Completed by</legend>
+          <p class="note">The person completing this questionnaire signs it here.</p>
+
+          <div class="field consent" data-group="esignConsent" data-msg="Please tick this box before confirming your signature">
+            <label class="opt"><input type="checkbox" name="esignConsent" value="Yes">
+              <span>I confirm that the answers in this questionnaire are accurate and that I am authorised to complete it on behalf of the company. I agree to sign it electronically: by typing my name and selecting “Confirm signature” I intend to sign and authenticate this questionnaire, and I understand this has the same effect as a handwritten signature. <span class="req">*</span></span>
+            </label>
+          </div>
+
+          <div class="field" data-group="signature" data-msg="Type your full name and select Confirm signature">
+            <label for="typedSignature">Signature <span class="req">*</span></label>
+            <div class="sign-row">
+              <input type="text" id="typedSignature" name="typedSignature" autocomplete="name"
+                     placeholder="Type your full name" aria-describedby="sigHelp">
+              <button type="button" class="btn" id="confirmSig">Confirm signature</button>
+            </div>
+            <div class="sig-preview empty" id="sigPreview" aria-hidden="true">Your signature will appear here</div>
+            <div class="sig-stamp" id="sigStamp" role="status">
+              <span id="sigStampText"></span>
+              <button type="button" class="link" id="changeSig">Change</button>
+            </div>
+            <div class="sig-foot" id="sigHelp">Type your full name, then select Confirm signature. The date and time are recorded when you confirm.</div>
+            <input type="hidden" id="signatureData" name="signatureData">
+            <input type="hidden" id="signatureConfirmedAt" name="signatureConfirmedAt">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="signName">Completed By</label>
+              <input type="text" id="signName" name="signName" readonly aria-readonly="true" aria-describedby="signNameHint">
+              <div class="sig-foot" id="signNameHint">Taken from your confirmed signature</div>
+            </div>
+            <div class="field">
+              <label for="signPosition">Position <span class="req">*</span></label>
+              <input type="text" id="signPosition" name="signPosition" required autocomplete="organization-title" maxlength="100">
+            </div>
+            <div class="field">
+              <label for="signDate">Date</label>
+              <input type="text" id="signDate" name="signDate" readonly aria-readonly="true" aria-describedby="signDateHint">
+              <div class="sig-foot" id="signDateHint">Set automatically to today’s date</div>
+            </div>
+          </div>
+          <p class="sub">Contact Detail</p>
+          <div class="row">
+            <div class="field">
+              <label for="contactPhone">Phone <span class="req">*</span> <span class="hint">Including country code</span></label>
+              <input type="tel" id="contactPhone" name="contactPhone" required autocomplete="tel" maxlength="40">
+            </div>
+            <div class="field">
+              <label for="contactEmail">Email <span class="req">*</span></label>
+              <input type="email" id="contactEmail" name="contactEmail" required autocomplete="email" maxlength="120">
+            </div>
+          </div>
+          <p class="evidence-note">When you confirm your signature and submit, we record the date and time, your IP address and your browser/device details. This is used only as evidence that you signed this questionnaire and is kept with your supplier records.</p>
+        </fieldset>
+      </div>
+
+      <div class="actions">
+        <p id="formMsg" role="alert">Please complete the highlighted fields.</p>
+        <div class="buttons">
+          <button type="button" class="btn secondary" id="backBtn" hidden>Back</button>
+          <button type="submit" class="btn" id="nextBtn">Continue</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="done" tabindex="-1">
+      <h2>Thank you – questionnaire submitted</h2>
+      <p>Our quality team will review your answers and be in touch.</p>
+      <p>Questions? Call us on +44 20 8728 7800 or contact the person at Syri Ltd who asked you to complete this questionnaire.</p>
+
+      <div class="record">
+        <h3>Electronic signature record</h3>
+        <dl id="recordList"></dl>
+        <p>This record is logically associated with your signed questionnaire (Electronic Communications Act 2000, s.7; UK eIDAS Art. 25).</p>
+      </div>
+      <p id="pdfStatus" style="margin-top:22px">Preparing your completed questionnaire (PDF)…</p>
+      <button type="button" class="btn" id="downloadPdf" disabled>Download completed form (PDF)</button>
+      <button type="button" class="btn secondary" id="printRecord">Print this record</button>
+    </div>
+
+  </div>
+
+  <div class="docfoot">
+    Parent SOP: SOP/QA/0014 · Form Number: F/QA/0014/008/v7 · Effective Date: 27 Jul 2026 · Review Date: 26 Jul 2028
+  </div>
+</div>
+
+<script src="assets/pdf-lib.min.js"></script>
+<script src="assets/template-q-manufacturer.js"></script>
+<script>
+(function () {
+  'use strict';
+  var form = document.getElementById('form');
+  var msg  = document.getElementById('formMsg');
+  var FORM_NUMBER = 'F/QA/0014/008/v7';
+
+  /* Who sent the supplier this form (optional ?sentBy= in the link) */
+  var sentBy = (new URLSearchParams(location.search).get('sentBy') || '').trim().slice(0, 120);
+
+  /* ---------- The 28 questions, worded exactly as on the form ----------
+     opts:    the answer boxes on the form (question 1 has no N/A).
+     sub:     the second line of the question, where the form has one.
+     yesNeed: the form asks for details when the answer is Yes, so the
+              comment is required for Yes as well (13, 14, 26).
+     yesHint: what the comment is for when the answer is Yes.
+     A comment is always required for No or N/A ("If you answer No or
+     N/A, please provide enough justification"). */
+  var YNN = ['Yes', 'No', 'N/A'];
+  var QUESTIONS = [
+    { n: 1, text: 'Will you provide a company brochure/another document presenting a general overview of the company?',
+      opts: ['Yes', 'No'], yesLabel: 'Yes (if so, please attach)',
+      yesHint: 'Please send the document to your Syri Ltd contact with this questionnaire.' },
+    { n: 2, text: 'Do you have a quality management system for all of your manufacturing site(s) listed above.' },
+    { n: 3, text: 'Do you have a formal training program for your employees?' },
+    { n: 4, text: 'Is your company certified (i.e. GMP, ISO 9001:2008 and BRC etc)? If so, please provide current accreditation certificate(s) for all site(s).',
+      yesHint: 'Please send your current certificate(s) to your Syri Ltd contact with this questionnaire.' },
+    { n: 5, text: 'Do you have change control and deviation management system?' },
+    { n: 6, text: 'Do you notify your customers of all changes to your product specifications or significant manufacturing changes?' },
+    { n: 7, text: 'Do you have a formal documented process for CAPA, Complain and recall?' },
+    { n: 8, text: 'Do you have a self inspection program?' },
+    { n: 9, text: 'Do you have specifications and certificates of analysis for your products?' },
+    { n: 10, text: 'Do you have a formal Supplier approval and assessment process?' },
+    { n: 11, text: 'Do you perform audits of all your suppliers?',
+      sub: 'If you do not perform audits for all suppliers, please describe how you categorise your suppliers and what level of auditing you perform' },
+    { n: 12, text: 'Do you maintain a list of approved suppliers?' },
+    { n: 13, text: 'Do you use subcontractors? Please specify for what activities.',
+      yesNeed: true, yesHint: 'Please specify for what activities.' },
+    { n: 14, text: 'Do you have a formal approval process for your subcontractors',
+      sub: 'Does this involve formal contracts or technical agreements? (please specify)',
+      yesNeed: true, yesHint: 'Please specify.' },
+    { n: 15, text: 'Do you maintain full traceability for your products and raw materials?' },
+    { n: 16, text: 'Do you have an independent QC Department?' },
+    { n: 17, text: 'Do you have a formal QA release process for your products?' },
+    { n: 18, text: 'Do you have an independent QA Department?' },
+    { n: 19, text: 'Are you willing to accept a B&S Audit request?' },
+    { n: 20, text: 'Are you willing to sign a Quality and Technical Agreement with B&S Group?' },
+    { n: 21, text: 'Do you have a pest control program?' },
+    { n: 22, text: 'Do you maintain a warehouse for storage and/or distribution of your products?',
+      sub: 'If address is different to manufacturing site please provide details',
+      yesHint: 'If address is different to manufacturing site please provide details.' },
+    { n: 23, text: 'Do you store and transport material according to material SDS and GMP/GDP?' },
+    { n: 24, text: 'Will you provide transport temperature monitoring with every delivery?' },
+    { n: 25, text: 'Will you provide products in tamper evident packaging?' },
+    { n: 26, text: 'Do you keep records of all shipments to customers, including batch number and quantity? How long do you retain these records?',
+      yesNeed: true, yesHint: 'How long do you retain these records?' },
+    { n: 27, text: 'Do you have a formal program to maintain and validate your premises and equipment?' },
+    { n: 28, text: 'Do you provide Genotoxic impurity and Nitrosamine impurity free declaration?' }
+  ];
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+
+  /* Each question: its Yes / No / N/A radios, then a Comment box that
+     appears once an answer is chosen (required for No / N/A). */
+  function questionHtml(q) {
+    var name = 'q' + q.n, opts = q.opts || YNN;
+    var needWhen = q.yesNeed ? opts.join('|') : 'No|N/A';
+    return '<div class="question">' +
+      '<div class="field" data-group="' + name + '" data-msg="Choose ' + opts.join(', ').replace(/, ([^,]*)$/, ' or $1') + '">' +
+        '<span class="label q-text" id="' + name + 'Label">' + q.n + '. ' + esc(q.text) + ' <span class="req">*</span>' +
+          (q.sub ? '<span class="hint">' + esc(q.sub) + '</span>' : '') + '</span>' +
+        '<div class="options inline" role="radiogroup" aria-labelledby="' + name + 'Label">' +
+          opts.map(function (o) {
+            return '<label class="opt"><input type="radio" name="' + name + '" value="' + o + '"> ' +
+              esc(o === 'Yes' && q.yesLabel ? q.yesLabel : o) + '</label>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+      '<div class="cond" data-show-when="' + name + '=' + opts.join('|') + '">' +
+        '<div class="field">' +
+          '<label for="' + name + 'Comment">Comment <span class="req" data-need></span>' +
+            '<span class="hint" data-comment-hint></span></label>' +
+          '<textarea id="' + name + 'Comment" name="' + name + 'Comment" rows="2" maxlength="1500"' +
+            ' data-need-when="' + name + '=' + needWhen + '"></textarea>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  form.querySelectorAll('[data-questions]').forEach(function (box) {
+    var r = box.getAttribute('data-questions').split('-').map(Number);
+    box.innerHTML = QUESTIONS.filter(function (q) { return q.n >= r[0] && q.n <= r[1]; }).map(questionHtml).join('');
+  });
+
+  /* ---------- Manufacturing sites: one box per site ----------
+     The signed form is valid only for the sites listed, so each site
+     gets its own address box. Up to MAX_SITES; site 1 is required and
+     any added box must be filled in or removed. */
+  var sitesBox = document.getElementById('sites');
+  var addSiteBtn = document.getElementById('addSite');
+  var MAX_SITES = 12;
+
+  function addSite(value) {
+    var div = document.createElement('div');
+    div.className = 'field site';
+    div.innerHTML = '<div class="site-head"><label></label><button type="button" class="link">Remove</button></div>' +
+      '<textarea rows="2" class="short" required maxlength="400"></textarea>';
+    div.querySelector('textarea').value = value || '';
+    div.querySelector('button').addEventListener('click', function () {
+      div.remove();
+      numberSites();
+      var last = sitesBox.querySelector('.site:last-child textarea');
+      if (last) { last.focus(); }
+    });
+    sitesBox.appendChild(div);
+    numberSites();
+    return div;
+  }
+
+  function numberSites() {
+    var list = sitesBox.querySelectorAll('.site');
+    list.forEach(function (div, i) {
+      var id = 'mfgSite' + (i + 1);
+      var ta = div.querySelector('textarea');
+      ta.id = id; ta.name = id;
+      div.querySelector('label').setAttribute('for', id);
+      div.querySelector('label').innerHTML = 'Site ' + (i + 1) + ' <span class="req">*</span>';
+      div.querySelector('button').hidden = list.length === 1;
+    });
+    addSiteBtn.hidden = list.length >= MAX_SITES;
+  }
+
+  addSiteBtn.addEventListener('click', function () {
+    addSite('').querySelector('textarea').focus();
+  });
+  addSite('');
+
+  /* ---------- Steps ----------
+     Six short steps. Continue checks only the step on screen; the last
+     step's button submits. Values stay in the page when going Back. */
+  var steps     = Array.prototype.slice.call(form.querySelectorAll('.step'));
+  var stepLabel = document.getElementById('stepLabel');
+  var backBtn   = document.getElementById('backBtn');
+  var nextBtn   = document.getElementById('nextBtn');
+  var current   = 0;
+  var LAST = steps.length - 1;
+
+  function showStep(n) {
+    current = n;
+    steps.forEach(function (s, i) { s.classList.toggle('active', i === n); });
+    stepLabel.textContent = 'Step ' + (n + 1) + ' of ' + steps.length + ' – ' + steps[n].getAttribute('data-title');
+    backBtn.hidden = n === 0;
+    nextBtn.textContent = n === LAST ? 'Submit questionnaire' : 'Continue';
+    msg.classList.remove('show');
+    if (n === LAST) { stampToday(); }
+    /* Back to the top of the sheet, so the new step starts in view */
+    var top = document.querySelector('.sheet').getBoundingClientRect().top + window.pageYOffset - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    stepLabel.focus({ preventScroll: true });
+  }
+
+  backBtn.addEventListener('click', function () {
+    if (current > 0) { showStep(current - 1); }
+  });
+
+  /* ---------- Signature: typed name, confirmed with a timestamp ----------
+     The signer ticks consent, types their full name and selects
+     "Confirm signature". That click is the act of signing: the time is
+     recorded, the signature is locked and "Completed By" is filled in. */
+  var typedSig   = document.getElementById('typedSignature');
+  var confirmBtn = document.getElementById('confirmSig');
+  var preview    = document.getElementById('sigPreview');
+  var stamp      = document.getElementById('sigStamp');
+  var sigInput   = document.getElementById('signatureData');
+  var sigAtInput = document.getElementById('signatureConfirmedAt');
+  var nameInput  = document.getElementById('signName');
+  var consentBox = form.querySelector('input[name=esignConsent]');
+  var SIG_FONT = '"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive';
+  var PREVIEW_EMPTY = 'Your signature will appear here';
+  var signed = false;
+  var signedAt = null; /* when the signer confirmed the signature (UTC) */
+
+  function cleanName(v) { return v.replace(/\s+/g, ' ').trim(); }
+
+  typedSig.addEventListener('input', function () {
+    var v = cleanName(typedSig.value);
+    preview.textContent = v || PREVIEW_EMPTY;
+    preview.classList.toggle('empty', !v);
+  });
+
+  /* Enter confirms the signature instead of submitting the whole form */
+  typedSig.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (!signed) { confirmBtn.click(); } }
+  });
+
+  /* The typed name drawn in a script face, used as the signature image in the PDF */
+  function renderSignature(text) {
+    var c = document.createElement('canvas');
+    c.width = 900; c.height = 180;
+    var g = c.getContext('2d');
+    var size = 84;
+    g.font = size + 'px ' + SIG_FONT;
+    while (g.measureText(text).width > c.width - 40 && size > 30) {
+      size -= 4;
+      g.font = size + 'px ' + SIG_FONT;
+    }
+    g.fillStyle = '#1A1D29';
+    g.textBaseline = 'middle';
+    g.fillText(text, 20, c.height / 2);
+    return c.toDataURL('image/png');
+  }
+
+  confirmBtn.addEventListener('click', function () {
+    var v = cleanName(typedSig.value);
+    var sigField = typedSig.closest('.field');
+    var okConsent = consentBox.checked;
+    var okName = (v.match(/\p{L}/gu) || []).length >= 2;
+    mark(consentBox.closest('.field'), okConsent);
+    mark(sigField, okName);
+    if (!okConsent) { consentBox.focus(); return; }
+    if (!okName) { typedSig.focus(); return; }
+
+    signedAt = new Date();
+    signed = true;
+    typedSig.value = v;
+    typedSig.readOnly = true;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Signed';
+    preview.classList.add('signed');
+    sigInput.value = renderSignature(v);
+    sigAtInput.value = signedAt.toISOString();
+    nameInput.value = v;
+    document.getElementById('sigStampText').textContent =
+      '✓ Signed electronically by ' + v + ' on ' + ukTime(sigAtInput.value, true);
+    stamp.classList.add('show');
+    if (!form.querySelector('.step.active .invalid')) { msg.classList.remove('show'); }
+  });
+
+  function resetSignature() {
+    signed = false;
+    signedAt = null;
+    typedSig.readOnly = false;
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Confirm signature';
+    preview.classList.remove('signed');
+    sigInput.value = '';
+    sigAtInput.value = '';
+    nameInput.value = '';
+    stamp.classList.remove('show');
+  }
+
+  document.getElementById('changeSig').addEventListener('click', function () {
+    resetSignature();
+    typedSig.focus();
+  });
+
+  /* Withdrawing consent withdraws the signature */
+  consentBox.addEventListener('change', function () {
+    if (!consentBox.checked && signed) { resetSignature(); }
+  });
+
+  /* ---------- Follow-up questions ----------
+     A .cond block with data-show-when="name=A|B" is shown when a ticked
+     radio / checkbox of that name has one of those values ("Other –
+     please specify", the Comment box once a question is answered).
+     Hidden blocks are skipped by validation and left out of the answers.
+     A comment with data-need-when="name=A|B" is required only for those
+     answers; its label says whether it is required and what it is for. */
+  var conds = Array.prototype.slice.call(form.querySelectorAll('.cond[data-show-when]'));
+  var needs = Array.prototype.slice.call(form.querySelectorAll('[data-need-when]'));
+
+  function pickedIn(rule) {
+    var parts = rule.split('='), values = parts[1].split('|');
+    return Array.prototype.some.call(form.querySelectorAll('input[name=' + parts[0] + ']:checked'), function (el) {
+      return values.indexOf(el.value) !== -1;
+    });
+  }
+
+  function updateConds() {
+    conds.forEach(function (c) { c.classList.toggle('show', pickedIn(c.getAttribute('data-show-when'))); });
+    needs.forEach(function (ta) {
+      var rule = ta.getAttribute('data-need-when');
+      var q = QUESTIONS[Number(rule.slice(1, rule.indexOf('='))) - 1];
+      var picked = form.querySelector('input[name=' + rule.split('=')[0] + ']:checked');
+      var need = pickedIn(rule);
+      ta.required = need;
+      var field = ta.closest('.field');
+      field.querySelector('[data-need]').textContent = need ? '*' : '';
+      var hint = '';
+      if (picked && picked.value !== 'Yes') {
+        hint = 'Please provide enough justification' + (q.sub && q.n === 11 ? '. ' + q.sub + '.' : '.');
+      } else if (picked) {
+        hint = q.yesHint || 'Optional';
+      }
+      field.querySelector('[data-comment-hint]').textContent = hint;
+      if (!need) { mark(field, true); }
+    });
+  }
+  form.addEventListener('change', function (e) {
+    if (e.target.type === 'radio' || e.target.type === 'checkbox') { updateConds(); }
+  });
+
+  function isHidden(el) { return !!el.closest('.cond:not(.show)'); }
+
+  /* ---------- Validation ---------- */
+  function isValid(field) {
+    var group = field.getAttribute('data-group');
+    if (group === 'signature') { return signed; }
+    if (group) {
+      var picked = field.querySelector('input[name=' + group + ']:checked');
+      if (!picked) { return false; }
+      var other = field.querySelector('[data-other-for=' + group + ']');
+      if (other && field.querySelector('input[name=' + group + '][value=Other]:checked')) { return other.value.trim() !== ''; }
+      return true;
+    }
+    var ok = true;
+    field.querySelectorAll('input,textarea').forEach(function (c) {
+      if (!c.checkValidity() || (c.required && !c.value.trim())) { ok = false; }
+    });
+    return ok;
+  }
+
+  function message(field) {
+    if (field.getAttribute('data-msg')) { return field.getAttribute('data-msg'); }
+    var c = field.querySelector('input,textarea');
+    if (c && c.id && /^q\d+Comment$/.test(c.id)) { return 'Please add a comment'; }
+    if (c && c.type === 'email' && c.value.trim()) { return 'Enter a valid email address'; }
+    if (c && c.type === 'number' && (c.value.trim() || c.validity.badInput)) { return 'Enter a whole number (0 or more)'; }
+    return 'This field is required';
+  }
+
+  function mark(field, ok) {
+    field.classList.toggle('invalid', !ok);
+    var err = field.querySelector(':scope > .error');
+    if (!ok) {
+      if (!err) { err = document.createElement('div'); err.className = 'error'; field.appendChild(err); }
+      err.textContent = message(field);
+    }
+    field.querySelectorAll('input,textarea').forEach(function (c) { c.setAttribute('aria-invalid', ok ? 'false' : 'true'); });
+  }
+
+  function recheck(field) {
+    if (field && field.classList.contains('invalid')) { mark(field, isValid(field)); }
+    if (!form.querySelector('.step.active .invalid')) { msg.classList.remove('show'); }
+  }
+  form.addEventListener('input', function (e) { recheck(e.target.closest('.field')); });
+  form.addEventListener('change', function (e) { recheck(e.target.closest('.field')); });
+
+  /* Checks every field in one step; returns the first field with a problem */
+  function checkStep(step) {
+    var first = null;
+    step.querySelectorAll('.field').forEach(function (field) {
+      if (isHidden(field)) { mark(field, true); return; }
+      var needsCheck = field.hasAttribute('data-group') || field.querySelector('[required],[type=email],[type=number]');
+      if (!needsCheck) { mark(field, true); return; }
+      var ok = isValid(field);
+      mark(field, ok);
+      if (!ok && !first) { first = field; }
+    });
+    return first;
+  }
+
+  function showProblem(field) {
+    msg.classList.add('show');
+    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var f = field.querySelector('input:not([type=hidden]),textarea');
+    if (f) { f.focus({ preventScroll: true }); }
+  }
+
+  /* ---------- Continue / Submit ---------- */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (current < LAST) {
+      var bad = checkStep(steps[current]);
+      if (bad) { showProblem(bad); return; }
+      showStep(current + 1);
+      return;
+    }
+
+    /* Final step: check every step again, in order */
+    for (var i = 0; i < steps.length; i++) {
+      var first = checkStep(steps[i]);
+      if (first) {
+        if (i !== current) { showStep(i); }
+        showProblem(first);
+        return;
+      }
+    }
+
+    nextBtn.disabled = true;
+    backBtn.disabled = true;
+    nextBtn.textContent = 'Submitting…';
+    stampToday();
+
+    var fd = new FormData(form);
+    var answers = {};
+    fd.forEach(function (v, k) { answers[k] = typeof v === 'string' ? v.trim() : v; });
+    /* Answers to follow-up questions that no longer apply are left out */
+    form.querySelectorAll('.cond:not(.show) [name]').forEach(function (el) { delete answers[el.name]; });
+    /* Tick-all-that-apply: every ticked raw material, in form order */
+    answers.rawMaterial = fd.getAll('rawMaterial').join('; ');
+    answers.siteCount = String(sitesBox.querySelectorAll('.site').length);
+
+    buildEvidence(answers).then(function (evidence) {
+      /* Not yet connected to a destination. `questionnaire` holds every
+         answer plus the signature evidence, ready to send to a backend. */
+      var questionnaire = { answers: answers, evidence: evidence };
+      console.log('Syri manufacturer assessment questionnaire', questionnaire);
+
+      showRecord(evidence);
+      form.style.display = 'none';
+      var done = document.getElementById('done');
+      done.classList.add('show');
+      done.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      makeFilledPdf(answers, evidence).then(function (result) {
+        questionnaire.pdfFileName = result.name;
+        offerPdf(result);
+      }).catch(function (err) {
+        console.error('PDF generation failed', err);
+        document.getElementById('pdfStatus').textContent =
+          'Your questionnaire was submitted, but the PDF copy could not be created in this browser.';
+      });
+    });
+  });
+
+  /* =====================================================================
+     Completed-questionnaire PDF
+     The controlled Word form (exported to PDF, assets/template-q-
+     manufacturer.js) is the background. Answers are ticked in the empty
+     box beside Yes / No / N/A and comments written after "Comment:".
+     Output: the six form pages, a continuation page (only if an answer is
+     too long for its box), then the signature record.
+     Coordinates are in PDF points measured from the TOP-LEFT of an A4
+     page, taken from the exported template. If the Word form layout
+     changes, re-export the template and re-measure these boxes.
+     ===================================================================== */
+  var PAGE_H = 841.92;
+  var P1 = {                                /* page 1: company details */
+    companyName: [130.0, 158.7, 558.1, 178.6],   /* after "Company name:" */
+    headOffice:  [254.3, 197.2, 558.1, 275.8],
+    sites:       [254.3, 275.8, 558.1, 354.8],
+    employees:   [151.0, 354.8, 558.1, 383.7],
+    rawMaterial: {                          /* the empty box right of each type */
+      'API':                 [412.6, 431.1, 558.1, 456.5],
+      'Excipient':           [412.6, 456.5, 558.1, 482.1],
+      'Primary packaging':   [412.6, 482.1, 558.1, 507.5],
+      'Secondary packaging': [412.6, 507.5, 558.1, 533.1],
+      'Other':               [412.6, 533.1, 558.1, 558.7]
+    },
+    rawMaterialOther: [72.0, 533.1, 408.6, 558.7],    /* written after the word "Other" */
+    role: {
+      'Manufacturer Only':                        [412.6, 596.7, 558.1, 622.3],
+      'Manufacturer as well as Supplier for B&S': [412.6, 622.3, 558.1, 653.5],
+      'Other':                                    [412.6, 653.5, 558.1, 678.9]
+    },
+    roleOther: [72.0, 653.5, 408.6, 678.9]
+  };
+
+  /* Questions 1–28: [page index, answer row top, bottom, comment row top, bottom];
+     the answer box columns (x) for each page follow below */
+  var Q_ROWS = {
+    1: [1, 110.8, 140.1, 140.1, 169.5],  2: [1, 216.6, 264.0, 264.0, 292.7],  3: [1, 318.5, 363.0, 363.0, 391.8],
+    4: [1, 431.5, 483.4, 483.4, 512.3],  5: [1, 536.8, 589.9, 589.9, 621.3],  6: [1, 668.4, 720.3, 720.3, 759.4],
+    7: [2, 89.3, 137.1, 137.1, 162.6],   8: [2, 187.1, 236.9, 236.9, 266.0],  9: [2, 290.5, 343.1, 343.1, 372.2],
+    10: [2, 401.0, 443.3, 443.3, 462.2], 11: [2, 527.3, 578.7, 578.7, 607.4], 12: [2, 632.1, 678.1, 678.1, 758.6],
+    13: [3, 88.6, 139.9, 139.9, 168.9],  14: [3, 207.4, 253.4, 253.4, 282.2], 15: [3, 306.8, 358.1, 358.1, 387.2],
+    16: [3, 411.7, 464.7, 464.7, 490.3], 17: [3, 519.0, 571.4, 571.4, 600.8], 18: [3, 630.3, 682.8, 682.8, 768.0],
+    19: [4, 93.3, 147.4, 147.4, 176.8],  20: [4, 206.3, 260.6, 260.6, 290.0], 21: [4, 319.5, 374.6, 374.6, 404.1],
+    22: [4, 442.5, 491.3, 491.3, 515.1], 23: [4, 544.5, 593.5, 593.5, 617.1], 24: [4, 646.7, 692.7, 692.7, 749.6],
+    25: [5, 93.3, 146.4, 146.4, 170.2],  26: [5, 208.6, 259.8, 259.8, 283.6], 27: [5, 313.0, 359.3, 359.3, 383.1],
+    28: [5, 406.8, 430.5, 430.5, 454.3]
+  };
+  function qCols(n) {                      /* x of the empty box right of Yes / No / N/A */
+    if (n === 1) { return { 'Yes': [204.4, 285.8], 'No': [453.1, 560.6] }; }
+    if (n === 28) { return { 'Yes': [122.4, 212.1], 'No': [300.0, 387.9], 'N/A': [475.9, 558.4] }; }
+    var naX = n <= 6 ? [453.1, 560.6] : n <= 19 ? [452.7, 560.6] : n <= 24 ? [456.7, 560.6] : [456.7, 558.4];
+    return { 'Yes': [n >= 25 ? 122.4 : 122.9, 204.4], 'No': [285.8, 368.2], 'N/A': naX };
+  }
+  var COMMENT_X = [95.0, 556.0];           /* after "Comment:" to the right border */
+  var P6 = {                                /* page 6: Completed By block */
+    completedBy: [171.1, 480.2, 558.4, 509.0],
+    signature:   [171.1, 509.0, 558.4, 538.4],
+    position:    [171.1, 538.4, 558.4, 567.1],
+    date:        [171.1, 567.1, 558.4, 596.5],
+    phone:       [212.5, 596.9, 558.4, 610.0],   /* after "Phone:" */
+    email:       [213.0, 624.6, 558.4, 638.7]    /* after "Email :" */
+  };
+
+  function makeFilledPdf(answers, evidence) {
+    if (!window.PDFLib || !window.SYRI_Q_MANUFACTURER_TEMPLATE) {
+      return Promise.reject(new Error('PDF library or template not loaded'));
+    }
+    var L = window.PDFLib;
+    var INK = L.rgb(0.05, 0.05, 0.12);
+    var NAVY = L.rgb(0.149, 0.208, 0.549);
+    var GREY = L.rgb(0.35, 0.37, 0.45);
+    var RULE = L.rgb(0.8, 0.82, 0.88);
+    function bytesOf(b64) { return Uint8Array.from(atob(b64), function (c) { return c.charCodeAt(0); }); }
+
+    return L.PDFDocument.load(bytesOf(window.SYRI_Q_MANUFACTURER_TEMPLATE)).then(function (pdf) {
+      return Promise.all([
+        pdf.embedFont(L.StandardFonts.Helvetica),
+        pdf.embedFont(L.StandardFonts.HelveticaBold),
+        sigInput.value ? pdf.embedPng(sigInput.value) : null,
+        pdf.embedPng(document.querySelector('.brand img').src)
+      ]).then(function (res) {
+        var font = res[0], bold = res[1], sigImg = res[2], logo = res[3];
+        var overflow = [];   /* [label, full text] of answers too long for their box */
+        var MORE = ' … (see continuation page)';
+
+        /* Only characters the standard PDF font can encode */
+        function safe(s) {
+          return Array.from(String(s == null ? '' : s)).map(function (ch) {
+            if (ch === '\n') { return ch; }
+            try { font.encodeText(ch); return ch; } catch (e) { return '?'; }
+          }).join('');
+        }
+
+        function wrap(text, f, size, width) {
+          var out = [];
+          text.split('\n').forEach(function (para) {
+            var line = '';
+            para.split(/\s+/).forEach(function (word) {
+              var tryLine = line ? line + ' ' + word : word;
+              if (f.widthOfTextAtSize(tryLine, size) <= width || !line) { line = tryLine; }
+              else { out.push(line); line = word; }
+            });
+            out.push(line);
+          });
+          return out;
+        }
+
+        /* Does a block of n lines at this size fit the cell height?
+           top: first line level with the cell's printed label ("Comment:");
+           otherwise the block is centred vertically. */
+        function blockFits(n, size, h, top) {
+          return top ? 3 + size * 0.75 + (n - 1) * size * 1.25 + size * 0.25 <= h - 1
+                     : size * (1.25 * (n - 1) + 0.95) <= h - 2;
+        }
+
+        /* Text in a cell: shrinks to fit (width and height, down to 6 pt; 7 pt
+           for comments), wraps up to maxLines.
+           Returns false if it still did not fit at the smallest size; the text
+           is then cut with "… (see continuation page)" and given in full on
+           the continuation page. */
+        function put(page, box, text, maxLines, label, top) {
+          text = maxLines > 1 ? safe(text).replace(/\s*\n\s*/g, '\n').trim() : safe(text).replace(/,?\s*\n\s*/g, ', ').trim();
+          if (!text) { return true; }
+          var x = box[0] + 5, w = box[2] - box[0] - 10, h = box[3] - box[1];
+          var size = 9.5, minSize = top ? 7 : 6, lines;
+          function widthsOk(ls, s) { return ls.every(function (ln) { return font.widthOfTextAtSize(ln, s) <= w; }); }
+          for (;;) {
+            lines = wrap(text, font, size, w);
+            if ((lines.length <= maxLines && blockFits(lines.length, size, h, top) && widthsOk(lines, size)) || size <= minSize) { break; }
+            size -= 0.5;
+          }
+          var cap = maxLines;
+          while (cap > 1 && !blockFits(cap, size, h, top)) { cap--; }
+          var complete = lines.length <= cap && widthsOk(lines, size);
+          lines = lines.slice(0, cap).map(function (ln) {
+            while (font.widthOfTextAtSize(ln, size) > w && ln.length > 1) { ln = ln.slice(0, -2) + '…'; }
+            return ln;
+          });
+          if (!complete && label) {
+            overflow.push([label, text]);
+            var last = lines[lines.length - 1];
+            var suffix = font.widthOfTextAtSize(MORE, size) < w * 0.8 ? MORE : '…';
+            while (last && font.widthOfTextAtSize(last + suffix, size) > w) { last = last.replace(/\s*\S+\s*$/, ''); }
+            lines[lines.length - 1] = last + suffix;
+          }
+          var lh = size * 1.25;
+          var first = top ? box[1] + 3 + size * 0.75
+                          : box[1] + (h - (lh * (lines.length - 1) + size * 0.72)) / 2 + size * 0.72;
+          lines.forEach(function (ln, i) {
+            page.drawText(ln, { x: x, y: PAGE_H - (first + i * lh), size: size, font: font, color: INK });
+          });
+          return complete;
+        }
+
+        function tick(page, cx, cy, s) {
+          s = s || 5;
+          var y = function (v) { return PAGE_H - v; };
+          page.drawLine({ start: { x: cx - s, y: y(cy) }, end: { x: cx - s * 0.3, y: y(cy + s * 0.75) }, thickness: 1.5, color: INK });
+          page.drawLine({ start: { x: cx - s * 0.3, y: y(cy + s * 0.75) }, end: { x: cx + s, y: y(cy - s * 0.9) }, thickness: 1.5, color: INK });
+        }
+
+        /* A tick in the middle of an answer box */
+        function tickBox(page, box) {
+          tick(page, (box[0] + box[2]) / 2, (box[1] + box[3]) / 2, 5);
+        }
+
+        /* Typed signature image fitted in a cell, "E-signed <time>" beside it */
+        function signIn(page, box) {
+          if (!sigImg) { return; }
+          var pad = 2, stampText = safe('E-signed ' + ukTime(evidence.signatureCapturedAt, true));
+          var cw = box[2] - box[0], ch = box[3] - box[1];
+          var d = sigImg.scaleToFit(cw * 0.55, ch - pad * 2);
+          page.drawImage(sigImg, { x: box[0] + 4, y: PAGE_H - (box[1] + (ch + d.height) / 2), width: d.width, height: d.height });
+          page.drawText(stampText, { x: box[0] + cw * 0.58, y: PAGE_H - (box[1] + ch / 2 + 2.5), size: 7, font: font, color: INK });
+        }
+
+        var pages = pdf.getPages();
+
+        /* ---- Page 1: company details, raw material, role ---- */
+        var p1 = pages[0];
+        put(p1, P1.companyName, answers.companyName, 1, 'Company name');
+        put(p1, P1.headOffice, answers.headOffice, 8, 'Head office Address');
+        var sites = [];
+        for (var s = 1; s <= Number(answers.siteCount || 0); s++) {
+          var addr = (answers['mfgSite' + s] || '').replace(/,?\s*\n\s*/g, ', ');
+          if (addr) { sites.push(s + '. ' + addr); }
+        }
+        put(p1, P1.sites, sites.join('\n'), 12, 'Manufacturing site Address');
+        put(p1, P1.employees, answers.employees, 1, 'Total No of Employees');
+        (answers.rawMaterial || '').split('; ').forEach(function (v) {
+          if (P1.rawMaterial[v]) { tickBox(p1, P1.rawMaterial[v]); }
+        });
+        put(p1, P1.rawMaterialOther, answers.rawMaterialOther, 2, 'Raw material – Other');
+        if (P1.role[answers.role]) { tickBox(p1, P1.role[answers.role]); }
+        put(p1, P1.roleOther, answers.roleOther, 2, 'Role in the Industry – Other');
+
+        /* ---- Pages 2–6: questions 1–28 ---- */
+        QUESTIONS.forEach(function (q) {
+          var r = Q_ROWS[q.n], page = pages[r[0]], a = answers['q' + q.n];
+          var col = qCols(q.n)[a];
+          if (col) { tickBox(page, [col[0], r[1], col[1], r[2]]); }
+          put(page, [COMMENT_X[0], r[3], COMMENT_X[1], r[4]], answers['q' + q.n + 'Comment'], 20,
+            'Question ' + q.n + ' – Comment', true);
+        });
+
+        /* ---- Page 6: Completed By block ---- */
+        var p6 = pages[5];
+        put(p6, P6.completedBy, answers.signName, 1, 'Completed By');
+        signIn(p6, P6.signature);
+        put(p6, P6.position, answers.signPosition, 1, 'Position');
+        put(p6, P6.date, answers.signDate, 1);
+        put(p6, P6.phone, answers.contactPhone, 1, 'Contact Detail – Phone');
+        put(p6, P6.email, answers.contactEmail, 1, 'Contact Detail – Email');
+
+        /* Header of an added page: logo, title, one line of explanation */
+        function addedPage(title, line) {
+          var pg = pdf.addPage([595.32, PAGE_H]);
+          var ld = logo.scaleToFit(110, 40);
+          pg.drawImage(logo, { x: 50, y: PAGE_H - 50 - ld.height, width: ld.width, height: ld.height });
+          pg.drawText(title, { x: 50, y: PAGE_H - 120, size: 16, font: bold, color: NAVY });
+          pg.drawText(safe(line), { x: 50, y: PAGE_H - 138, size: 9, font: font, color: INK });
+          pg.drawText('Parent SOP: SOP/QA/0014  |  Form Number: F/QA/0014/008/v7  |  ' + title,
+            { x: 50, y: 40, size: 8, font: font, color: GREY });
+          return pg;
+        }
+
+        /* Label / value rows; starts a new page when one is full */
+        function drawRows(pg, rows, y, labelW, newPage) {
+          var valW = 545 - 50 - labelW - 10;
+          rows.forEach(function (r) {
+            var vl = wrap(safe(r[1]), font, 9, valW);
+            var hh = Math.max(1, vl.length) * 12 + 10;
+            if (y + hh > PAGE_H - 70 && newPage) {
+              pg.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: RULE });
+              pg = newPage(); y = 165;
+            }
+            pg.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: RULE });
+            wrap(safe(r[0]), bold, 9, labelW).forEach(function (ln, i) {
+              pg.drawText(ln, { x: 50, y: PAGE_H - (y + 15 + i * 12), size: 9, font: bold, color: NAVY });
+            });
+            vl.forEach(function (ln, i) {
+              pg.drawText(ln, { x: 50 + labelW + 10, y: PAGE_H - (y + 15 + i * 12), size: 9, font: font, color: INK });
+            });
+            y += hh;
+          });
+          pg.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: RULE });
+          return { page: pg, y: y };
+        }
+
+        /* ---- Continuation page: answers too long for their box, in full ---- */
+        if (overflow.length) {
+          var cont = function () {
+            return addedPage('Continuation', 'Answers that did not fit in their box on the form, given here in full.');
+          };
+          drawRows(cont(), overflow, 165, 130, cont);
+        }
+
+        /* ---- Appendix: electronic signature record ---- */
+        var rec = addedPage('Electronic Signature Record',
+          'Appendix to Manufacturer Assessment Questionnaire ' + evidence.formNumber + ', generated automatically on submission.');
+
+        var rows = [
+          ['Signed by', evidence.signerName + (evidence.signerPosition ? ', ' + evidence.signerPosition : '') +
+            (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
+          ['Document signed', evidence.documentsSigned],
+          ['Signature method', evidence.signatureMethod],
+          ['Typed signature', evidence.typedSignature],
+          ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
+          ['Submitted', ukTime(evidence.submittedAt)],
+          ['Signer time zone', evidence.timeZone],
+          ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
+          ['Browser / device', evidence.userAgent],
+          ['Screen / language', evidence.screen + ' / ' + evidence.language],
+          ['Page', evidence.pageUrl]
+        ];
+        if (evidence.formSentBy) { rows.push(['Form sent by', evidence.formSentBy]); }
+        rows.push(
+          ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
+          ['Integrity hash (SHA-256)', evidence.sha256]
+        );
+        var y = drawRows(rec, rows, 165, 130, null).y;
+
+        if (sigImg) {
+          rec.drawText('Signature', { x: 50, y: PAGE_H - (y + 24), size: 9, font: bold, color: NAVY });
+          var sd = sigImg.scaleToFit(260, 90);
+          rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: RULE, borderWidth: 0.5 });
+          rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105), width: sd.width, height: sd.height });
+          y += 125;
+        }
+
+        var legal = 'This document was signed electronically. The signer consented to sign electronically, typed their name ' +
+          'and confirmed it as their signature at the time shown. A name applied with the intention to authenticate is a ' +
+          'valid electronic signature in England and Wales. The signature is logically associated with the questionnaire ' +
+          'answers above and is admissible as evidence under section 7 of the Electronic Communications Act 2000; under ' +
+          'Article 25(1) of UK eIDAS it may not be denied legal effect solely because it is in electronic form. The integrity ' +
+          'hash is calculated over the submitted answers and this record, so any later alteration can be detected.';
+        wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
+          rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: GREY });
+        });
+
+        pdf.setTitle('Manufacturer Assessment Questionnaire - ' + safe(answers.companyName));
+        pdf.setSubject('Syri Ltd. manufacturer assessment questionnaire (' + FORM_NUMBER + ')');
+        pdf.setAuthor(safe(answers.signName));
+        pdf.setCreator('Syri Ltd. online questionnaire');
+        pdf.setProducer('pdf-lib');
+        pdf.setCreationDate(new Date(evidence.submittedAt));
+
+        return pdf.save();
+      }).then(function (bytes) {
+        var company = (answers.companyName || 'Questionnaire').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        return {
+          name: 'Syri-Manufacturer-Assessment-Questionnaire_' + company + '_' + evidence.submittedAt.slice(0, 10) + '.pdf',
+          blob: new Blob([bytes], { type: 'application/pdf' })
+        };
+      });
+    });
+  }
+
+  function offerPdf(result) {
+    var url = URL.createObjectURL(result.blob);
+    var btn = document.getElementById('downloadPdf');
+    function download() {
+      var a = document.createElement('a');
+      a.href = url; a.download = result.name;
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+    btn.disabled = false;
+    btn.onclick = download;
+    document.getElementById('pdfStatus').textContent =
+      'Your completed questionnaire (' + result.name + ') has been downloaded. Keep it for your records.';
+    download();
+  }
+
+  /* ---------- Signature evidence ----------
+     A typed name confirmed by the signer is a simple electronic signature.
+     It is valid where applied with intent to authenticate (Law Commission
+     2019), admissible (ECA 2000 s.7) and cannot be denied legal effect for
+     being electronic (UK eIDAS Art. 25). Its weight depends on showing who
+     signed, when, what they signed and that they intended to sign, so we
+     record that.
+     NOTE: a browser cannot see its own public IP. Here it is looked up
+     from a third-party service at submit time (client-reported). Once
+     submissions go to a server, record the IP and time server-side as
+     the authoritative values. */
+  var IP_LOOKUP_URL = 'https://api.ipify.org?format=json';
+
+  function lookupIp() {
+    var timeout = new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 4000); });
+    var lookup = fetch(IP_LOOKUP_URL, { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return j && j.ip ? j.ip : null; })
+      .catch(function () { return null; });
+    return Promise.race([lookup, timeout]);
+  }
+
+  function sha256(text) {
+    if (!(window.crypto && crypto.subtle && window.TextEncoder)) { return Promise.resolve(null); }
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+    }).catch(function () { return null; });
+  }
+
+  function canonical(obj) {
+    return JSON.stringify(Object.keys(obj).sort().reduce(function (o, k) { o[k] = obj[k]; return o; }, {}));
+  }
+
+  function buildEvidence(answers) {
+    var submittedAt = new Date();
+    return lookupIp().then(function (ip) {
+      var evidence = {
+        signerName: answers.signName,
+        signerPosition: answers.signPosition,
+        signerCompany: answers.companyName,
+        documentsSigned: 'Manufacturer Assessment Questionnaire (F/QA/0014/008/v7)',
+        signatureMethod: 'Typed name, confirmed by the signer ("Confirm signature")',
+        typedSignature: answers.typedSignature,
+        signatureCapturedAt: (signedAt || submittedAt).toISOString(),
+        submittedAt: submittedAt.toISOString(),
+        timeZone: (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'unknown',
+        ipAddress: ip || 'unavailable',
+        ipSource: ip ? 'client-reported via api.ipify.org' : 'lookup failed',
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        screen: screen.width + 'x' + screen.height,
+        pageUrl: location.href,
+        formNumber: FORM_NUMBER,
+        formSentBy: sentBy,
+        consentToSignElectronically: answers.esignConsent === 'Yes',
+        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim()
+      };
+      /* Hash of the answers + evidence, so any later change to the record is detectable */
+      return sha256(canonical(answers) + canonical(evidence)).then(function (hash) {
+        evidence.sha256 = hash || 'unavailable';
+        return evidence;
+      });
+    });
+  }
+
+  /* UK local time; the full form also shows the exact UTC value */
+  function ukTime(iso, short) {
+    var d = new Date(iso);
+    var local = d.toLocaleString('en-GB', {
+      timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
+    });
+    return short ? local : local + ' (' + iso + ')';
+  }
+
+  function showRecord(ev) {
+    var rows = [
+      ['Signed by', ev.signerName + (ev.signerPosition ? ', ' + ev.signerPosition : '') + (ev.signerCompany ? ', ' + ev.signerCompany : '')],
+      ['Signature', null],
+      ['Signature method', ev.signatureMethod],
+      ['Signature confirmed', ukTime(ev.signatureCapturedAt)],
+      ['Submitted', ukTime(ev.submittedAt)],
+      ['IP address', ev.ipAddress],
+      ['Browser / device', ev.userAgent],
+      ['Consent to e-sign', ev.consentToSignElectronically ? 'Given' : 'Not given'],
+      ['Form', ev.formNumber],
+      ['Integrity hash (SHA-256)', ev.sha256]
+    ];
+    var dl = document.getElementById('recordList');
+    dl.innerHTML = '';
+    rows.forEach(function (row) {
+      var dt = document.createElement('dt'); dt.textContent = row[0];
+      var dd = document.createElement('dd');
+      if (row[1] === null) {
+        var img = document.createElement('img');
+        img.src = sigInput.value; img.alt = 'Captured signature';
+        dd.appendChild(img);
+      } else {
+        dd.textContent = row[1];
+      }
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+  }
+
+  document.getElementById('printRecord').addEventListener('click', function () { window.print(); });
+
+  /* Signing date is always today's date and cannot be edited.
+     It is set again at submission, so it reflects the day the form is sent. */
+  function stampToday() {
+    document.getElementById('signDate').value = new Date().toLocaleDateString('en-GB', {
+      timeZone: 'Europe/London', day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+  }
+  stampToday();
+  updateConds();
+}());
+</script>
+</body>
+</html>

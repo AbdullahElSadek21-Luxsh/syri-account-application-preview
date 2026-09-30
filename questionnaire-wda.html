@@ -1,0 +1,1815 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Supplier Questionnaire (WDA) &ndash; Syri Ltd.</title>
+<style>
+/* Syri Ltd. — Supplier Questionnaire (WDA)
+   Web version of the controlled form F/SALE/0017/004/v4 Supplier and
+   Manufacturer Assessment Questionnaire under WDA (H) 39307
+   · Parent SOP SOP/SALE/0017
+   Seven short steps; the Responsible Person signs with a typed e-signature. */
+
+:root{
+  --navy:#26358C;
+  --navy-dark:#1C2870;
+  --navy-soft:#F1F3FA;
+  --ink:#1A1D29;
+  --muted:#636A7E;
+  --line:#D9DDE7;
+  --bg:#F5F6FA;
+  --err:#B42318;
+  --ok:#1B6B47;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font:400 15px/1.6 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+.page{max-width:1000px;margin:0 auto;padding:32px 16px 64px}
+.sheet{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.back-link{display:inline-block;margin:0 0 12px;font-size:13.5px;color:var(--navy);text-decoration:none}
+.back-link:hover{text-decoration:underline}
+
+/* Header */
+header{padding:30px 36px 26px;border-top:4px solid var(--navy);border-bottom:1px solid var(--line)}
+.brand{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.brand img{width:140px;height:auto;display:block}
+.contact{font-size:12px;line-height:1.6;color:var(--muted);text-align:right}
+.contact a{color:var(--navy);text-decoration:none}
+h1{margin:24px 0 6px;font-size:26px;font-weight:600;letter-spacing:-.3px}
+.intro{margin:0;color:var(--muted);font-size:14.5px}
+.req{color:var(--err)}
+
+/* Steps: one short step visible at a time */
+.step{display:none}
+.step.active{display:block}
+.step-label{margin:0;padding:22px 36px 0;font-size:13.5px;font-weight:600;color:var(--muted)}
+.step-label:focus,.step-label:focus-visible{outline:none}
+
+/* Sections */
+fieldset{border:0;margin:0;padding:28px 36px 4px;min-width:0}
+fieldset + fieldset{border-top:1px solid var(--line)}
+.step > fieldset:first-child{padding-top:14px}
+legend{
+  float:left;width:100%;padding:0;margin:0 0 4px;
+  font-size:17px;font-weight:600;color:var(--navy);
+}
+legend + *{clear:both}
+.note{margin:0 0 18px;font-size:13.5px;color:var(--muted)}
+.note a{color:var(--navy)}
+.note strong{color:var(--ink)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+.row.three{grid-template-columns:1fr 1fr 1fr}
+.sub{margin:6px 0 10px;font-size:13px;font-weight:600;color:var(--muted)}
+
+/* Fields */
+.field{margin-bottom:20px;min-width:0}
+label,.label{display:block;margin-bottom:6px;font-size:13.5px;font-weight:600}
+.hint{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
+input[type=text],input[type=tel],input[type=email],input[type=date],input[type=number],textarea{
+  width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:6px;padding:10px 12px;
+}
+textarea{resize:vertical;min-height:88px}
+input:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(38,53,140,.14)}
+input[readonly]{background:var(--bg);color:var(--muted);cursor:not-allowed}
+input[readonly]:focus{border-color:var(--line);box-shadow:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+
+/* Radio / checkbox */
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.options.inline{display:flex;gap:24px;flex-wrap:wrap}
+.opt{display:flex;align-items:center;gap:10px;font-weight:400;font-size:14.5px;margin:0;padding:4px 0;cursor:pointer}
+.opt input{width:18px;height:18px;margin:0;accent-color:var(--navy);cursor:pointer;flex:none}
+
+/* Yes / No questions: the question on the left, the answer on the right */
+.field.yn{
+  display:grid;grid-template-columns:1fr auto;gap:2px 28px;align-items:center;
+  margin:0;padding:12px 0;border-top:1px solid var(--line);
+}
+.yn .label{margin:0;font-weight:400;font-size:14.5px}
+.yn .error{grid-column:1/-1;margin-top:2px}
+.yn + .field:not(.yn){margin-top:0;padding-top:16px;border-top:1px solid var(--line)}
+.yn + .cond .field{margin:0;padding:4px 0 16px}
+
+/* Tick-box + frequency (climatic conditions) */
+.freq{display:grid;grid-template-columns:220px 1fr;gap:0 20px;align-items:center;min-height:52px}
+.freq .cond{margin:0}
+.freq .cond .field{margin:0}
+
+/* Follow-up questions shown only for some answers ("Yes", "Other", ...) */
+.cond{display:none;margin-top:12px}
+.cond.show{display:block}
+
+/* Errors */
+.error{display:none;margin-top:6px;font-size:13px;color:var(--err)}
+.invalid .error{display:block}
+.invalid input:not([type=radio]):not([type=checkbox]),.invalid textarea,.invalid .sig-preview{border-color:var(--err)}
+
+/* Statement / declaration panels */
+.declaration{
+  background:var(--navy-soft);border-radius:8px;padding:18px 20px;margin-bottom:22px;
+  font-size:14px;line-height:1.65;color:#343A4D;
+}
+.declaration p{margin:0 0 10px}
+.declaration p:last-child{margin-bottom:0}
+.declaration a{color:var(--navy)}
+
+/* Signature (typed, confirmed with a timestamp) */
+.sign-row{display:flex;gap:10px}
+.sign-row input{flex:1;min-width:0}
+.sign-row .btn{white-space:nowrap;padding:10px 20px}
+.btn:disabled{opacity:.55;cursor:default}
+.btn:disabled:hover{background:var(--navy)}
+.sig-preview{
+  margin-top:10px;min-height:78px;padding:8px 18px;display:flex;align-items:center;
+  border:1px dashed #AEB5C7;border-radius:6px;background:#fff;overflow:hidden;white-space:nowrap;
+  font-family:"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive;
+  font-size:30px;color:var(--ink);
+}
+.sig-preview.empty{font-family:inherit;font-size:13.5px;color:#9AA1B4}
+.sig-preview.signed{border-style:solid;border-color:var(--navy)}
+.sig-stamp{
+  display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding:9px 12px;
+  background:#EEF7F2;border:1px solid #BFE0CD;border-radius:6px;font-size:13px;color:var(--ok);font-weight:600;
+}
+.sig-stamp.show{display:flex}
+.sig-stamp .link{margin-left:auto}
+.sig-foot{display:flex;justify-content:space-between;margin-top:6px;font-size:12.5px;color:var(--muted)}
+.link{background:none;border:0;padding:0;font:inherit;font-size:13px;color:var(--navy);cursor:pointer;text-decoration:underline}
+.consent .opt{align-items:flex-start;font-size:14px}
+.consent .opt input{margin-top:2px}
+.evidence-note{
+  margin:-6px 0 20px;padding:12px 14px;border-left:3px solid var(--navy);
+  background:var(--navy-soft);border-radius:0 6px 6px 0;font-size:12.8px;color:#343A4D;
+}
+
+/* Footer + actions */
+.actions{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:22px 36px;border-top:1px solid var(--line);background:#FAFBFD;
+}
+.actions p{margin:0;font-size:13.5px;color:var(--err);display:none}
+.actions p.show{display:block}
+.buttons{display:flex;gap:10px;margin-left:auto}
+.btn{
+  font:inherit;font-size:15px;font-weight:600;cursor:pointer;
+  background:var(--navy);color:#fff;border:0;border-radius:6px;padding:11px 24px;
+}
+.btn:hover{background:var(--navy-dark)}
+.btn[hidden]{display:none}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.secondary:hover{border-color:var(--navy);color:var(--navy)}
+.docfoot{margin-top:18px;text-align:center;font-size:11.5px;color:var(--muted);line-height:1.7}
+
+/* Thank-you */
+#done{display:none;padding:56px 36px;text-align:center}
+#done.show{display:block}
+#done h2{margin:0 0 10px;font-size:23px;font-weight:600;color:var(--ok)}
+#done p{margin:0 auto 10px;max-width:52ch;color:var(--muted)}
+.record{max-width:640px;margin:28px auto 0;text-align:left;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.record h3{margin:0;padding:12px 16px;font-size:14px;font-weight:600;color:var(--navy);background:var(--navy-soft);border-bottom:1px solid var(--line)}
+.record dl{margin:0;display:grid;grid-template-columns:180px 1fr}
+.record dt,.record dd{margin:0;padding:9px 16px;border-bottom:1px solid var(--line);font-size:13px}
+.record dt{color:var(--muted)}
+.record dd{word-break:break-all}
+.record dd img{max-height:60px;display:block}
+.record p{margin:0;padding:10px 16px;font-size:12px;max-width:none;color:var(--muted)}
+#done .btn{margin-top:22px}
+@media (max-width:640px){.record dl{grid-template-columns:1fr}.record dt{border-bottom:0;padding-bottom:0}}
+
+:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+@media (max-width:640px){
+  .page{padding:12px 10px 40px}
+  header,fieldset,.actions{padding-left:20px;padding-right:20px}
+  .step-label{padding-left:20px;padding-right:20px}
+  .contact{text-align:left}
+  .row,.row.three,.options,.freq,.field.yn{grid-template-columns:1fr}
+  .freq{min-height:0;margin-bottom:8px}
+  .sign-row{flex-direction:column}
+  .buttons{width:100%;flex-direction:column-reverse}
+  .btn{width:100%}
+}
+
+@page{size:A4;margin:14mm}
+@media print{
+  body{background:#fff;font-size:10pt}
+  .page{max-width:none;padding:0}
+  .sheet{border:0}
+  .back-link,.actions,.link,#printRecord,#downloadPdf,#pdfStatus,#confirmSig{display:none!important}
+  fieldset{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="select.html?view=questionnaires">&larr; Choose a different form</a>
+  <div class="sheet">
+
+    <header>
+      <div class="brand">
+        <img src="data:image/png;base64,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" alt="SyriMed – Syri Ltd.">
+        <div class="contact">
+          Syri Ltd. · Unit 4, Bradfield Road<br>
+          Ruislip, Middlesex, HA4 0NU<br>
+          Tel 0208 728 7800<br>
+          <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>
+        </div>
+      </div>
+      <h1>Supplier Questionnaire (WDA)</h1>
+      <p class="intro">Only complete this questionnaire if Syri Ltd has asked you to. This is our Supplier and Manufacturer Assessment Questionnaire under WDA (H) 39307. Fields marked <span class="req">*</span> are mandatory.</p>
+    </header>
+
+    <form id="form" novalidate>
+
+      <p class="step-label" id="stepLabel" tabindex="-1">Step 1 of 7 – General information</p>
+
+      <!-- ===== Step 1: A. General information (form page 1) ===== -->
+      <div class="step active" data-title="General information">
+        <fieldset>
+          <legend>About this questionnaire</legend>
+          <div class="declaration">
+            <p>In order to fulfil the requirements mentioned in the EU Guidelines on Good distribution practice of Medicinal products for human use (2013/C343/01).</p>
+            <p>This questionnaire is part of supplier QMS assessment.</p>
+            <p>Complete all sections of the audit and supply supporting documentation as required. Information supplied will not be disseminated to any 3rd party in return for commercial remuneration in any way and may only be disclosed to relevant 3rd parties to demonstrate regulatory compliance.</p>
+          </div>
+          <p class="note">Where the questionnaire asks you to enclose a copy of a document, please email it to <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a> quoting your company name.</p>
+        </fieldset>
+
+        <fieldset>
+          <legend>A. General information</legend>
+          <div class="field">
+            <label for="companyName">Company name <span class="req">*</span></label>
+            <input type="text" id="companyName" name="companyName" required autocomplete="organization">
+          </div>
+          <p class="sub">Address <span class="req">*</span></p>
+          <div class="row">
+            <div class="field">
+              <label for="addr1">Address Line 1 <span class="req">*</span></label>
+              <input type="text" id="addr1" name="addr1" required autocomplete="address-line1">
+            </div>
+            <div class="field">
+              <label for="addr2">Address Line 2</label>
+              <input type="text" id="addr2" name="addr2" autocomplete="address-line2">
+            </div>
+            <div class="field">
+              <label for="town">Town / City <span class="req">*</span></label>
+              <input type="text" id="town" name="town" required autocomplete="address-level2">
+            </div>
+            <div class="field">
+              <label for="county">County</label>
+              <input type="text" id="county" name="county" autocomplete="address-level1">
+            </div>
+            <div class="field">
+              <label for="postcode">Post Code <span class="req">*</span></label>
+              <input type="text" id="postcode" name="postcode" required autocomplete="postal-code">
+            </div>
+            <div class="field">
+              <label for="country">Country</label>
+              <input type="text" id="country" name="country" autocomplete="country-name">
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label">Site Address <span class="hint">(IF different from above)</span></span>
+            <label class="opt"><input type="checkbox" name="siteDifferent" value="Yes"> The site address is different from the address above</label>
+          </div>
+          <div class="cond" data-show-when="siteDifferent=Yes">
+            <div class="row">
+              <div class="field">
+                <label for="siteAddr1">Site Address Line 1 <span class="req">*</span></label>
+                <input type="text" id="siteAddr1" name="siteAddr1" required>
+              </div>
+              <div class="field">
+                <label for="siteAddr2">Site Address Line 2</label>
+                <input type="text" id="siteAddr2" name="siteAddr2">
+              </div>
+              <div class="field">
+                <label for="siteTown">Town / City <span class="req">*</span></label>
+                <input type="text" id="siteTown" name="siteTown" required>
+              </div>
+              <div class="field">
+                <label for="siteCounty">County</label>
+                <input type="text" id="siteCounty" name="siteCounty">
+              </div>
+              <div class="field">
+                <label for="sitePostcode">Post Code <span class="req">*</span></label>
+                <input type="text" id="sitePostcode" name="sitePostcode" required>
+              </div>
+              <div class="field">
+                <label for="siteCountry">Country</label>
+                <input type="text" id="siteCountry" name="siteCountry">
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="companyRegNo">Company Reg. Number</label>
+              <input type="text" id="companyRegNo" name="companyRegNo">
+            </div>
+            <div class="field">
+              <label for="vatNo">VAT Reg. Number</label>
+              <input type="text" id="vatNo" name="vatNo">
+            </div>
+            <div class="field">
+              <label for="licenceNo">License /WDA Number <span class="req">*</span> <span class="hint">(Please enclose a copy)</span></label>
+              <input type="text" id="licenceNo" name="licenceNo" required>
+            </div>
+            <div class="field">
+              <label for="issuingAuthority">Issuing Authority <span class="hint">&nbsp;</span></label>
+              <input type="text" id="issuingAuthority" name="issuingAuthority">
+            </div>
+            <div class="field">
+              <label for="issueDate">Issue Date</label>
+              <input type="date" id="issueDate" name="issueDate">
+            </div>
+            <div class="field">
+              <label for="expiryDate">Expiry Date</label>
+              <input type="date" id="expiryDate" name="expiryDate">
+            </div>
+            <div class="field">
+              <label for="tradingSince">When did the company begin trading? <span class="hint">e.g. 2012 or March 2012</span></label>
+              <input type="text" id="tradingSince" name="tradingSince" maxlength="40">
+            </div>
+            <div class="field">
+              <label for="employees">Number of employees <span class="hint">&nbsp;</span></label>
+              <input type="number" id="employees" name="employees" min="0" step="1" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="field">
+            <span class="label">Medicinal Products with additional requirement <span class="hint">Tick any that apply</span></span>
+            <div class="options inline">
+              <label class="opt"><input type="checkbox" name="coldChain" value="Yes"> COLD CHAIN</label>
+              <label class="opt"><input type="checkbox" name="cdProducts" value="Yes"> CD</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="lastInspection">Date of Last Inspection:</label>
+              <input type="date" id="lastInspection" name="lastInspection">
+            </div>
+          </div>
+          <div class="field yn" data-group="specialConditions" data-msg="Choose Yes or No">
+            <span class="label">Were any special conditions placed upon your license post inspection? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Were any special conditions placed upon your license post inspection?">
+              <label class="opt"><input type="radio" name="specialConditions" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="specialConditions" value="No"> No</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 2: A. General information, continued (form page 2, top) ===== -->
+      <div class="step" data-title="Licences, accreditations &amp; products">
+        <fieldset>
+          <legend>Licences and accreditations</legend>
+          <div class="field">
+            <span class="label">Did you receive deficiency ratings of the following? <span class="hint">Tick any that apply</span></span>
+            <div class="options inline">
+              <label class="opt"><input type="checkbox" name="defCritical" value="Yes"> CRITICAL</label>
+              <label class="opt"><input type="checkbox" name="defMajor" value="Yes"> MAJOR</label>
+            </div>
+          </div>
+          <p class="note"><strong><em>The latest versions of all relevant licenses should be enclosed along with GDP/GMP Certificates of Compliance</em></strong> – please email them to <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>.</p>
+          <div class="field yn" data-group="accreditations" data-msg="Choose Yes or No">
+            <span class="label">Do you hold any Industry Standard Accreditations? If yes, please specify <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Do you hold any Industry Standard Accreditations? If yes, please specify">
+              <label class="opt"><input type="radio" name="accreditations" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="accreditations" value="No"> No</label>
+            </div>
+          </div>
+          <div class="cond" data-show-when="accreditations=Yes">
+            <div class="field">
+              <label for="accreditationsDetail">Please specify <span class="req">*</span></label>
+              <textarea id="accreditationsDetail" name="accreditationsDetail" rows="2" style="min-height:56px" required maxlength="600"></textarea>
+            </div>
+          </div>
+          <div class="field yn" data-group="orgChart" data-msg="Choose Yes or No">
+            <span class="label">Does the company have a company organisational Chart? <span class="req">*</span> <span class="hint">(If yes please enclose a latest copy)</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have a company organisational Chart?">
+              <label class="opt"><input type="radio" name="orgChart" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="orgChart" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="qaEmployees">Number of employees engaged in Quality topics/Quality Assurance</label>
+            <input type="number" id="qaEmployees" name="qaEmployees" min="0" step="1" inputmode="numeric" style="max-width:220px">
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Product range</legend>
+          <div class="field" data-any data-msg="Tick at least one product range">
+            <span class="label">What range of products does the supplier do? <span class="req">*</span> <span class="hint">Tick all that apply</span></span>
+            <div class="options">
+              <label class="opt"><input type="checkbox" name="prodPOM" value="Yes"> POM</label>
+              <label class="opt"><input type="checkbox" name="prodP" value="Yes"> P</label>
+              <label class="opt"><input type="checkbox" name="prodGSL" value="Yes"> GSL</label>
+              <label class="opt"><input type="checkbox" name="prodNonPharma" value="Yes"> Non-Pharmaceutical</label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 3: B. Warehouse (form pages 2–3) ===== -->
+      <div class="step" data-title="Warehouse">
+        <fieldset>
+          <legend>B. Warehouse</legend>
+          <div class="field yn" data-group="tempMonitor" data-msg="Choose Yes or No">
+            <span class="label">Does the company routinely monitor and record the temperature of warehouses? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company routinely monitor and record the temperature of warehouses?">
+              <label class="opt"><input type="radio" name="tempMonitor" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="tempMonitor" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label">The company has special storage areas for <span class="hint">Tick all that apply</span></span>
+            <div class="options">
+              <label class="opt"><input type="checkbox" name="stRefrig" value="Yes"> Refrigerated Storage</label>
+              <label class="opt"><input type="checkbox" name="stFreezer" value="Yes"> Freezer Storage</label>
+              <label class="opt"><input type="checkbox" name="stCD" value="Yes"> Controlled Drugs</label>
+              <label class="opt"><input type="checkbox" name="stHazard" value="Yes"> Hazardous materials/ cytostatic</label>
+              <label class="opt"><input type="checkbox" name="stOther" value="Yes"> Other</label>
+            </div>
+          </div>
+          <div class="cond" data-show-when="stOther=Yes" style="margin-top:-8px">
+            <div class="field">
+              <label for="stOtherText">Other please specify: <span class="req">*</span></label>
+              <input type="text" id="stOtherText" name="stOtherText" required maxlength="160">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Climatic conditions in storage areas are</legend>
+          <p class="note">Tick all that apply and give the frequency.</p>
+          <div class="freq">
+            <label class="opt"><input type="checkbox" name="clMapped" value="Yes"> Temperature Mapped</label>
+            <div class="cond" data-show-when="clMapped=Yes"><div class="field">
+              <input type="text" id="clMappedFreq" name="clMappedFreq" aria-label="Temperature mapped – frequency" placeholder="Frequency, e.g. every 3 years" maxlength="60">
+            </div></div>
+          </div>
+          <div class="freq">
+            <label class="opt"><input type="checkbox" name="clMonitored" value="Yes"> Monitored</label>
+            <div class="cond" data-show-when="clMonitored=Yes"><div class="field">
+              <input type="text" id="clMonitoredFreq" name="clMonitoredFreq" aria-label="Monitored – frequency" placeholder="Frequency, e.g. continuous" maxlength="60">
+            </div></div>
+          </div>
+          <div class="freq">
+            <label class="opt"><input type="checkbox" name="clValidated" value="Yes"> Validated</label>
+            <div class="cond" data-show-when="clValidated=Yes"><div class="field">
+              <input type="text" id="clValidatedFreq" name="clValidatedFreq" aria-label="Validated – frequency" placeholder="Frequency" maxlength="60">
+            </div></div>
+          </div>
+          <div class="freq" style="margin-bottom:20px">
+            <label class="opt"><input type="checkbox" name="clRecorded" value="Yes"> Recorded</label>
+            <div class="cond" data-show-when="clRecorded=Yes"><div class="field">
+              <input type="text" id="clRecordedFreq" name="clRecordedFreq" aria-label="Recorded – frequency" placeholder="Frequency, e.g. daily" maxlength="60">
+            </div></div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Warehouse controls</legend>
+          <div class="field yn" data-group="alarm" data-msg="Choose Yes or No">
+            <span class="label">Does the company have a functional alarm system installed for excursion? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have a functional alarm system installed for excursion?">
+              <label class="opt"><input type="radio" name="alarm" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="alarm" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="deviationSys" data-msg="Choose Yes or No">
+            <span class="label">Does the company have deviation system to assess any excursion? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have deviation system to assess any excursion?">
+              <label class="opt"><input type="radio" name="deviationSys" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="deviationSys" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="premisesSecure" data-msg="Choose Yes or No">
+            <span class="label">Are the premises protected from access by unauthorised parties? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Are the premises protected from access by unauthorised parties?">
+              <label class="opt"><input type="radio" name="premisesSecure" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="premisesSecure" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="faultsProc" data-msg="Choose Yes or No">
+            <span class="label">Is a procedure specified for dealing with faults during storage of the pharmaceuticals e.g. deviations? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Is a procedure specified for dealing with faults during storage of the pharmaceuticals e.g. deviations?">
+              <label class="opt"><input type="radio" name="faultsProc" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="faultsProc" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="segregation" data-msg="Choose Yes or No">
+            <span class="label">Are there separate or secure areas determined for quarantined, falsified medicines or returned pharmaceuticals <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Are there separate or secure areas determined for quarantined, falsified medicines or returned pharmaceuticals">
+              <label class="opt"><input type="radio" name="segregation" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="segregation" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="cytoSecure" data-msg="Choose Yes or No">
+            <span class="label">Are cytostatic and hazardous materials stored in designated secure area? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Are cytostatic and hazardous materials stored in designated secure area?">
+              <label class="opt"><input type="radio" name="cytoSecure" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="cytoSecure" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="pestControl" data-msg="Choose Yes or No">
+            <span class="label">Does the company have a formal pest control programme for the warehouse? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have a formal pest control programme for the warehouse?">
+              <label class="opt"><input type="radio" name="pestControl" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="pestControl" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="crossContam" data-msg="Choose Yes or No">
+            <span class="label">Are appropriate measures undertaken to prevent cross contamination from personnel, materials etc? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Are appropriate measures undertaken to prevent cross contamination from personnel, materials etc?">
+              <label class="opt"><input type="radio" name="crossContam" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="crossContam" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="cleaningSop" data-msg="Choose Yes or No">
+            <span class="label">Is there an SOP covering cleaning and does this reflect actual practice? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Is there an SOP covering cleaning and does this reflect actual practice?">
+              <label class="opt"><input type="radio" name="cleaningSop" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="cleaningSop" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="calibration" data-msg="Choose Yes or No">
+            <span class="label">Does the company have a program of equipment calibration, qualification and maintenance service? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have a program of equipment calibration, qualification and maintenance service?">
+              <label class="opt"><input type="radio" name="calibration" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="calibration" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="warehouseInfo">Additional Information</label>
+            <textarea id="warehouseInfo" name="warehouseInfo" rows="3" maxlength="1500"></textarea>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 4: C. Operations (sourcing and delivery) (form pages 3–4) ===== -->
+      <div class="step" data-title="Operations (sourcing and delivery)">
+        <fieldset>
+          <legend>C. Operations (sourcing and delivery)</legend>
+          <div class="field">
+            <label for="orderProcess">Explain process of ordering, receiving stock, processing and then despatching stock.:</label>
+            <textarea id="orderProcess" name="orderProcess" rows="4" maxlength="1500"></textarea>
+          </div>
+          <div class="field">
+            <label for="stockRecords">Are stock records kept -electronically or on paper?</label>
+            <textarea id="stockRecords" name="stockRecords" rows="2" style="min-height:56px" maxlength="1000"></textarea>
+          </div>
+          <div class="field yn" data-group="expiredControl" data-msg="Choose Yes or No">
+            <span class="label">Does the company have control for prevention of expired goods shipping out? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have control for prevention of expired goods shipping out?">
+              <label class="opt"><input type="radio" name="expiredControl" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="expiredControl" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="ownTransport" data-msg="Choose Yes or No">
+            <span class="label">Does the company use own transport mechanism? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company use own transport mechanism?">
+              <label class="opt"><input type="radio" name="ownTransport" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="ownTransport" value="No"> No</label>
+            </div>
+          </div>
+          <div class="cond" data-show-when="ownTransport=Yes">
+            <div class="field">
+              <label for="transportMeasures">If yes please provide what measures are available for temperature control during the delivery: <span class="req">*</span></label>
+              <textarea id="transportMeasures" name="transportMeasures" rows="3" required maxlength="1500"></textarea>
+            </div>
+          </div>
+          <div class="field yn" data-group="courier" data-msg="Choose Yes or No">
+            <span class="label">Does the company use third party courier service? <span class="req">*</span> <span class="hint">If, Yes Provide Technical Agreement</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company use third party courier service?">
+              <label class="opt"><input type="radio" name="courier" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="courier" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="courierTemp" data-msg="Choose Yes or No">
+            <span class="label">Does the courier company provide temperature-controlled delivery and records of temperature? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the courier company provide temperature-controlled delivery and records of temperature?">
+              <label class="opt"><input type="radio" name="courierTemp" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="courierTemp" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="coldChainVehicle" data-msg="Choose Yes or No">
+            <span class="label">Does the cold chain product deliver with temperature-controlled vehicle? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the cold chain product deliver with temperature-controlled vehicle?">
+              <label class="opt"><input type="radio" name="coldChainVehicle" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="coldChainVehicle" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="outsourced" data-msg="Choose Yes or No">
+            <span class="label">Does the company have any outsourced activity? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have any outsourced activity?">
+              <label class="opt"><input type="radio" name="outsourced" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="outsourced" value="No"> No</label>
+            </div>
+          </div>
+          <div class="cond" data-show-when="outsourced=Yes">
+          <div class="field yn" data-group="outsourcedTA" data-msg="Choose Yes or No">
+            <span class="label">If yes, is it covered under Technical agreement? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="If yes, is it covered under Technical agreement?">
+              <label class="opt"><input type="radio" name="outsourcedTA" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="outsourcedTA" value="No"> No</label>
+            </div>
+          </div>
+          </div>
+          <div style="height:12px"></div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 5: D. Quality assurance (form pages 4–5) ===== -->
+      <div class="step" data-title="Quality assurance">
+        <fieldset>
+          <legend>D. Quality assurance</legend>
+          <div class="field yn" data-group="qualityManual" data-msg="Choose Yes or No">
+            <span class="label">Does the company have a Quality manual and/or a Site Master File? <span class="req">*</span> <span class="hint">please enclose a copy</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have a Quality manual and/or a Site Master File?">
+              <label class="opt"><input type="radio" name="qualityManual" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="qualityManual" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="qms" data-msg="Choose Yes or No">
+            <span class="label">Does the company have formal Quality Management System in place? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have formal Quality Management System in place?">
+              <label class="opt"><input type="radio" name="qms" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="qms" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="bonaFides">How does the supplier establish the Bona Fides of their suppliers?</label>
+            <textarea id="bonaFides" name="bonaFides" rows="3" maxlength="1500"></textarea>
+          </div>
+          <div class="field yn" data-group="approvedList" data-msg="Choose Yes or No">
+            <span class="label">Does the company maintain an approved suppliers list? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company maintain an approved suppliers list?">
+              <label class="opt"><input type="radio" name="approvedList" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="approvedList" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="unapproved" data-msg="Choose Yes or No">
+            <span class="label">Does your system allow you to use unapproved suppliers? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does your system allow you to use unapproved suppliers?">
+              <label class="opt"><input type="radio" name="unapproved" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="unapproved" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="supplierAudits" data-msg="Choose Yes or No">
+            <span class="label">Does the company conduct Audits of their suppliers? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company conduct Audits of their suppliers?">
+              <label class="opt"><input type="radio" name="supplierAudits" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="supplierAudits" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="falsifProc" data-msg="Choose Yes or No">
+            <span class="label">Does the company have procedure for identification of falsification/counterfeit medicines? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have procedure for identification of falsification/counterfeit medicines?">
+              <label class="opt"><input type="radio" name="falsifProc" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="falsifProc" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="falsifProcess" data-msg="Choose Yes or No">
+            <span class="label">Does the company have falsified medicine identification process? <span class="req">*</span> <span class="hint">If yes please provide a copy with system description</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have falsified medicine identification process?">
+              <label class="opt"><input type="radio" name="falsifProcess" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="falsifProcess" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="selfInspection" data-msg="Choose Yes or No">
+            <span class="label">Does the company have self-inspection process in place? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have self-inspection process in place?">
+              <label class="opt"><input type="radio" name="selfInspection" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="selfInspection" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="selfInspFreq">What is a frequency of self-inspection?</label>
+            <input type="text" id="selfInspFreq" name="selfInspFreq" maxlength="80" style="max-width:420px">
+          </div>
+          <div class="field yn" data-group="complaints" data-msg="Choose Yes or No">
+            <span class="label">Does the company have a complaint procedure? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have a complaint procedure?">
+              <label class="opt"><input type="radio" name="complaints" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="complaints" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="returnsProc" data-msg="Choose Yes or No">
+            <span class="label">Does the company have a returns procedure? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have a returns procedure?">
+              <label class="opt"><input type="radio" name="returnsProc" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="returnsProc" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="recallProc" data-msg="Choose Yes or No">
+            <span class="label">Does the company have a recall procedure? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does the company have a recall procedure?">
+              <label class="opt"><input type="radio" name="recallProc" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="recallProc" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="recallNotify">In the event of a product recall how can we be assured that prompt notification is sent?</label>
+            <textarea id="recallNotify" name="recallNotify" rows="3" maxlength="1200"></textarea>
+          </div>
+          <div class="field yn" data-group="allowInspection" data-msg="Choose Yes or No">
+            <span class="label">Does company allow to perform supplier inspection? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does company allow to perform supplier inspection?">
+              <label class="opt"><input type="radio" name="allowInspection" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="allowInspection" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="trainingProc" data-msg="Choose Yes or No">
+            <span class="label">Does company have training procedure <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Does company have training procedure">
+              <label class="opt"><input type="radio" name="trainingProc" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="trainingProc" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="gdpTraining" data-msg="Choose Yes or No">
+            <span class="label">Are staff trained on Good Distribution Practice (FMD, GDP or GMP)? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Are staff trained on Good Distribution Practice (FMD, GDP or GMP)?">
+              <label class="opt"><input type="radio" name="gdpTraining" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="gdpTraining" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="jobTraining" data-msg="Choose Yes or No">
+            <span class="label">Are all staff trained on their job function with training records available? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Are all staff trained on their job function with training records available?">
+              <label class="opt"><input type="radio" name="jobTraining" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="jobTraining" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="falsifTraining" data-msg="Choose Yes or No">
+            <span class="label">Do the employees receive instruction and retraining on a regular basis on falsification? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Do the employees receive instruction and retraining on a regular basis on falsification?">
+              <label class="opt"><input type="radio" name="falsifTraining" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="falsifTraining" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field yn" data-group="securityVerif" data-msg="Choose Yes or No">
+            <span class="label">Do you have a process for security verification on Goods <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Do you have a process for security verification on Goods">
+              <label class="opt"><input type="radio" name="securityVerif" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="securityVerif" value="No"> No</label>
+            </div>
+          </div>
+          <div class="field">
+            <label for="securityDetails">Details:</label>
+            <textarea id="securityDetails" name="securityDetails" rows="2" style="min-height:56px" maxlength="800"></textarea>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 6: E. Key contacts + additional information (form page 6) ===== -->
+      <div class="step" data-title="Key contacts">
+        <fieldset>
+          <legend>E. Key contacts</legend>
+          <p class="note">For the CEO or Director and the Responsible Person, please provide photographic evidence (driving license/ passport copy). Please email copies to <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>.</p>
+          <p class="sub">CEO or Director <span class="hint" style="display:inline">(Please provide photographic evidence (driving license/ passport copy)</span></p>
+          <div class="row three">
+            <div class="field">
+              <label for="ceoName">Name:</label>
+              <input type="text" id="ceoName" name="ceoName">
+            </div>
+            <div class="field">
+              <label for="ceoEmail">Email:</label>
+              <input type="email" id="ceoEmail" name="ceoEmail">
+            </div>
+            <div class="field">
+              <label for="ceoPhone">Phone:</label>
+              <input type="tel" id="ceoPhone" name="ceoPhone">
+            </div>
+          </div>
+          <p class="sub">Responsible Person <span class="hint" style="display:inline">(Please provide photographic evidence (driving license/ passport copy)</span></p>
+          <div class="row three">
+            <div class="field">
+              <label for="rpName">Name:</label>
+              <input type="text" id="rpName" name="rpName">
+            </div>
+            <div class="field">
+              <label for="rpEmail">Email:</label>
+              <input type="email" id="rpEmail" name="rpEmail">
+            </div>
+            <div class="field">
+              <label for="rpPhone">Phone:</label>
+              <input type="tel" id="rpPhone" name="rpPhone">
+            </div>
+          </div>
+          <p class="sub">Quality Assurance <span class="req">*</span></p>
+          <div class="row three">
+            <div class="field">
+              <label for="qaName">Name: <span class="req">*</span></label>
+              <input type="text" id="qaName" name="qaName" required>
+            </div>
+            <div class="field">
+              <label for="qaEmail">Email: <span class="req">*</span></label>
+              <input type="email" id="qaEmail" name="qaEmail" required>
+            </div>
+            <div class="field">
+              <label for="qaPhone">Phone: <span class="req">*</span></label>
+              <input type="tel" id="qaPhone" name="qaPhone" required>
+            </div>
+          </div>
+          <p class="sub">Customer Service</p>
+          <div class="row three">
+            <div class="field">
+              <label for="csName">Name:</label>
+              <input type="text" id="csName" name="csName">
+            </div>
+            <div class="field">
+              <label for="csEmail">Email:</label>
+              <input type="email" id="csEmail" name="csEmail">
+            </div>
+            <div class="field">
+              <label for="csPhone">Phone:</label>
+              <input type="tel" id="csPhone" name="csPhone">
+            </div>
+          </div>
+          <p class="sub">Sales</p>
+          <div class="row three">
+            <div class="field">
+              <label for="salesName">Name:</label>
+              <input type="text" id="salesName" name="salesName">
+            </div>
+            <div class="field">
+              <label for="salesEmail">Email:</label>
+              <input type="email" id="salesEmail" name="salesEmail">
+            </div>
+            <div class="field">
+              <label for="salesPhone">Phone:</label>
+              <input type="tel" id="salesPhone" name="salesPhone">
+            </div>
+          </div>
+          <p class="sub">Purchase</p>
+          <div class="row three">
+            <div class="field">
+              <label for="purName">Name:</label>
+              <input type="text" id="purName" name="purName">
+            </div>
+            <div class="field">
+              <label for="purEmail">Email:</label>
+              <input type="email" id="purEmail" name="purEmail">
+            </div>
+            <div class="field">
+              <label for="purPhone">Phone:</label>
+              <input type="tel" id="purPhone" name="purPhone">
+            </div>
+          </div>
+          <p class="sub">Out of Office Hours Contact</p>
+          <div class="row three">
+            <div class="field">
+              <label for="oohName">Name:</label>
+              <input type="text" id="oohName" name="oohName">
+            </div>
+            <div class="field">
+              <label for="oohEmail">Email:</label>
+              <input type="email" id="oohEmail" name="oohEmail">
+            </div>
+            <div class="field">
+              <label for="oohPhone">Phone:</label>
+              <input type="tel" id="oohPhone" name="oohPhone">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Additional information</legend>
+          <div class="field">
+            <textarea id="additionalInfo" name="additionalInfo" rows="4" maxlength="2000" aria-label="Additional information"></textarea>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 7: To be filled in by Responsible Person (form page 7) ===== -->
+      <div class="step" data-title="Declaration &amp; signature">
+        <fieldset>
+          <legend>Declaration</legend>
+          <p class="note">To be filled in by Responsible Person.</p>
+          <div class="row">
+            <div class="field">
+              <label for="position">Position: <span class="req">*</span></label>
+              <input type="text" id="position" name="position" required autocomplete="organization-title">
+            </div>
+            <div class="field">
+              <label for="signEmail">Email: <span class="req">*</span></label>
+              <input type="email" id="signEmail" name="signEmail" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="field consent" data-group="esignConsent" data-msg="Please tick this box before confirming your signature">
+            <label class="opt"><input type="checkbox" name="esignConsent" value="Yes">
+              <span>I confirm that the answers in this questionnaire are accurate and that I am authorised to complete it on behalf of the company. I agree to sign this questionnaire electronically: by typing my name and selecting “Confirm signature” I intend to sign and authenticate it, and I understand this has the same effect as a handwritten signature. <span class="req">*</span></span>
+            </label>
+          </div>
+
+          <div class="field" data-group="signature" data-msg="Type your full name and select Confirm signature">
+            <label for="typedSignature">Sign <span class="req">*</span></label>
+            <div class="sign-row">
+              <input type="text" id="typedSignature" name="typedSignature" autocomplete="name"
+                     placeholder="Type your full name" aria-describedby="sigHelp">
+              <button type="button" class="btn" id="confirmSig">Confirm signature</button>
+            </div>
+            <div class="sig-preview empty" id="sigPreview" aria-hidden="true">Your signature will appear here</div>
+            <div class="sig-stamp" id="sigStamp" role="status">
+              <span id="sigStampText"></span>
+              <button type="button" class="link" id="changeSig">Change</button>
+            </div>
+            <div class="sig-foot" id="sigHelp">Type your full name, then select Confirm signature. The date and time are recorded when you confirm.</div>
+            <input type="hidden" id="signatureData" name="signatureData">
+            <input type="hidden" id="signatureConfirmedAt" name="signatureConfirmedAt">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="signName">Questionnaire Completed by (Name)</label>
+              <input type="text" id="signName" name="signName" readonly aria-readonly="true" aria-describedby="signNameHint">
+              <div class="sig-foot" id="signNameHint">Taken from your confirmed signature</div>
+            </div>
+            <div class="field">
+              <label for="signDate">Date</label>
+              <input type="text" id="signDate" name="signDate" readonly aria-readonly="true" aria-describedby="signDateHint">
+              <div class="sig-foot" id="signDateHint">Set automatically to today’s date</div>
+            </div>
+          </div>
+          <p class="evidence-note">When you confirm your signature and submit, we record the date and time, your IP address and your browser/device details. This is used only as evidence that you signed this questionnaire and is kept with our supplier records.</p>
+        </fieldset>
+      </div>
+
+      <div class="actions">
+        <p id="formMsg" role="alert">Please complete the highlighted fields.</p>
+        <div class="buttons">
+          <button type="button" class="btn secondary" id="backBtn" hidden>Back</button>
+          <button type="submit" class="btn" id="nextBtn">Continue</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="done" tabindex="-1">
+      <h2>Thank you – questionnaire submitted</h2>
+      <p>Our team will review your answers and be in touch if we need anything else.</p>
+      <p>Please email any documents the questionnaire asks for (licences, certificates, organisational chart, photographic ID) to <a href="mailto:credit.control@syrimed.co.uk" style="color:#26358C">credit.control@syrimed.co.uk</a>, or call +44 20 8728 7800.</p>
+
+      <div class="record">
+        <h3>Electronic signature record</h3>
+        <dl id="recordList"></dl>
+        <p>This record is logically associated with your signed questionnaire (Electronic Communications Act 2000, s.7; UK eIDAS Art. 25).</p>
+      </div>
+      <p id="pdfStatus" style="margin-top:22px">Preparing your completed questionnaire (PDF)…</p>
+      <button type="button" class="btn" id="downloadPdf" disabled>Download completed form (PDF)</button>
+      <button type="button" class="btn secondary" id="printRecord">Print this record</button>
+    </div>
+
+  </div>
+
+  <div class="docfoot">
+    Parent SOP: SOP/SALE/0017 · Form Number: F/SALE/0017/004/v4 · Effective Date: 13 Feb 2026 · Review Date: 11 Feb 2028
+  </div>
+</div>
+
+<script src="assets/pdf-lib.min.js"></script>
+<script src="assets/template-q-wda.js"></script>
+<script>
+(function () {
+  'use strict';
+  var form = document.getElementById('form');
+  var msg  = document.getElementById('formMsg');
+  var FORM_NUMBER = 'F/SALE/0017/004/v4';
+
+  /* Who sent the supplier this questionnaire (optional ?sentBy= in the link) */
+  var sentBy = (new URLSearchParams(location.search).get('sentBy') || '').trim().slice(0, 120);
+
+  /* ---------- Steps ----------
+     Seven short steps, one per section of the form. Continue checks only
+     the step on screen; the last step's button submits. Values stay in
+     the page when going Back. */
+  var steps     = Array.prototype.slice.call(form.querySelectorAll('.step'));
+  var stepLabel = document.getElementById('stepLabel');
+  var backBtn   = document.getElementById('backBtn');
+  var nextBtn   = document.getElementById('nextBtn');
+  var current   = 0;
+  var LAST = steps.length - 1;
+
+  function showStep(n) {
+    current = n;
+    steps.forEach(function (s, i) { s.classList.toggle('active', i === n); });
+    stepLabel.textContent = 'Step ' + (n + 1) + ' of ' + steps.length + ' – ' + steps[n].getAttribute('data-title');
+    backBtn.hidden = n === 0;
+    nextBtn.textContent = n === LAST ? 'Submit questionnaire' : 'Continue';
+    msg.classList.remove('show');
+    if (n === LAST) { stampToday(); }
+    /* Back to the top of the sheet, so the new step starts in view */
+    var top = document.querySelector('.sheet').getBoundingClientRect().top + window.pageYOffset - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    stepLabel.focus({ preventScroll: true });
+  }
+
+  backBtn.addEventListener('click', function () {
+    if (current > 0) { showStep(current - 1); }
+  });
+
+  /* ---------- Signature: typed name, confirmed with a timestamp ----------
+     The Responsible Person ticks consent, types their full name and
+     selects "Confirm signature". That click is the act of signing: the
+     time is recorded, the signature is locked and the "Questionnaire
+     Completed" name is filled in. */
+  var typedSig   = document.getElementById('typedSignature');
+  var confirmBtn = document.getElementById('confirmSig');
+  var preview    = document.getElementById('sigPreview');
+  var stamp      = document.getElementById('sigStamp');
+  var sigInput   = document.getElementById('signatureData');
+  var sigAtInput = document.getElementById('signatureConfirmedAt');
+  var nameInput  = document.getElementById('signName');
+  var consentBox = form.querySelector('input[name=esignConsent]');
+  var SIG_FONT = '"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive';
+  var PREVIEW_EMPTY = 'Your signature will appear here';
+  var signed = false;
+  var signedAt = null; /* when the signer confirmed the signature (UTC) */
+
+  function cleanName(v) { return v.replace(/\s+/g, ' ').trim(); }
+
+  typedSig.addEventListener('input', function () {
+    var v = cleanName(typedSig.value);
+    preview.textContent = v || PREVIEW_EMPTY;
+    preview.classList.toggle('empty', !v);
+  });
+
+  /* Enter confirms the signature instead of submitting the whole form */
+  typedSig.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (!signed) { confirmBtn.click(); } }
+  });
+
+  /* The typed name drawn in a script face, used as the signature image in the PDF */
+  function renderSignature(text) {
+    var c = document.createElement('canvas');
+    c.width = 900; c.height = 180;
+    var g = c.getContext('2d');
+    var size = 84;
+    g.font = size + 'px ' + SIG_FONT;
+    while (g.measureText(text).width > c.width - 40 && size > 30) {
+      size -= 4;
+      g.font = size + 'px ' + SIG_FONT;
+    }
+    g.fillStyle = '#1A1D29';
+    g.textBaseline = 'middle';
+    g.fillText(text, 20, c.height / 2);
+    return c.toDataURL('image/png');
+  }
+
+  confirmBtn.addEventListener('click', function () {
+    var v = cleanName(typedSig.value);
+    var sigField = typedSig.closest('.field');
+    var okConsent = consentBox.checked;
+    var okName = (v.match(/\p{L}/gu) || []).length >= 2;
+    mark(consentBox.closest('.field'), okConsent);
+    mark(sigField, okName);
+    if (!okConsent) { consentBox.focus(); return; }
+    if (!okName) { typedSig.focus(); return; }
+
+    signedAt = new Date();
+    signed = true;
+    typedSig.value = v;
+    typedSig.readOnly = true;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Signed';
+    preview.classList.add('signed');
+    sigInput.value = renderSignature(v);
+    sigAtInput.value = signedAt.toISOString();
+    nameInput.value = v;
+    document.getElementById('sigStampText').textContent =
+      '✓ Signed electronically by ' + v + ' on ' + ukTime(sigAtInput.value, true);
+    stamp.classList.add('show');
+    if (!form.querySelector('.step.active .invalid')) { msg.classList.remove('show'); }
+  });
+
+  function resetSignature() {
+    signed = false;
+    signedAt = null;
+    typedSig.readOnly = false;
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Confirm signature';
+    preview.classList.remove('signed');
+    sigInput.value = '';
+    sigAtInput.value = '';
+    nameInput.value = '';
+    stamp.classList.remove('show');
+  }
+
+  document.getElementById('changeSig').addEventListener('click', function () {
+    resetSignature();
+    typedSig.focus();
+  });
+
+  /* Withdrawing consent withdraws the signature */
+  consentBox.addEventListener('change', function () {
+    if (!consentBox.checked && signed) { resetSignature(); }
+  });
+
+  /* ---------- Follow-up questions ----------
+     A .cond block with data-show-when="name=value" is shown only while that
+     radio answer or tick box is selected ("If yes, please specify", site
+     address, "Other please specify", frequencies). Hidden blocks are
+     skipped by validation and left out of the submitted answers. */
+  var conds = Array.prototype.slice.call(form.querySelectorAll('.cond[data-show-when]'));
+  function updateConds() {
+    conds.forEach(function (c) {
+      var rule = c.getAttribute('data-show-when').split('=');
+      c.classList.toggle('show', !!form.querySelector('input[name=' + rule[0] + '][value="' + rule[1] + '"]:checked'));
+    });
+  }
+  form.addEventListener('change', function (e) {
+    if (e.target.type === 'radio' || e.target.type === 'checkbox') { updateConds(); }
+  });
+
+  function isHidden(el) { return !!el.closest('.cond:not(.show)'); }
+
+  /* ---------- Validation ----------
+     data-group: one radio answer (every Yes / No question) or the consent box.
+     data-any: at least one tick box in the field (product range). */
+  function isValid(field) {
+    var group = field.getAttribute('data-group');
+    if (group === 'signature') { return signed; }
+    if (group) { return !!field.querySelector('input[name=' + group + ']:checked'); }
+    if (field.hasAttribute('data-any')) { return !!field.querySelector('input[type=checkbox]:checked'); }
+    var ok = true;
+    field.querySelectorAll('input,textarea').forEach(function (c) {
+      if (!c.checkValidity() || (c.required && !c.value.trim())) { ok = false; }
+    });
+    return ok;
+  }
+
+  function message(field) {
+    if (field.getAttribute('data-msg')) { return field.getAttribute('data-msg'); }
+    var c = field.querySelector('input,textarea');
+    if (c && c.type === 'email' && c.value.trim()) { return 'Enter a valid email address'; }
+    if (c && c.type === 'number' && (c.value.trim() || c.validity.badInput)) { return 'Enter a whole number (0 or more)'; }
+    return 'This field is required';
+  }
+
+  function mark(field, ok) {
+    field.classList.toggle('invalid', !ok);
+    var err = field.querySelector(':scope > .error');
+    if (!ok) {
+      if (!err) { err = document.createElement('div'); err.className = 'error'; field.appendChild(err); }
+      err.textContent = message(field);
+    }
+    field.querySelectorAll('input,textarea').forEach(function (c) { c.setAttribute('aria-invalid', ok ? 'false' : 'true'); });
+  }
+
+  function recheck(field) {
+    if (field && field.classList.contains('invalid')) { mark(field, isValid(field)); }
+    if (!form.querySelector('.step.active .invalid')) { msg.classList.remove('show'); }
+  }
+  form.addEventListener('input', function (e) { recheck(e.target.closest('.field')); });
+  form.addEventListener('change', function (e) { recheck(e.target.closest('.field')); });
+
+  /* Checks every field in one step; returns the first field with a problem */
+  function checkStep(step) {
+    var first = null;
+    step.querySelectorAll('.field').forEach(function (field) {
+      if (isHidden(field)) { mark(field, true); return; }
+      var needsCheck = field.hasAttribute('data-group') || field.hasAttribute('data-any') ||
+        field.querySelector('[required],[type=email],[type=number]');
+      if (!needsCheck) { return; }
+      var ok = isValid(field);
+      mark(field, ok);
+      if (!ok && !first) { first = field; }
+    });
+    return first;
+  }
+
+  function showProblem(field) {
+    msg.classList.add('show');
+    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var f = field.querySelector('input:not([type=hidden]),textarea');
+    if (f) { f.focus({ preventScroll: true }); }
+  }
+
+  /* ---------- Continue / Submit ---------- */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (current < LAST) {
+      var bad = checkStep(steps[current]);
+      if (bad) { showProblem(bad); return; }
+      showStep(current + 1);
+      return;
+    }
+
+    /* Final step: check every step again, in order */
+    for (var i = 0; i < steps.length; i++) {
+      var first = checkStep(steps[i]);
+      if (first) {
+        if (i !== current) { showStep(i); }
+        showProblem(first);
+        return;
+      }
+    }
+
+    nextBtn.disabled = true;
+    backBtn.disabled = true;
+    nextBtn.textContent = 'Submitting…';
+    stampToday();
+
+    var answers = {};
+    new FormData(form).forEach(function (v, k) { answers[k] = typeof v === 'string' ? v.trim() : v; });
+    /* Answers to follow-up questions that no longer apply are left out */
+    form.querySelectorAll('.cond:not(.show) [name]').forEach(function (el) { delete answers[el.name]; });
+
+    buildEvidence(answers).then(function (evidence) {
+      /* Not yet connected to a destination. `questionnaire` holds every
+         answer plus the signature evidence, ready to send to a backend. */
+      var questionnaire = { answers: answers, evidence: evidence };
+      console.log('Syri WDA supplier questionnaire', questionnaire);
+
+      showRecord(evidence);
+      form.style.display = 'none';
+      var done = document.getElementById('done');
+      done.classList.add('show');
+      done.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      makeFilledPdf(answers, evidence).then(function (result) {
+        questionnaire.pdfFileName = result.name;
+        offerPdf(result);
+      }).catch(function (err) {
+        console.error('PDF generation failed', err);
+        document.getElementById('pdfStatus').textContent =
+          'Your questionnaire was submitted, but the PDF copy could not be created in this browser.';
+      });
+    });
+  });
+
+  /* =====================================================================
+     Completed-questionnaire PDF
+     The controlled Word form (exported to PDF, assets/template-q-wda.js)
+     is the background; answers are written into its cells and the ☐
+     boxes are ticked. Output: the seven form pages, a continuation page
+     only if a long answer did not fit its cell, then the signature record.
+     Coordinates are in PDF points measured from the TOP-LEFT of an A4
+     page, taken from the exported template. Tick boxes are the visible ☐
+     squares. If the Word form layout changes, re-export the template and
+     re-measure these boxes.
+     ===================================================================== */
+  var PAGE_H = 841.92;
+  var LAYOUT = {
+    p1: {                                 /* A. General information */
+      companyName:      [263.7, 229.9, 546.7, 267.5],
+      address:          [263.7, 267.5, 546.7, 354.2],
+      siteAddress:      [263.7, 354.2, 546.7, 440.7],
+      companyRegNo:     [263.7, 440.7, 546.7, 469.5],
+      vatNo:            [263.7, 469.5, 546.7, 498.4],
+      licenceNo:        [263.7, 498.4, 546.7, 532.9],
+      issuingAuthority: [263.7, 532.9, 546.7, 561.8],
+      issueDate:        [263.7, 561.8, 546.7, 590.6],
+      expiryDate:       [263.7, 590.6, 546.7, 619.4],
+      tradingSince:     [263.7, 619.4, 376.9, 648.3],
+      employees:        [448.8, 619.4, 546.7, 648.3],
+      coldChain:        [368.4, 658.8, 378.8, 669.1],
+      cdProducts:       [482.4, 658.8, 492.8, 669.1],
+      lastInspection:   [263.7, 680.0, 546.7, 711.7]
+    },
+    p2: {                                 /* deficiency ratings, accreditations, products, B. Warehouse */
+      defCritical:      [424.6, 112.4, 435.0, 122.8],
+      defMajor:         [513.6, 112.4, 524.0, 122.8],
+      accreditationsDetail: [97.0, 188.0, 438.0, 202.0],   /* after "specify" on the question's 2nd line */
+      qaEmployees:      [263.7, 230.9, 546.9, 259.5],
+      prodPOM:          [470.9, 265.6, 481.2, 276.0],
+      prodP:            [470.9, 288.9, 481.2, 299.2],
+      prodGSL:          [470.9, 312.1, 481.2, 322.5],
+      prodNonPharma:    [470.9, 335.2, 481.2, 345.6],
+      stRefrig:         [360.0, 414.8, 367.8, 422.6],
+      stFreezer:        [333.1, 429.4, 340.9, 437.1],
+      stCD:             [337.9, 444.0, 345.6, 451.8],
+      stHazard:         [420.0, 458.6, 427.8, 466.4],
+      stOtherText:      [370.5, 479.0, 546.9, 499.5],   /* after "Other please specify:" */
+      /* [tick box, frequency cell] */
+      clMapped:         [[299.6, 517.9, 307.4, 525.6], [398.1, 509.5, 546.9, 532.6]],
+      clMonitored:      [[237.2, 540.2, 245.4, 548.4], [398.1, 532.6, 546.9, 555.9]],
+      clValidated:      [[232.8, 564.2, 240.5, 572.0], [398.1, 555.9, 546.9, 579.1]],
+      clRecorded:       [[233.1, 587.5, 240.9, 595.2], [398.1, 579.1, 546.9, 602.3]]
+    },
+    p3: {                                 /* B. Warehouse (cont.), C. Operations */
+      warehouseInfo:     [50.6, 260.5, 547.1, 326.2],
+      orderProcess:      [50.6, 369.5, 547.1, 433.1],
+      stockRecords:      [50.6, 447.5, 547.1, 510.9],
+      transportMeasures: [50.6, 594.5, 547.1, 663.9]
+    },
+    p4: {                                 /* C. Operations (cont.), D. Quality assurance */
+      bonaFides:         [50.6, 274.0, 547.1, 348.3],
+      selfInspFreq:      [440.6, 521.5, 547.1, 550.3],
+      recallNotify:      [50.6, 664.2, 547.1, 705.5]
+    },
+    p5: {
+      securityDetails:   [100.0, 217.3, 547.1, 263.2]   /* right of "Details:" */
+    },
+    p6: {                                 /* E. Key contacts: [Name, Email, Phone] rows, right of the labels */
+      contacts: {
+        ceo:   [116.7, 140.4, 163.6, 186.7],
+        rp:    [186.7, 210.0, 233.2, 256.4],
+        qa:    [256.4, 279.6, 302.8, 326.0],
+        cs:    [326.0, 349.2, 372.4, 395.6],
+        sales: [395.6, 418.9, 442.0, 465.2],
+        pur:   [465.2, 488.5, 511.6, 534.8],
+        ooh:   [534.8, 558.1, 581.3, 604.5]
+      },
+      contactX: [286.0, 547.0],
+      additionalInfo:    [50.7, 619.5, 547.0, 725.9]
+    },
+    p7: {                                 /* To be filled in by Responsible Person */
+      signName:  [193.8, 115.7, 547.0, 156.0],   /* Questionnaire Completed */
+      position:  [193.8, 156.0, 547.0, 196.2],
+      signature: [193.8, 196.2, 547.0, 236.4],   /* Sign & Date */
+      signEmail: [193.8, 236.4, 547.0, 276.6]
+    }
+  };
+
+  /* Yes / No questions: [page index, Yes ☐, No ☐] */
+  var YN = {
+    specialConditions: [0, [470.0, 724.2, 477.8, 732.0], [510.5, 723.9, 518.6, 732.0]],
+    accreditations:    [1, [481.5, 184.9, 489.2, 192.6], [521.2, 184.9, 529.0, 192.6]],
+    orgChart:          [1, [481.2, 212.9, 489.4, 221.0], [522.0, 213.2, 529.8, 221.0]],
+    tempMonitor:       [1, [401.8, 391.8, 409.9, 399.9], [499.4, 392.8, 507.1, 400.5]],
+    alarm:             [1, [481.5, 613.6, 489.2, 621.4], [521.2, 613.6, 529.0, 621.4]],
+    deviationSys:      [1, [481.5, 642.4, 489.2, 650.1], [521.2, 642.4, 529.0, 650.1]],
+    premisesSecure:    [1, [481.5, 671.2, 489.2, 679.0], [521.2, 671.2, 529.0, 679.0]],
+    faultsProc:        [1, [481.5, 700.1, 489.2, 707.9], [521.2, 700.1, 529.0, 707.9]],
+    segregation:       [1, [481.4, 728.4, 489.5, 736.5], [522.1, 728.8, 529.9, 736.5]],
+    cytoSecure:        [2, [481.4, 112.6, 489.5, 120.8], [522.1, 113.0, 529.9, 120.8]],
+    pestControl:       [2, [481.5, 142.0, 489.2, 149.8], [521.2, 142.0, 529.0, 149.8]],
+    crossContam:       [2, [481.4, 170.4, 489.5, 178.5], [522.1, 170.8, 529.9, 178.5]],
+    cleaningSop:       [2, [481.5, 199.8, 489.2, 207.5], [521.2, 199.8, 529.0, 207.5]],
+    calibration:       [2, [481.5, 228.5, 489.2, 236.2], [521.2, 228.5, 529.0, 236.2]],
+    expiredControl:    [2, [481.6, 522.1, 489.4, 529.9], [521.4, 522.1, 529.1, 529.9]],
+    ownTransport:      [2, [481.4, 549.6, 489.5, 557.8], [522.1, 550.0, 529.9, 557.8]],
+    courier:           [2, [481.4, 674.5, 489.5, 682.6], [522.1, 674.9, 529.9, 682.6]],
+    courierTemp:       [2, [481.6, 704.0, 489.4, 711.8], [521.4, 704.0, 529.1, 711.8]],
+    coldChainVehicle:  [2, [481.6, 732.9, 489.4, 740.6], [521.4, 732.9, 529.1, 740.6]],
+    outsourced:        [3, [481.4, 112.6, 489.5, 120.8], [522.1, 113.0, 529.9, 120.8]],
+    outsourcedTA:      [3, [481.6, 142.0, 489.4, 149.8], [521.4, 142.0, 529.1, 149.8]],
+    qualityManual:     [3, [481.6, 213.4, 489.4, 221.1], [521.4, 213.4, 529.1, 221.1]],
+    qms:               [3, [481.6, 242.4, 489.4, 250.1], [521.4, 242.4, 529.1, 250.1]],
+    approvedList:      [3, [481.6, 359.5, 489.4, 367.2], [521.4, 359.5, 529.1, 367.2]],
+    unapproved:        [3, [481.6, 388.4, 489.4, 396.1], [521.4, 388.4, 529.1, 396.1]],
+    supplierAudits:    [3, [481.6, 417.2, 489.4, 425.0], [521.4, 417.2, 529.1, 425.0]],
+    falsifProc:        [3, [481.6, 446.1, 489.4, 453.9], [521.4, 446.1, 529.1, 453.9]],
+    falsifProcess:     [3, [481.6, 475.0, 489.4, 482.8], [521.4, 475.0, 529.1, 482.8]],
+    selfInspection:    [3, [481.4, 503.2, 489.5, 511.4], [522.1, 503.6, 529.9, 511.4]],
+    complaints:        [3, [481.6, 561.5, 489.4, 569.2], [521.4, 561.5, 529.1, 569.2]],
+    returnsProc:       [3, [481.6, 590.4, 489.4, 598.1], [521.4, 590.4, 529.1, 598.1]],
+    recallProc:        [3, [481.6, 619.2, 489.4, 627.0], [521.4, 619.2, 529.1, 627.0]],
+    allowInspection:   [3, [478.0, 716.4, 485.8, 724.1], [518.5, 716.0, 526.6, 724.1]],
+    trainingProc:      [3, [478.8, 745.5, 486.5, 753.2], [518.5, 745.5, 526.2, 753.2]],
+    gdpTraining:       [4, [478.8, 113.1, 486.5, 120.9], [518.5, 113.1, 526.2, 120.9]],
+    jobTraining:       [4, [478.8, 142.0, 486.5, 149.8], [518.5, 142.0, 526.2, 149.8]],
+    falsifTraining:    [4, [478.8, 170.9, 486.5, 178.6], [518.5, 170.9, 526.2, 178.6]],
+    securityVerif:     [4, [478.8, 199.8, 486.5, 207.5], [518.5, 199.8, 526.2, 207.5]]
+  };
+
+  function makeFilledPdf(answers, evidence) {
+    if (!window.PDFLib || !window.SYRI_Q_WDA_TEMPLATE) {
+      return Promise.reject(new Error('PDF library or template not loaded'));
+    }
+    var L = window.PDFLib;
+    var INK = L.rgb(0.05, 0.05, 0.12);
+    var NAVY = L.rgb(0.149, 0.208, 0.549);
+    var GREY = L.rgb(0.35, 0.37, 0.45);
+    function bytesOf(b64) { return Uint8Array.from(atob(b64), function (c) { return c.charCodeAt(0); }); }
+
+    return L.PDFDocument.load(bytesOf(window.SYRI_Q_WDA_TEMPLATE)).then(function (pdf) {
+      return Promise.all([
+        pdf.embedFont(L.StandardFonts.Helvetica),
+        pdf.embedFont(L.StandardFonts.HelveticaBold),
+        sigInput.value ? pdf.embedPng(sigInput.value) : null,
+        pdf.embedPng(document.querySelector('.brand img').src)
+      ]).then(function (res) {
+        var font = res[0], bold = res[1], sigImg = res[2], logo = res[3];
+        var overflow = [];   /* answers too long for their cell: printed in full on a continuation page */
+
+        /* Only characters the standard PDF font can encode */
+        function safe(s) {
+          return Array.from(String(s == null ? '' : s)).map(function (ch) {
+            if (ch === '\n') { return ch; }
+            try { font.encodeText(ch); return ch; } catch (e) { return '?'; }
+          }).join('');
+        }
+
+        /* Text in a cell: shrinks to fit (width and height) and wraps.
+           maxLines 1 (default) = one line, vertically centred; 0 = as many
+           lines as the cell height allows, from the top (free-text boxes).
+           If it still does not fit at the smallest size (6pt; 7.5pt in
+           free-text boxes, to stay readable), the cell shows what fits and the
+           full answer goes on the continuation page under `label`. */
+        function put(page, box, text, maxLines, label) {
+          var fill = maxLines === 0;
+          maxLines = maxLines === undefined ? 1 : maxLines;
+          var raw = safe(text).trim();
+          text = raw.replace(/\s*\n\s*/g, maxLines === 1 ? ', ' : '\n');
+          if (!text) { return; }
+          var x = box[0] + 5, w = box[2] - box[0] - 10, h = box[3] - box[1];
+          var size = 9.5, minSize = fill ? 7.5 : 6, lines, cap;
+          for (;;) {
+            lines = wrap(text, font, size, w);
+            cap = fill ? Math.max(1, Math.floor((h - 4 - size * 0.95) / (size * 1.25)) + 1) : maxLines;
+            var fits = lines.length <= cap && size * (1.25 * (lines.length - 1) + 0.95) <= h - 2 &&
+              lines.every(function (ln) { return font.widthOfTextAtSize(ln, size) <= w; });
+            if (fits || size <= minSize) { break; }
+            size -= 0.5;
+          }
+          var cut = lines.length > cap;
+          lines = lines.slice(0, cap);
+          if (cut) {
+            var more = label ? ' (continued on page 8)' : '…';
+            var last = lines[cap - 1];
+            while (last && font.widthOfTextAtSize(last + more, size) > w) { last = last.replace(/\s*\S+$/, ''); }
+            lines[cap - 1] = (last || '') + more;
+            if (label) { overflow.push([label, raw]); }
+          }
+          lines = lines.map(function (ln) {
+            while (font.widthOfTextAtSize(ln, size) > w && ln.length > 1) { ln = ln.slice(0, -2) + '…'; }
+            return ln;
+          });
+          var lh = size * 1.25, blockH = lh * (lines.length - 1) + size * 0.72;
+          var top = fill ? box[1] + 3 + size * 0.72 : box[1] + (h - blockH) / 2 + size * 0.72;
+          lines.forEach(function (ln, i) {
+            page.drawText(ln, { x: x, y: PAGE_H - (top + i * lh), size: size, font: font, color: INK });
+          });
+        }
+
+        function wrap(text, f, size, width) {
+          var out = [];
+          text.split('\n').forEach(function (para) {
+            var line = '';
+            para.split(/\s+/).forEach(function (word) {
+              var tryLine = line ? line + ' ' + word : word;
+              if (f.widthOfTextAtSize(tryLine, size) <= width || !line) { line = tryLine; }
+              else { out.push(line); line = word; }
+            });
+            out.push(line);
+          });
+          return out;
+        }
+
+        function tick(page, cx, cy, s) {
+          s = s || 5;
+          var y = function (v) { return PAGE_H - v; };
+          page.drawLine({ start: { x: cx - s, y: y(cy) }, end: { x: cx - s * 0.3, y: y(cy + s * 0.75) }, thickness: 1.5, color: INK });
+          page.drawLine({ start: { x: cx - s * 0.3, y: y(cy + s * 0.75) }, end: { x: cx + s, y: y(cy - s * 0.9) }, thickness: 1.5, color: INK });
+        }
+
+        /* A tick inside a ☐ box */
+        function tickBox(page, box) {
+          tick(page, (box[0] + box[2]) / 2, (box[1] + box[3]) / 2, 4);
+        }
+
+        function ukDate(iso) {
+          if (!iso) { return ''; }
+          var p = iso.split('-');
+          return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
+        }
+
+        /* Address lines, one per line in the cell */
+        function addressOf(p) {
+          return [
+            answers[p + 'Addr1'], answers[p + 'Addr2'], answers[p + 'Town'],
+            [answers[p + 'County'], answers[p + 'Postcode']].filter(Boolean).join(', '),
+            answers[p + 'Country']
+          ].filter(Boolean).join('\n');
+        }
+
+        var pages = pdf.getPages();
+        var P1 = LAYOUT.p1, P2 = LAYOUT.p2, P3 = LAYOUT.p3, P4 = LAYOUT.p4, P5 = LAYOUT.p5, P6 = LAYOUT.p6, P7 = LAYOUT.p7;
+        function yes(name) { return answers[name] === 'Yes'; }
+
+        /* ---- Every Yes / No question ---- */
+        Object.keys(YN).forEach(function (name) {
+          var q = YN[name];
+          if (answers[name] === 'Yes') { tickBox(pages[q[0]], q[1]); }
+          if (answers[name] === 'No') { tickBox(pages[q[0]], q[2]); }
+        });
+
+        /* ---- Page 1: A. General information ---- */
+        var p1 = pages[0];
+        put(p1, P1.companyName, answers.companyName, 2);
+        put(p1, P1.address, [answers.addr1, answers.addr2, answers.town,
+          [answers.county, answers.postcode].filter(Boolean).join(', '), answers.country].filter(Boolean).join('\n'), 0, 'Address');
+        if (yes('siteDifferent')) { put(p1, P1.siteAddress, addressOf('site'), 0, 'Site Address'); }
+        put(p1, P1.companyRegNo, answers.companyRegNo);
+        put(p1, P1.vatNo, answers.vatNo);
+        put(p1, P1.licenceNo, answers.licenceNo, 2);
+        put(p1, P1.issuingAuthority, answers.issuingAuthority, 2);
+        put(p1, P1.issueDate, ukDate(answers.issueDate));
+        put(p1, P1.expiryDate, ukDate(answers.expiryDate));
+        put(p1, P1.tradingSince, answers.tradingSince, 2);
+        put(p1, P1.employees, answers.employees);
+        if (yes('coldChain')) { tickBox(p1, P1.coldChain); }
+        if (yes('cdProducts')) { tickBox(p1, P1.cdProducts); }
+        put(p1, P1.lastInspection, ukDate(answers.lastInspection));
+
+        /* ---- Page 2: deficiency ratings ... B. Warehouse ---- */
+        var p2 = pages[1];
+        if (yes('defCritical')) { tickBox(p2, P2.defCritical); }
+        if (yes('defMajor')) { tickBox(p2, P2.defMajor); }
+        if (answers.accreditationsDetail) {
+          put(p2, P2.accreditationsDetail, '– ' + answers.accreditationsDetail, 1, 'Industry Standard Accreditations');
+        }
+        put(p2, P2.qaEmployees, answers.qaEmployees);
+        ['prodPOM', 'prodP', 'prodGSL', 'prodNonPharma', 'stRefrig', 'stFreezer', 'stCD', 'stHazard'].forEach(function (n) {
+          if (yes(n)) { tickBox(p2, P2[n]); }
+        });
+        if (yes('stOther')) { put(p2, P2.stOtherText, answers.stOtherText, 2, 'Special storage areas – Other'); }
+        ['clMapped', 'clMonitored', 'clValidated', 'clRecorded'].forEach(function (n) {
+          if (!yes(n)) { return; }
+          tickBox(p2, P2[n][0]);
+          put(p2, P2[n][1], answers[n + 'Freq'], 2);
+        });
+
+        /* ---- Page 3: B. Warehouse (cont.), C. Operations ---- */
+        var p3 = pages[2];
+        put(p3, P3.warehouseInfo, answers.warehouseInfo, 0, 'B. Warehouse – Additional Information');
+        put(p3, P3.orderProcess, answers.orderProcess, 0, 'Process of ordering, receiving, processing and despatching stock');
+        put(p3, P3.stockRecords, answers.stockRecords, 0, 'Are stock records kept electronically or on paper?');
+        put(p3, P3.transportMeasures, answers.transportMeasures, 0, 'Temperature control measures during delivery');
+
+        /* ---- Page 4: D. Quality assurance ---- */
+        var p4 = pages[3];
+        put(p4, P4.bonaFides, answers.bonaFides, 0, 'How the supplier establishes the Bona Fides of their suppliers');
+        put(p4, P4.selfInspFreq, answers.selfInspFreq, 2, 'Frequency of self-inspection');
+        put(p4, P4.recallNotify, answers.recallNotify, 0, 'Assurance of prompt recall notification');
+
+        /* ---- Page 5 ---- */
+        put(pages[4], P5.securityDetails, answers.securityDetails, 0, 'Security verification on Goods – Details');
+
+        /* ---- Page 6: E. Key contacts, additional information ---- */
+        var p6 = pages[5];
+        Object.keys(P6.contacts).forEach(function (k) {
+          var r = P6.contacts[k], x0 = P6.contactX[0], x1 = P6.contactX[1];
+          put(p6, [x0, r[0], x1, r[1]], answers[k + 'Name']);
+          put(p6, [x0, r[1], x1, r[2]], answers[k + 'Email']);
+          put(p6, [x0, r[2], x1, r[3]], answers[k + 'Phone']);
+        });
+        put(p6, P6.additionalInfo, answers.additionalInfo, 0, 'Additional Information');
+
+        /* ---- Page 7: To be filled in by Responsible Person ---- */
+        var p7 = pages[6];
+        put(p7, P7.signName, answers.signName, 2);
+        put(p7, P7.position, answers.position, 2);
+        put(p7, P7.signEmail, answers.signEmail);
+        /* Sign & Date: signature image on the left, date and e-sign time on the right */
+        var sb = P7.signature, sh = sb[3] - sb[1];
+        if (sigImg) {
+          var sd = sigImg.scaleToFit(190, sh - 6);
+          p7.drawImage(sigImg, { x: sb[0] + 5, y: PAGE_H - (sb[1] + (sh + sd.height) / 2), width: sd.width, height: sd.height });
+        }
+        p7.drawText(safe(answers.signDate), { x: sb[0] + 205, y: PAGE_H - (sb[1] + sh / 2 - 1), size: 9.5, font: font, color: INK });
+        p7.drawText(safe('E-signed ' + ukTime(evidence.signatureCapturedAt, true)),
+          { x: sb[0] + 205, y: PAGE_H - (sb[1] + sh / 2 + 10), size: 5.5, font: font, color: INK });
+
+        /* ---- Continuation page: long answers in full (only if needed) ---- */
+        if (overflow.length) {
+          var cp, cy;
+          var newCont = function () {
+            cp = pdf.addPage([595.32, PAGE_H]);
+            cp.drawText('Continuation of answers', { x: 50, y: PAGE_H - 70, size: 14, font: bold, color: NAVY });
+            cp.drawText(safe('Supplier and Manufacturer Assessment Questionnaire ' + FORM_NUMBER + ' – ' + answers.companyName),
+              { x: 50, y: PAGE_H - 86, size: 9, font: font, color: GREY });
+            cy = 110;
+          };
+          newCont();
+          overflow.forEach(function (o) {
+            if (cy + 40 > 790) { newCont(); }
+            cp.drawText(safe(o[0]), { x: 50, y: PAGE_H - cy, size: 9, font: bold, color: NAVY });
+            cy += 14;
+            wrap(o[1], font, 9, 495).forEach(function (ln) {
+              if (cy > 790) { newCont(); }
+              cp.drawText(ln, { x: 50, y: PAGE_H - cy, size: 9, font: font, color: INK });
+              cy += 12;
+            });
+            cy += 10;
+          });
+        }
+
+        /* ---- Appendix: electronic signature record ---- */
+        var rec = pdf.addPage([595.32, PAGE_H]);
+        var ld = logo.scaleToFit(110, 40);
+        rec.drawImage(logo, { x: 50, y: PAGE_H - 50 - ld.height, width: ld.width, height: ld.height });
+        rec.drawText('Electronic Signature Record', { x: 50, y: PAGE_H - 120, size: 16, font: bold, color: NAVY });
+        rec.drawText(safe('Appendix to Supplier and Manufacturer Assessment Questionnaire ' + evidence.formNumber + ', generated automatically on submission.'),
+          { x: 50, y: PAGE_H - 138, size: 9, font: font, color: INK });
+
+        var rows = [
+          ['Signed by', evidence.signerName + (evidence.signerPosition ? ', ' + evidence.signerPosition : '') +
+            (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
+          ['Document signed', evidence.documentsSigned],
+          ['Signature method', evidence.signatureMethod],
+          ['Typed signature', evidence.typedSignature],
+          ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
+          ['Submitted', ukTime(evidence.submittedAt)],
+          ['Signer time zone', evidence.timeZone],
+          ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
+          ['Browser / device', evidence.userAgent],
+          ['Screen / language', evidence.screen + ' / ' + evidence.language],
+          ['Page', evidence.pageUrl]
+        ];
+        if (evidence.formSentBy) { rows.push(['Form sent by', evidence.formSentBy]); }
+        rows.push(
+          ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
+          ['Integrity hash (SHA-256)', evidence.sha256]
+        );
+        var y = 165, labelW = 130, valW = 545 - 50 - labelW - 10;
+        rows.forEach(function (r) {
+          var vl = wrap(safe(r[1]), font, 9, valW);
+          var hh = Math.max(1, vl.length) * 12 + 10;
+          rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
+          rec.drawText(r[0], { x: 50, y: PAGE_H - (y + 15), size: 9, font: bold, color: NAVY });
+          vl.forEach(function (ln, i) {
+            rec.drawText(ln, { x: 50 + labelW + 10, y: PAGE_H - (y + 15 + i * 12), size: 9, font: font, color: INK });
+          });
+          y += hh;
+        });
+        rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
+
+        if (sigImg) {
+          rec.drawText('Signature', { x: 50, y: PAGE_H - (y + 24), size: 9, font: bold, color: NAVY });
+          var sd2 = sigImg.scaleToFit(260, 90);
+          rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: L.rgb(0.8, 0.82, 0.88), borderWidth: 0.5 });
+          rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105), width: sd2.width, height: sd2.height });
+          y += 125;
+        }
+
+        var legal = 'This document was signed electronically. The signer consented to sign electronically, typed their name ' +
+          'and confirmed it as their signature at the time shown. A name applied with the intention to authenticate is a ' +
+          'valid electronic signature in England and Wales. The signature is logically associated with the questionnaire ' +
+          'data above and is admissible as evidence under section 7 of the Electronic Communications Act 2000; under ' +
+          'Article 25(1) of UK eIDAS it may not be denied legal effect solely because it is in electronic form. The ' +
+          'integrity hash is calculated over the submitted answers and this record, so any later alteration can be detected.';
+        wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
+          rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: GREY });
+        });
+        rec.drawText('Parent SOP: SOP/SALE/0017  |  Form Number: F/SALE/0017/004/v4  |  Appendix: signature record',
+          { x: 50, y: 40, size: 8, font: font, color: GREY });
+
+        pdf.setTitle('Supplier Questionnaire (WDA) - ' + safe(answers.companyName));
+        pdf.setSubject('Syri Ltd. Supplier and Manufacturer Assessment Questionnaire under WDA (H) 39307 (' + FORM_NUMBER + ')');
+        pdf.setAuthor(safe(answers.signName));
+        pdf.setCreator('Syri Ltd. online supplier questionnaire');
+        pdf.setProducer('pdf-lib');
+        pdf.setCreationDate(new Date(evidence.submittedAt));
+
+        return pdf.save();
+      }).then(function (bytes) {
+        var company = (answers.companyName || 'Supplier').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        return {
+          name: 'Syri-WDA-Supplier-Questionnaire_' + company + '_' + evidence.submittedAt.slice(0, 10) + '.pdf',
+          blob: new Blob([bytes], { type: 'application/pdf' })
+        };
+      });
+    });
+  }
+
+  function offerPdf(result) {
+    var url = URL.createObjectURL(result.blob);
+    var btn = document.getElementById('downloadPdf');
+    function download() {
+      var a = document.createElement('a');
+      a.href = url; a.download = result.name;
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+    btn.disabled = false;
+    btn.onclick = download;
+    document.getElementById('pdfStatus').textContent =
+      'Your completed questionnaire (' + result.name + ') has been downloaded. Keep it for your records.';
+    download();
+  }
+
+  /* ---------- Signature evidence ----------
+     A typed name confirmed by the signer is a simple electronic signature.
+     It is valid where applied with intent to authenticate (Law Commission
+     2019), admissible (ECA 2000 s.7) and cannot be denied legal effect for
+     being electronic (UK eIDAS Art. 25). Its weight depends on showing who
+     signed, when, what they signed and that they intended to sign, so we
+     record that.
+     NOTE: a browser cannot see its own public IP. Here it is looked up
+     from a third-party service at submit time (client-reported). Once
+     submissions go to a server, record the IP and time server-side as
+     the authoritative values. */
+  var IP_LOOKUP_URL = 'https://api.ipify.org?format=json';
+
+  function lookupIp() {
+    var timeout = new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 4000); });
+    var lookup = fetch(IP_LOOKUP_URL, { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return j && j.ip ? j.ip : null; })
+      .catch(function () { return null; });
+    return Promise.race([lookup, timeout]);
+  }
+
+  function sha256(text) {
+    if (!(window.crypto && crypto.subtle && window.TextEncoder)) { return Promise.resolve(null); }
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+    }).catch(function () { return null; });
+  }
+
+  function canonical(obj) {
+    return JSON.stringify(Object.keys(obj).sort().reduce(function (o, k) { o[k] = obj[k]; return o; }, {}));
+  }
+
+  function buildEvidence(answers) {
+    var submittedAt = new Date();
+    return lookupIp().then(function (ip) {
+      var evidence = {
+        signerName: answers.signName,
+        signerPosition: answers.position,
+        signerCompany: answers.companyName,
+        documentsSigned: 'Supplier and Manufacturer Assessment Questionnaire under WDA (H) 39307 (F/SALE/0017/004/v4)',
+        signatureMethod: 'Typed name, confirmed by the signer ("Confirm signature")',
+        typedSignature: answers.typedSignature,
+        signatureCapturedAt: (signedAt || submittedAt).toISOString(),
+        submittedAt: submittedAt.toISOString(),
+        timeZone: (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'unknown',
+        ipAddress: ip || 'unavailable',
+        ipSource: ip ? 'client-reported via api.ipify.org' : 'lookup failed',
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        screen: screen.width + 'x' + screen.height,
+        pageUrl: location.href,
+        formNumber: FORM_NUMBER,
+        formSentBy: sentBy,
+        consentToSignElectronically: answers.esignConsent === 'Yes',
+        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim()
+      };
+      /* Hash of the answers + evidence, so any later change to the record is detectable */
+      return sha256(canonical(answers) + canonical(evidence)).then(function (hash) {
+        evidence.sha256 = hash || 'unavailable';
+        return evidence;
+      });
+    });
+  }
+
+  /* UK local time; the full form also shows the exact UTC value */
+  function ukTime(iso, short) {
+    var d = new Date(iso);
+    var local = d.toLocaleString('en-GB', {
+      timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
+    });
+    return short ? local : local + ' (' + iso + ')';
+  }
+
+  function showRecord(ev) {
+    var rows = [
+      ['Signed by', ev.signerName + (ev.signerPosition ? ', ' + ev.signerPosition : '') + (ev.signerCompany ? ', ' + ev.signerCompany : '')],
+      ['Signature', null],
+      ['Signature method', ev.signatureMethod],
+      ['Signature confirmed', ukTime(ev.signatureCapturedAt)],
+      ['Submitted', ukTime(ev.submittedAt)],
+      ['IP address', ev.ipAddress],
+      ['Browser / device', ev.userAgent],
+      ['Consent to e-sign', ev.consentToSignElectronically ? 'Given' : 'Not given'],
+      ['Form', ev.formNumber],
+      ['Integrity hash (SHA-256)', ev.sha256]
+    ];
+    var dl = document.getElementById('recordList');
+    dl.innerHTML = '';
+    rows.forEach(function (row) {
+      var dt = document.createElement('dt'); dt.textContent = row[0];
+      var dd = document.createElement('dd');
+      if (row[1] === null) {
+        var img = document.createElement('img');
+        img.src = sigInput.value; img.alt = 'Captured signature';
+        dd.appendChild(img);
+      } else {
+        dd.textContent = row[1];
+      }
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+  }
+
+  document.getElementById('printRecord').addEventListener('click', function () { window.print(); });
+
+  /* Signing date is always today's date and cannot be edited.
+     It is set again at submission, so it reflects the day the form is sent. */
+  function stampToday() {
+    document.getElementById('signDate').value = new Date().toLocaleDateString('en-GB', {
+      timeZone: 'Europe/London', day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+  }
+  stampToday();
+  updateConds();
+}());
+</script>
+</body>
+</html>

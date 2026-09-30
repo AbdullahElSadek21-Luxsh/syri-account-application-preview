@@ -7,11 +7,16 @@ print, sign and scan Word form.
 **Live:** https://abdullahelsadek21-luxsh.github.io/syri-account-application-preview/
 
 - `index.html`: entry page (name + email, front end only)
-- `select.html`: account type — Customer (UK / Hospital / Outside the UK); Supplier coming soon.
-  Sales/BD links can skip it: `?type=uk|hospital|export&sentBy=<name>`
+- `select.html`: account type — Customer (UK / Hospital / Outside the UK) or Supplier, plus a separate
+  optional route "Have you been asked to complete a questionnaire?".
+  Direct links: `?type=uk|hospital|export|supplier|q-wda|q-manufacturer|q-supplier&sentBy=<name>`
 - `syri-account-application-form.html`: UK customer (F/SALE/0015/004)
 - `form-hospital.html`: Hospital (F/SALE/0015/003)
 - `form-export.html`: Export customer, 5 steps (F/SALE/0015/006 + 005 in one PDF)
+- `form-supplier.html`: Supplier Account Opening (F/SALE/0017/003)
+- `questionnaire-wda.html`: WDA supplier questionnaire (F/SALE/0017/004)
+- `questionnaire-manufacturer.html`: Manufacturer assessment questionnaire (F/QA/0014/008)
+- `questionnaire-supplier.html`: Supplier assessment questionnaire (F/QA/0014/005)
 
 - **Section A**: company details, business address, trade references, business type,
   account details and the signed declaration

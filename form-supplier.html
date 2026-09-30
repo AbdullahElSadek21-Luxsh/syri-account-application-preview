@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Hospital Account Application Form &ndash; Syri Ltd.</title>
+<title>Supplier Account Opening Form &ndash; Syri Ltd.</title>
 <style>
-/* Syri Ltd. — Hospital Account Application
-   Form F/SALE/0015/003/v6 · Parent SOP SOP/SALE/0015
-   Uses assets/pdf-lib.min.js and assets/template-hospital.js for the PDF copy. */
+/* Syri Ltd. — Supplier Account Opening Form
+   Form F/SALE/0017/003/v4 · Parent SOP SOP/SALE/0017
+   Uses assets/pdf-lib.min.js and assets/template-supplier-opening.js for the PDF copy. */
 
 :root{
   --navy:#26358C;
@@ -40,6 +40,7 @@ header{padding:30px 36px 26px;border-top:4px solid var(--navy);border-bottom:1px
 .contact a{color:var(--navy);text-decoration:none}
 h1{margin:24px 0 6px;font-size:26px;font-weight:600;letter-spacing:-.3px}
 .intro{margin:0;color:var(--muted);font-size:14.5px}
+.intro + .intro{margin-top:6px}
 .req{color:var(--err)}
 
 /* Sections */
@@ -67,36 +68,25 @@ textarea{resize:vertical;min-height:88px}
 input:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(38,53,140,.14)}
 input[readonly]{background:var(--bg);color:var(--muted);cursor:not-allowed}
 input[readonly]:focus{border-color:var(--line);box-shadow:none}
+.field-part{min-width:0}
 
-/* Radio / checkbox */
-.options{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
-.options.inline{display:flex;gap:24px}
+/* Checkbox */
 .opt{display:flex;align-items:center;gap:10px;font-weight:400;font-size:14.5px;margin:0;padding:4px 0;cursor:pointer}
 .opt input{width:18px;height:18px;margin:0;accent-color:var(--navy);cursor:pointer;flex:none}
-.same{margin-bottom:14px}
 
 /* Errors */
 .error{display:none;margin-top:6px;font-size:13px;color:var(--err)}
 .invalid .error{display:block}
 .invalid input:not([type=radio]):not([type=checkbox]),.invalid textarea,.invalid .sig-preview{border-color:var(--err)}
 
-/* Declaration */
+/* Instruction boxes */
 .declaration{
   background:var(--navy-soft);border-radius:8px;padding:18px 20px;margin-bottom:22px;
   font-size:14px;line-height:1.65;color:#343A4D;
 }
 .declaration p{margin:0 0 10px}
 .declaration p:last-child{margin-bottom:0}
-
-/* Terms of Business (read-only, scrollable) */
-.terms{
-  max-height:340px;overflow-y:auto;margin-bottom:24px;padding:16px 20px;
-  border:1px solid var(--line);border-radius:8px;background:#FAFBFD;
-  font-size:13.5px;line-height:1.6;color:#343A4D;
-}
-.terms h3{margin:0 0 12px;font-size:14.5px;font-weight:600;color:var(--ink);text-align:center}
-.terms h4{margin:14px 0 4px;font-size:13.5px;font-weight:600;color:var(--ink)}
-.terms p{margin:0 0 6px}
+.declaration a{color:var(--navy)}
 
 /* Signature (typed, confirmed with a timestamp) */
 .sign-row{display:flex;gap:10px}
@@ -164,7 +154,8 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
   .page{padding:12px 10px 40px}
   header,fieldset,.actions{padding-left:20px;padding-right:20px}
   .contact{text-align:left}
-  .row,.row.three,.options{grid-template-columns:1fr}
+  .row,.row.three{grid-template-columns:1fr}
+  .pair .row{row-gap:20px}
   .sign-row{flex-direction:column}
   .buttons{width:100%;flex-direction:column-reverse}
   .btn{width:100%}
@@ -175,7 +166,6 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
   body{background:#fff;font-size:10pt}
   .page{max-width:none;padding:0}
   .sheet{border:0}
-  .terms{max-height:none;overflow:visible}
   .actions,.link,.back,#downloadPdf,#pdfStatus,#confirmSig{display:none!important}
   fieldset{break-inside:avoid}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -197,274 +187,147 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
           <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>
         </div>
       </div>
-      <h1>Hospital Account Application Form</h1>
+      <h1>Supplier Account Opening Form</h1>
+      <!-- Instruction from F/SALE/0017/003/v4 ("authorsed" corrected). The Word
+           form's "Please fill in all section" is replaced by the mandatory markers. -->
+      <p class="intro">Only personnel authorised to give the information about the company QMS should complete this form.</p>
       <p class="intro">Fields marked <span class="req">*</span> are mandatory.</p>
     </header>
 
     <form id="form" novalidate>
 
-      <!-- Hospital trading address -->
+      <!-- Supplier information -->
       <fieldset>
-        <legend>Hospital Trading Address <span class="req">*</span></legend>
+        <legend>Supplier Information</legend>
         <div class="row">
           <div class="field">
-            <label for="tradeTrust">Trust</label>
-            <input type="text" id="tradeTrust" name="tradeTrust">
+            <label for="companyName">Company Name <span class="req">*</span></label>
+            <input type="text" id="companyName" name="companyName" required autocomplete="organization">
           </div>
           <div class="field">
-            <label for="tradeHospital">Hospital <span class="req">*</span></label>
-            <input type="text" id="tradeHospital" name="tradeHospital" required autocomplete="organization">
+            <label for="regNumber">Registration Number <span class="req">*</span></label>
+            <input type="text" id="regNumber" name="regNumber" required>
           </div>
           <div class="field">
-            <label for="tradeAddr1">Address 1 <span class="req">*</span></label>
-            <input type="text" id="tradeAddr1" name="tradeAddr1" required autocomplete="address-line1">
+            <label for="vatNumber">VAT Number</label>
+            <input type="text" id="vatNumber" name="vatNumber">
           </div>
           <div class="field">
-            <label for="tradeAddr2">Address 2</label>
-            <input type="text" id="tradeAddr2" name="tradeAddr2" autocomplete="address-line2">
+            <label for="telephone">Telephone No <span class="req">*</span></label>
+            <input type="tel" id="telephone" name="telephone" required autocomplete="tel">
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="regAddress">Registered Office Address <span class="req">*</span></label>
+            <textarea id="regAddress" name="regAddress" rows="3" required autocomplete="street-address"></textarea>
+          </div>
+          <div class="field">
+            <label for="tradingAddress">Trading/Warehouse Address <span class="hint">If different from the registered office address</span></label>
+            <textarea id="tradingAddress" name="tradingAddress" rows="3"></textarea>
           </div>
         </div>
         <div class="row three">
           <div class="field">
-            <label for="tradePostcode">Post Code <span class="req">*</span></label>
-            <input type="text" id="tradePostcode" name="tradePostcode" class="postcode" required autocomplete="postal-code" style="text-transform:uppercase">
+            <label for="regPostcode">Post Code <span class="req">*</span></label>
+            <input type="text" id="regPostcode" name="regPostcode" class="upper" required autocomplete="postal-code" style="text-transform:uppercase">
           </div>
         </div>
-      </fieldset>
 
-      <!-- Hospital accounting address -->
-      <fieldset>
-        <legend>Hospital Accounting Address <span class="req">*</span></legend>
-        <div class="field same">
-          <label class="opt"><input type="checkbox" id="sameAddress"> Same as trading address</label>
-        </div>
-        <div id="acctAddress">
-          <div class="row">
-            <div class="field">
-              <label for="acctTrust">Trust</label>
-              <input type="text" id="acctTrust" name="acctTrust">
-            </div>
-            <div class="field">
-              <label for="acctHospital">Hospital <span class="req">*</span></label>
-              <input type="text" id="acctHospital" name="acctHospital" required>
-            </div>
-            <div class="field">
-              <label for="acctAddr1">Address 1 <span class="req">*</span></label>
-              <input type="text" id="acctAddr1" name="acctAddr1" required>
-            </div>
-            <div class="field">
-              <label for="acctAddr2">Address 2</label>
-              <input type="text" id="acctAddr2" name="acctAddr2">
-            </div>
-          </div>
-          <div class="row three">
-            <div class="field">
-              <label for="acctPostcode">Post Code <span class="req">*</span></label>
-              <input type="text" id="acctPostcode" name="acctPostcode" class="postcode" required style="text-transform:uppercase">
-            </div>
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- Contact details -->
-      <fieldset>
-        <legend>Contact details</legend>
-
-        <p class="sub">Hospital Contact <span class="req">*</span></p>
-        <div class="row">
-          <div class="field">
-            <label for="hcProcurement">Procurement Manager <span class="req">*</span></label>
-            <input type="text" id="hcProcurement" name="hcProcurement" required>
-          </div>
-          <div class="field">
-            <label for="hcDoctor">Doctor/Pharmacist</label>
-            <input type="text" id="hcDoctor" name="hcDoctor">
-          </div>
-        </div>
+        <p class="sub">Accounts Receivable Contact <span class="req">*</span></p>
         <div class="row three">
           <div class="field">
-            <label for="hcTel">Tel No <span class="req">*</span></label>
-            <input type="tel" id="hcTel" name="hcTel" required>
+            <label for="arName">Contact Name <span class="req">*</span></label>
+            <input type="text" id="arName" name="arName" required>
           </div>
           <div class="field">
-            <label for="hcEmail">Email <span class="req">*</span></label>
-            <input type="email" id="hcEmail" name="hcEmail" required>
+            <label for="arEmail">Email <span class="req">*</span></label>
+            <input type="email" id="arEmail" name="arEmail" required>
+          </div>
+          <div class="field">
+            <label for="arPosition">Position</label>
+            <input type="text" id="arPosition" name="arPosition">
           </div>
         </div>
 
-        <p class="sub">Accounting Contact <span class="req">*</span></p>
-        <div class="row">
-          <div class="field">
-            <label for="acPrimary">Primary Contact <span class="req">*</span></label>
-            <input type="text" id="acPrimary" name="acPrimary" required>
-          </div>
-          <div class="field">
-            <label for="acSecondary">Secondary Contact</label>
-            <input type="text" id="acSecondary" name="acSecondary">
-          </div>
-        </div>
+        <p class="sub">Alternative Contact</p>
         <div class="row three">
           <div class="field">
-            <label for="acTel">Tel No <span class="req">*</span></label>
-            <input type="tel" id="acTel" name="acTel" required>
+            <label for="altName">Contact Name</label>
+            <input type="text" id="altName" name="altName">
           </div>
           <div class="field">
-            <label for="acEmail">Email <span class="req">*</span></label>
-            <input type="email" id="acEmail" name="acEmail" required>
+            <label for="altEmail">Email</label>
+            <input type="email" id="altEmail" name="altEmail">
+          </div>
+          <div class="field">
+            <label for="altPosition">Position</label>
+            <input type="text" id="altPosition" name="altPosition">
           </div>
         </div>
       </fieldset>
 
-      <!-- Registrations -->
+      <!-- Bank details -->
       <fieldset>
-        <legend>Registrations</legend>
-        <div class="row">
-          <div class="field">
-            <label for="cqcNo">Hospital (CQC Reg. No.)</label>
-            <input type="text" id="cqcNo" name="cqcNo">
-          </div>
-          <div class="field">
-            <label for="gphcNo">Pharmacy (GPhC Reg. No.)</label>
-            <input type="text" id="gphcNo" name="gphcNo">
-          </div>
-          <div class="field">
-            <label for="gmcNo">GMC Reg No.</label>
-            <input type="text" id="gmcNo" name="gmcNo">
-          </div>
-          <div class="field">
-            <label for="cdLicence">CD License</label>
-            <input type="text" id="cdLicence" name="cdLicence">
-          </div>
-        </div>
-        <div class="field" data-group="hospitalType" data-msg="Choose Private or NHS">
-          <span class="label">Private / NHS <span class="req">*</span></span>
-          <div class="options inline" role="radiogroup" aria-label="Private / NHS">
-            <label class="opt"><input type="radio" name="hospitalType" value="Private"> Private</label>
-            <label class="opt"><input type="radio" name="hospitalType" value="NHS"> NHS</label>
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- Trade references: only for private hospitals. Hidden and disabled
-           otherwise, so the fields are neither validated nor submitted. -->
-      <fieldset id="tradeRefs" hidden disabled>
-        <legend>Trade references (Private Hospitals only)</legend>
-        <p class="note">Please provide two trade references. <span class="req">*</span></p>
-
-        <p class="sub">Reference 1</p>
-        <div class="row">
-          <div class="field">
-            <label for="ref1Contact">Contact Name <span class="req">*</span></label>
-            <input type="text" id="ref1Contact" name="ref1Contact" required>
-          </div>
-          <div class="field">
-            <label for="ref1Company">Company Name <span class="req">*</span></label>
-            <input type="text" id="ref1Company" name="ref1Company" required>
-          </div>
-          <div class="field">
-            <label for="ref1Addr1">Address 1 <span class="req">*</span></label>
-            <input type="text" id="ref1Addr1" name="ref1Addr1" required>
-          </div>
-          <div class="field">
-            <label for="ref1Addr2">Address 2</label>
-            <input type="text" id="ref1Addr2" name="ref1Addr2">
-          </div>
-        </div>
-        <div class="row three">
-          <div class="field">
-            <label for="ref1Postcode">Post Code <span class="req">*</span></label>
-            <input type="text" id="ref1Postcode" name="ref1Postcode" class="postcode" required style="text-transform:uppercase">
-          </div>
-          <div class="field">
-            <label for="ref1Tel">Tel No <span class="req">*</span></label>
-            <input type="tel" id="ref1Tel" name="ref1Tel" required>
-          </div>
-        </div>
-
-        <p class="sub">Reference 2</p>
-        <div class="row">
-          <div class="field">
-            <label for="ref2Contact">Contact Name <span class="req">*</span></label>
-            <input type="text" id="ref2Contact" name="ref2Contact" required>
-          </div>
-          <div class="field">
-            <label for="ref2Company">Company Name <span class="req">*</span></label>
-            <input type="text" id="ref2Company" name="ref2Company" required>
-          </div>
-          <div class="field">
-            <label for="ref2Addr1">Address 1 <span class="req">*</span></label>
-            <input type="text" id="ref2Addr1" name="ref2Addr1" required>
-          </div>
-          <div class="field">
-            <label for="ref2Addr2">Address 2</label>
-            <input type="text" id="ref2Addr2" name="ref2Addr2">
-          </div>
-        </div>
-        <div class="row three">
-          <div class="field">
-            <label for="ref2Postcode">Post Code <span class="req">*</span></label>
-            <input type="text" id="ref2Postcode" name="ref2Postcode" class="postcode" required style="text-transform:uppercase">
-          </div>
-          <div class="field">
-            <label for="ref2Tel">Tel No <span class="req">*</span></label>
-            <input type="tel" id="ref2Tel" name="ref2Tel" required>
-          </div>
-        </div>
-      </fieldset>
-
-      <!-- Terms of Business (page 2 of the Word form, controlled wording) -->
-      <fieldset>
-        <legend>Terms of Business</legend>
-        <p class="note">Please read the Terms of Business below. You agree to them in the Acceptance section.</p>
-        <div class="terms" tabindex="0" role="region" aria-label="Terms of Business">
-          <h3>Syri Limited (THE COMPANY)<br>TERMS OF BUSINESS</h3>
-          <h4>MISSING</h4>
-          <p>All missing items need to be reported within 24hrs of receipt of goods to Customer Service who will give you a reference number.</p>
-          <h4>RETURNS</h4>
-          <p>You must call in any return within 3 days of receipt of goods, this is a MHRA policy. We cannot for any reason accept returns after this period. Please call in to Customer Service who will give you a reference number. Goods received back without a reference number will be returned back to you. All our own drivers will collect the following day. All courier customers will have the goods collected the same day if reported before 12.00 and next day thereafter. Should for whatever reason the collection not be made, please inform Customer Service immediately who will rebook the collection.</p>
-          <h4>Price Difference</h4>
-          <p>Should you have a price discrepancy, please call Customer Service within 48 hrs who will raise the query and give you a reference number. Should the price be below what we can do, customer service will ask if you would like to return the goods</p>
-          <h4>Missing Parcels</h4>
-          <p>As soon as you realize you have a parcel missing please call Customer Service ASAP who can start investigating the missing goods. They will relay all feedback back to you as and when they get it. If we fail to locate the parcel, we will raise a query and give you a reference number.</p>
-          <h4>Payment</h4>
-          <p>All invoices MUST be paid within 30days from the date of statement or within such period to be determined at the sole discretion of <strong>The Company</strong> to be specified in writing</p>
-          <h4>Default</h4>
-          <p>In the event that you fail to pay any money due to <strong>The Company</strong> on time, or any references subsequently prove unsatisfactory or <strong>The Company</strong> considers there is a risk of default payment then <strong>The Company</strong> shall have the following right any of which it may exercise:</p>
-          <p>i) cease immediately to sell any goods</p>
-          <p>ii) impose whatever payment period it considers appropriate in respect of your business</p>
-          <p>iii) all sums due to <strong>The Company</strong> which are not paid on time shall bear interest from day to day at the annual rate of 5% over the current National Westminster Bank plc daily base interest rate with a minimum of 12% per year from the time of when payment is due and until payment is received by <strong>The Company</strong>.</p>
-          <h4>Change of Ownership/ Termination of Account</h4>
-          <p>Written notice of at least fourteen (14) days is required in the event of a change of ownership of your business</p>
-          <h4>General</h4>
-          <p>If we relax any terms of this Agreement, we can enforce them strictly again at any time</p>
-          <p>You must not assign this Agreement. We may do so.</p>
-          <p>No verbal conditions or guarantees expressed or implied shall have effect on these terms and conditions unless written and initialized by one of the Directors of <strong>The Company</strong>.</p>
-          <p>Punctual payment is of the essence. Failure to pay on time (for any reason at all) will be a repudiation of this Agreement, leading to all sums becoming payable immediately regardless of the due date.</p>
-          <p>This will give us the rights described in the Default Clause.</p>
-          <p>You must pay us our costs and legal expenses for taking steps to make you keep to your part of the Agreement or trying to find you</p>
-          <p>You agree that we may authorize another Company/Companies to carry out any acts relating to this Agreement on our behalf and its names</p>
-          <h4>Specials Order</h4>
-          <p>Opening Hours: 9am – 6pm Mon – Fri. Last orders must be placed by 5pm latest. Any orders placed after 5pm are not guaranteed for next day delivery.</p>
-          <p>In the absence of a signed account opening form the placement of an order will be taken as your agreement to our standard terms of business.</p>
-          <p>Delivery Charges &amp; Wholesale Handling Fee will apply appropriately.</p>
-          <p>Prices are subject to change without any notification to the customer. This will be determined by market pressures.</p>
-        </div>
-      </fieldset>
-
-      <!-- Acceptance -->
-      <fieldset>
-        <legend>Acceptance</legend>
-        <!-- Controlled wording from F/SALE/0015/003/v6, reproduced verbatim.
-             "Thame Laboratories- Licence Division" is not Syri Limited: correct
-             this in the next revision of the Word form, then update it here. -->
+        <legend>Bank Details</legend>
+        <!-- First sentence is the controlled wording from F/SALE/0017/003/v4;
+             the second (where to send the letterhead) is added for the online form. -->
         <div class="declaration">
-          <p>Subject to your receiving satisfactory references I/We request that a Trading Account with Thame Laboratories- Licence Division be made available to Me/Us.</p>
-          <p>I/We understand and agree to the terms of Business contained overleaf.</p>
+          <p>Please provide these Bank Details on your <strong>Company Letterhead</strong> duly signed by a Director.</p>
+          <p>Please email the signed letterhead to <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a> quoting your company name.</p>
         </div>
+        <div class="row">
+          <div class="field">
+            <label for="currency">Currency of Payment <span class="req">*</span></label>
+            <input type="text" id="currency" name="currency" required placeholder="e.g. GBP">
+          </div>
+          <div class="field">
+            <label for="beneficiary">Beneficiary Name <span class="req">*</span></label>
+            <input type="text" id="beneficiary" name="beneficiary" required>
+          </div>
+          <div class="field">
+            <label for="bankName">Name of Bank <span class="req">*</span></label>
+            <input type="text" id="bankName" name="bankName" required>
+          </div>
+          <div class="field">
+            <label for="bankAddress">Address</label>
+            <input type="text" id="bankAddress" name="bankAddress">
+          </div>
+        </div>
+        <!-- Account No and IBAN: at least one of the two is needed -->
+        <div class="field pair" data-group="accountOrIban" data-msg="Enter an account number or an IBAN">
+          <p class="note">Account No or IBAN No <span class="req">*</span> &ndash; please give at least one.</p>
+          <div class="row">
+            <div class="field-part">
+              <label for="accountNo">Account No</label>
+              <input type="text" id="accountNo" name="accountNo" autocomplete="off">
+            </div>
+            <div class="field-part">
+              <label for="iban">IBAN No</label>
+              <input type="text" id="iban" name="iban" class="upper" autocomplete="off" style="text-transform:uppercase">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="sortCode">Sort Code</label>
+            <input type="text" id="sortCode" name="sortCode" autocomplete="off" placeholder="e.g. 12-34-56">
+          </div>
+          <div class="field">
+            <label for="bic">BIC Code</label>
+            <input type="text" id="bic" name="bic" class="upper" autocomplete="off" style="text-transform:uppercase">
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Authorisation: the Word form has no signature section. The signature
+           is captured here and recorded on the appended signature record page. -->
+      <fieldset>
+        <legend>Authorisation</legend>
 
         <div class="field consent" data-group="esignConsent" data-msg="Please tick this box before confirming your signature">
           <label class="opt"><input type="checkbox" name="esignConsent" value="Yes">
-            <span>I agree to sign this application electronically. By typing my name and selecting “Confirm signature” I intend to sign and authenticate this application, and I understand this has the same effect as a handwritten signature. <span class="req">*</span></span>
+            <span>I confirm I am authorised to provide this information on behalf of the company and that it is accurate and complete. I agree to sign this form electronically: by typing my name and selecting “Confirm signature” I intend to sign and authenticate this form, and I understand this has the same effect as a handwritten signature. <span class="req">*</span></span>
           </label>
         </div>
 
@@ -486,7 +349,7 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
         </div>
         <div class="row three">
           <div class="field">
-            <label for="signName">Print Name</label>
+            <label for="signName">Name</label>
             <input type="text" id="signName" name="signName" readonly aria-readonly="true" aria-describedby="signNameHint">
             <div class="sig-foot" id="signNameHint">Taken from your confirmed signature</div>
           </div>
@@ -500,46 +363,47 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
             <div class="sig-foot" id="signDateHint">Set automatically to today’s date</div>
           </div>
         </div>
-        <p class="evidence-note">When you confirm your signature and submit, we record the date and time, your IP address and your browser/device details. This is used only as evidence that you signed this application and is kept with your account records.</p>
+        <p class="evidence-note">When you confirm your signature and submit, we record the date and time, your IP address and your browser/device details. This is used only as evidence that you signed this form and is kept with our supplier records.</p>
       </fieldset>
 
       <div class="actions">
         <p id="formMsg" role="alert">Please complete the highlighted fields.</p>
         <div class="buttons">
-          <button type="submit" class="btn">Submit application</button>
+          <button type="submit" class="btn">Submit form</button>
         </div>
       </div>
     </form>
 
     <div id="done" tabindex="-1">
-      <h2>Thank you – application submitted</h2>
+      <h2>Thank you – form submitted</h2>
       <p>Our team will review your details and be in touch.</p>
+      <p>Please remember to email your bank details on your company letterhead, signed by a Director, to <a href="mailto:credit.control@syrimed.co.uk" style="color:#26358C">credit.control@syrimed.co.uk</a> quoting your company name.</p>
       <p>Questions? Email <a href="mailto:credit.control@syrimed.co.uk" style="color:#26358C">credit.control@syrimed.co.uk</a> or call 0208 728 7800.</p>
 
       <div class="record">
         <h3>Electronic signature record</h3>
         <dl id="recordList"></dl>
-        <p>This record is logically associated with your signed application (Electronic Communications Act 2000, s.7; UK eIDAS Art. 25).</p>
+        <p>This record is logically associated with your signed form (Electronic Communications Act 2000, s.7; UK eIDAS Art. 25).</p>
       </div>
-      <p id="pdfStatus" style="margin-top:22px">Preparing your completed application form (PDF)…</p>
+      <p id="pdfStatus" style="margin-top:22px">Preparing your completed form (PDF)…</p>
       <button type="button" class="btn" id="downloadPdf" disabled>Download completed form (PDF)</button>
     </div>
 
   </div>
 
   <div class="docfoot">
-    Parent SOP: SOP/SALE/0015 · Form Number: F/SALE/0015/003/v6 · Effective Date: 21 Jul 2025 · Review Date: 20 Jul 2027
+    Parent SOP: SOP/SALE/0017 · Form Number: F/SALE/0017/003/v4 · Effective Date: 13 Feb 2026 · Review Date: 11 Feb 2028
   </div>
 </div>
 
 <script src="assets/pdf-lib.min.js"></script>
-<script src="assets/template-hospital.js"></script>
+<script src="assets/template-supplier-opening.js"></script>
 <script>
 (function () {
   'use strict';
   var form = document.getElementById('form');
   var msg  = document.getElementById('formMsg');
-  var FORM_NUMBER = 'F/SALE/0015/003/v6';
+  var FORM_NUMBER = 'F/SALE/0017/003/v4';
 
   /* Who sent the form link (optional ?sentBy= parameter), kept with the evidence */
   var sentBy = '';
@@ -548,7 +412,7 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
   /* ---------- Signature: typed name, confirmed with a timestamp ----------
      The signer ticks consent, types their full name and selects
      "Confirm signature". That click is the act of signing: the time is
-     recorded, the signature is locked and Print Name is filled in. */
+     recorded, the signature is locked and Name is filled in. */
   var typedSig   = document.getElementById('typedSignature');
   var confirmBtn = document.getElementById('confirmSig');
   var preview    = document.getElementById('sigPreview');
@@ -575,8 +439,8 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
     if (e.key === 'Enter') { e.preventDefault(); if (!signed) { confirmBtn.click(); } }
   });
 
-  /* The typed name drawn in a script face, used as the signature image in the PDF.
-     The canvas is cropped to the name so it scales well into the shallow Sign box. */
+  /* The typed name drawn in a script face, used as the signature image
+     on the signature record page of the PDF. Cropped to the name. */
   function renderSignature(text) {
     var c = document.createElement('canvas');
     var g = c.getContext('2d');
@@ -645,49 +509,14 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
     if (!consentBox.checked && signed) { resetSignature(); }
   });
 
-  /* ---------- Accounting address: "Same as trading address" ----------
-     A convenience only: the values are copied (and kept in step) so the
-     PDF still has both address blocks filled in. */
-  var ADDR_PARTS = ['Trust', 'Hospital', 'Addr1', 'Addr2', 'Postcode'];
-  var sameBox = document.getElementById('sameAddress');
-  var acctBlock = document.getElementById('acctAddress');
-
-  function copyAddress() {
-    ADDR_PARTS.forEach(function (p) {
-      document.getElementById('acct' + p).value = document.getElementById('trade' + p).value;
-    });
-  }
-
-  sameBox.addEventListener('change', function () {
-    var on = sameBox.checked;
-    acctBlock.classList.toggle('synced', on);
-    ADDR_PARTS.forEach(function (p) {
-      var el = document.getElementById('acct' + p);
-      el.readOnly = on;
-      if (on) { mark(el.closest('.field'), true); }
-    });
-    if (on) { copyAddress(); }
-  });
-  ADDR_PARTS.forEach(function (p) {
-    document.getElementById('trade' + p).addEventListener('input', function () {
-      if (sameBox.checked) { copyAddress(); }
-    });
-  });
-
-  /* ---------- Private / NHS: trade references for private hospitals only ---------- */
-  var refs = document.getElementById('tradeRefs');
-  form.querySelectorAll('input[name=hospitalType]').forEach(function (r) {
-    r.addEventListener('change', function () {
-      var priv = form.querySelector('input[name=hospitalType]:checked').value === 'Private';
-      refs.hidden = !priv;
-      refs.disabled = !priv;
-    });
-  });
-
   /* ---------- Validation ---------- */
+  var accountNo = document.getElementById('accountNo');
+  var iban = document.getElementById('iban');
+
   function isValid(field) {
     var group = field.getAttribute('data-group');
     if (group === 'signature') { return signed; }
+    if (group === 'accountOrIban') { return !!(accountNo.value.trim() || iban.value.trim()); }
     if (group) { return !!field.querySelector('input[name=' + group + ']:checked'); }
     var ok = true;
     field.querySelectorAll('input,textarea').forEach(function (c) {
@@ -720,11 +549,9 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
   form.addEventListener('input', function (e) { recheck(e.target.closest('.field')); });
   form.addEventListener('change', function (e) { recheck(e.target.closest('.field')); });
 
-  form.querySelectorAll('input.postcode').forEach(function (pc) {
-    pc.addEventListener('blur', function () {
-      if (!pc.readOnly) { pc.value = pc.value.toUpperCase().trim(); }
-      if (sameBox.checked) { copyAddress(); }
-    });
+  /* Post code, IBAN and BIC are stored in capitals */
+  form.querySelectorAll('input.upper').forEach(function (el) {
+    el.addEventListener('blur', function () { el.value = el.value.toUpperCase().trim(); });
   });
 
   /* ---------- Submit ---------- */
@@ -732,9 +559,6 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
     e.preventDefault();
     var first = null;
     form.querySelectorAll('.field').forEach(function (field) {
-      /* Skipped: trade references when not private (disabled fieldset),
-         and the accounting address while it is copied from the trading address */
-      if (field.closest('fieldset[disabled]') || field.closest('.synced')) { mark(field, true); return; }
       var needsCheck = field.hasAttribute('data-group') || field.querySelector('[required],[type=email]');
       if (!needsCheck) { return; }
       var ok = isValid(field);
@@ -754,19 +578,17 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting…';
 
-    form.querySelectorAll('input.postcode').forEach(function (pc) { pc.value = pc.value.toUpperCase().trim(); });
-    if (sameBox.checked) { copyAddress(); }
+    form.querySelectorAll('input.upper').forEach(function (el) { el.value = el.value.toUpperCase().trim(); });
     stampToday();
 
     var answers = {};
     new FormData(form).forEach(function (v, k) { answers[k] = v; });
-    answers.accountingSameAsTrading = sameBox.checked ? 'Yes' : 'No';
 
     buildEvidence(answers).then(function (evidence) {
-      /* Not yet connected to a destination. `application` holds every
+      /* Not yet connected to a destination. `submission` holds every
          answer plus the signature evidence, ready to send to a backend. */
-      var application = { answers: answers, evidence: evidence };
-      console.log('Syri hospital account application', application);
+      var submission = { answers: answers, evidence: evidence };
+      console.log('Syri supplier account opening form', submission);
 
       showRecord(evidence);
       form.style.display = 'none';
@@ -776,82 +598,63 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       makeFilledPdf(answers, evidence).then(function (result) {
-        application.pdfFileName = result.name;
+        submission.pdfFileName = result.name;
         offerPdf(result);
       }).catch(function (err) {
         console.error('PDF generation failed', err);
         document.getElementById('pdfStatus').textContent =
-          'Your application was submitted, but the PDF copy could not be created in this browser.';
+          'Your form was submitted, but the PDF copy could not be created in this browser.';
       });
     });
   });
 
   /* =====================================================================
-     Completed-application PDF
-     The controlled Word form (exported to PDF, assets/template-hospital.js)
+     Completed-form PDF
+     The controlled Word form (exported to PDF, assets/template-supplier-opening.js)
      is the background; answers are written into its cells. Coordinates
      are in PDF points measured from the TOP-LEFT of the page, taken from
-     the exported template (its page is 595.56 x 842.04 pt). If the Word
+     the exported template (its page is 594.96 x 840.96 pt). If the Word
      form layout changes, re-export the template and re-measure these boxes.
-     The Sign / Print Name / Position / Date boxes carry their label at the
-     bottom, so the value boxes stop just above the labels.
+     The Word form has no value column for the bank details, so each value
+     is written in its label cell, to the right of the label text.
+     The Word form has no signature box: the signature is shown only on
+     the appended Electronic Signature Record page. The Fax No row is left
+     blank (fax numbers are not collected).
      ===================================================================== */
-  var PAGE_H = 842.04;
+  var PAGE_W = 594.96, PAGE_H = 840.96;
   var LAYOUT = {
-    trading: {                            /* Hospital Trading Address */
-      Trust:    [98.4, 161.3, 275.3, 190.7],
-      Hospital: [98.4, 190.7, 275.3, 219.1],
-      Addr1:    [98.4, 219.1, 275.3, 247.2],
-      Addr2:    [98.4, 247.2, 275.3, 275.0],
-      Postcode: [98.4, 275.0, 275.3, 303.7]
+    supplier: {                           /* [box, max lines] — value column */
+      companyName:    [[213.5, 151.0, 558.6, 164.8], 1],
+      regNumber:      [[213.5, 164.8, 558.6, 186.0], 1],
+      vatNumber:      [[213.5, 186.0, 558.6, 207.3], 1],
+      regAddress:     [[213.5, 207.3, 558.6, 249.2], 3],
+      regPostcode:    [[213.5, 249.2, 558.6, 270.3], 1],
+      tradingAddress: [[213.5, 270.3, 558.6, 312.3], 3],
+      telephone:      [[213.5, 312.3, 558.6, 326.1], 1]
+      /* Fax No row 326.1-340.0 intentionally left blank */
     },
-    accounting: {                         /* Hospital Accounting Address */
-      Trust:    [354.8, 161.3, 545.8, 190.7],
-      Hospital: [354.8, 190.7, 545.8, 219.1],
-      Addr1:    [354.8, 219.1, 545.8, 247.2],
-      Addr2:    [354.8, 247.2, 545.8, 275.0],
-      Postcode: [354.8, 275.0, 545.8, 303.7]
-    },
-    contacts: {                           /* [box, max lines] */
-      hcProcurement: [[109.5, 340.6, 293.2, 367.8], 2],
-      hcDoctor:      [[109.5, 367.8, 293.2, 395.2], 2],
-      hcTel:         [[109.5, 395.2, 293.2, 409.1], 1],
-      hcFax:         [[109.5, 409.1, 293.2, 423.1], 1],
-      hcEmail:       [[109.5, 423.1, 293.2, 437.0], 1],
-      acPrimary:     [[366.4, 339.8, 557.3, 367.1], 2],
-      acSecondary:   [[366.4, 367.1, 557.3, 394.5], 2],
-      acTel:         [[366.4, 394.5, 557.3, 408.4], 1],
-      acFax:         [[366.4, 408.4, 557.3, 422.2], 1],
-      acEmail:       [[366.4, 422.2, 557.3, 436.1], 1]
-    },
-    registrations: {                      /* value row under the headings */
-      cqcNo:        [33.8, 468.5, 146.5, 497.1],
-      gphcNo:       [147.0, 468.5, 260.0, 497.1],
-      gmcNo:        [260.5, 468.5, 352.2, 497.1],
-      cdLicence:    [352.6, 468.5, 451.4, 497.1],
-      hospitalType: [451.9, 468.5, 557.8, 497.1]
-    },
-    /* Trade references: one column per reference, rows top to bottom */
-    refRows: ['Contact', 'Company', 'Addr1', 'Addr2', 'Postcode', 'Tel', 'Fax'],
-    ref1: { x: [128.3, 269.6], y: [545.0, 559.1, 573.0, 586.9, 600.8, 614.7, 628.8, 642.8] },
-    ref2: { x: [387.9, 536.3], y: [546.5, 560.4, 574.3, 588.2, 602.1, 616.1, 630.1, 644.0] },
-    acceptance: {                         /* first signature row; office-use row left blank */
-      signature:    [63.0, 697.8, 159.4, 715.5],   /* right of the "Sign" label */
-      signStamp:    [63.0, 720.6],                 /* baseline of the e-sign time line */
-      signName:     [160.3, 697.1, 276.6, 711.5],
-      signPosition: [277.1, 697.1, 393.6, 711.5],
-      signDate:     [394.1, 697.1, 510.6, 711.5]
+    arContact:  [213.5, 340.0, 558.6, 393.9],   /* name / email / position, one per line */
+    altContact: [213.5, 393.9, 558.6, 447.9],
+    bank: {                               /* from the end of the label text to the cell edge */
+      currency:    [188.7, 488.0, 261.2, 502.2],
+      beneficiary: [163.8, 502.2, 261.2, 516.3],
+      bankName:    [142.6, 516.3, 261.2, 530.6],
+      bankAddress: [107.3, 530.6, 261.2, 543.7],
+      accountNo:   [128.6, 543.7, 261.2, 557.9],
+      sortCode:    [119.4, 557.9, 261.2, 572.1],
+      iban:        [105.6, 572.1, 261.2, 586.3],
+      bic:         [108.6, 586.3, 261.2, 600.6]
     }
   };
 
   function makeFilledPdf(answers, evidence) {
-    if (!window.PDFLib || !window.SYRI_HOSPITAL_TEMPLATE) {
+    if (!window.PDFLib || !window.SYRI_SUPPLIER_OPENING_TEMPLATE) {
       return Promise.reject(new Error('PDF library or template not loaded'));
     }
     var L = window.PDFLib;
     var INK = L.rgb(0.05, 0.05, 0.12);
     var NAVY = L.rgb(0.149, 0.208, 0.549);
-    var tplBytes = Uint8Array.from(atob(window.SYRI_HOSPITAL_TEMPLATE), function (c) { return c.charCodeAt(0); });
+    var tplBytes = Uint8Array.from(atob(window.SYRI_SUPPLIER_OPENING_TEMPLATE), function (c) { return c.charCodeAt(0); });
 
     return L.PDFDocument.load(tplBytes).then(function (pdf) {
       return Promise.all([
@@ -870,30 +673,35 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
           }).join('');
         }
 
-        /* Text in a cell: vertically centred, shrinks to fit, wraps up to maxLines */
-        function put(page, box, text, maxLines, f) {
-          f = f || font;
+        /* Text in a cell: vertically centred, wraps up to maxLines and shrinks
+           until it fits the cell's width AND height (down to minSize) */
+        function put(page, box, text, maxLines, minSize) {
+          maxLines = maxLines || 1;
+          minSize = minSize || 6;
           text = safe(text).replace(/\s*\n\s*/g, maxLines > 1 ? '\n' : ', ').trim();
           if (!text) { return; }
           var x = box[0] + 5, w = box[2] - box[0] - 10, h = box[3] - box[1];
           var size = 9.5, lines;
           for (;;) {
-            lines = wrap(text, f, size, w);
-            var fits = lines.length <= (maxLines || 1) && lines.every(function (ln) {
-              return f.widthOfTextAtSize(ln, size) <= w;
-            });
-            if (fits || size <= 6) { break; }
+            lines = wrap(text, font, size, w);
+            var fits = lines.length <= maxLines &&
+              (lines.length - 1) * size * 1.2 + size <= h - 2 &&
+              lines.every(function (ln) { return font.widthOfTextAtSize(ln, size) <= w; });
+            if (fits || size <= minSize) { break; }
             size -= 0.5;
           }
-          lines = lines.slice(0, maxLines || 1);
+          if (lines.length > maxLines) {
+            lines = lines.slice(0, maxLines);
+            lines[maxLines - 1] += '…';
+          }
           lines = lines.map(function (ln) {
-            while (f.widthOfTextAtSize(ln, size) > w && ln.length > 1) { ln = ln.slice(0, -2) + '…'; }
+            while (font.widthOfTextAtSize(ln, size) > w && ln.length > 1) { ln = ln.slice(0, -2) + '…'; }
             return ln;
           });
           var lh = size * 1.2, blockH = lh * (lines.length - 1) + size * 0.72;
           var top = box[1] + (h - blockH) / 2 + size * 0.72;
           lines.forEach(function (ln, i) {
-            page.drawText(ln, { x: x, y: PAGE_H - (top + i * lh), size: size, font: f, color: INK });
+            page.drawText(ln, { x: x, y: PAGE_H - (top + i * lh), size: size, font: font, color: INK });
           });
         }
 
@@ -911,59 +719,34 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
           return out;
         }
 
+        /* Contact cells: name, email and position one per line */
+        function joinLines() {
+          return Array.prototype.filter.call(arguments, function (v) { return v && String(v).trim(); }).join('\n');
+        }
+
         var p1 = pdf.getPages()[0];
 
-        /* ---- Addresses ---- */
-        ADDR_PARTS.forEach(function (p) {
-          var lines = p === 'Postcode' ? 1 : 2;
-          put(p1, LAYOUT.trading[p], answers['trade' + p], lines);
-          put(p1, LAYOUT.accounting[p], answers['acct' + p], lines);
+        /* ---- Supplier information ---- */
+        Object.keys(LAYOUT.supplier).forEach(function (k) {
+          put(p1, LAYOUT.supplier[k][0], answers[k], LAYOUT.supplier[k][1]);
         });
+        put(p1, LAYOUT.arContact, joinLines(answers.arName, answers.arEmail, answers.arPosition), 4);
+        put(p1, LAYOUT.altContact, joinLines(answers.altName, answers.altEmail, answers.altPosition), 4);
 
-        /* ---- Contact details ---- */
-        Object.keys(LAYOUT.contacts).forEach(function (k) {
-          put(p1, LAYOUT.contacts[k][0], answers[k], LAYOUT.contacts[k][1]);
+        /* ---- Bank details (short cells: smaller text, a second line only if needed) ---- */
+        Object.keys(LAYOUT.bank).forEach(function (k) {
+          put(p1, LAYOUT.bank[k], answers[k], 2, 5);
         });
-
-        /* ---- Registrations + Private / NHS ---- */
-        Object.keys(LAYOUT.registrations).forEach(function (k) {
-          put(p1, LAYOUT.registrations[k], answers[k], 2);
-        });
-
-        /* ---- Trade references (only submitted for private hospitals) ---- */
-        ['ref1', 'ref2'].forEach(function (r) {
-          var col = LAYOUT[r];
-          LAYOUT.refRows.forEach(function (row, i) {
-            put(p1, [col.x[0], col.y[i], col.x[1], col.y[i + 1]], answers[r + row], 1);
-          });
-        });
-
-        /* ---- Acceptance: Sign, Print Name, Position, Date ---- */
-        var A = LAYOUT.acceptance;
-        if (sigImg) {
-          /* Typed signature to the right of the "Sign" label, e-sign timestamp beneath */
-          var sb = A.signature;
-          var dims = sigImg.scaleToFit(sb[2] - sb[0], sb[3] - sb[1]);
-          p1.drawImage(sigImg, {
-            x: sb[0],
-            y: PAGE_H - (sb[1] + (sb[3] - sb[1] + dims.height) / 2),
-            width: dims.width, height: dims.height
-          });
-          p1.drawText(safe('E-signed ' + ukTime(evidence.signatureCapturedAt, true)), {
-            x: A.signStamp[0], y: PAGE_H - A.signStamp[1], size: 4.8, font: font, color: INK
-          });
-        }
-        put(p1, A.signName, answers.signName, 1);
-        put(p1, A.signPosition, answers.signPosition, 1);
-        put(p1, A.signDate, answers.signDate, 1);
 
         /* ---- Appendix: electronic signature record ---- */
-        var rec = pdf.addPage([595.56, PAGE_H]);
+        var rec = pdf.addPage([PAGE_W, PAGE_H]);
         var ld = logo.scaleToFit(110, 40);
         rec.drawImage(logo, { x: 50, y: PAGE_H - 50 - ld.height, width: ld.width, height: ld.height });
         rec.drawText('Electronic Signature Record', { x: 50, y: PAGE_H - 120, size: 16, font: bold, color: NAVY });
-        rec.drawText(safe('Appendix to Hospital Account Application Form ' + evidence.formNumber + ', generated automatically on submission.'),
+        rec.drawText(safe('Appendix to Supplier Account Opening Form ' + evidence.formNumber + ', generated automatically on submission.'),
           { x: 50, y: PAGE_H - 138, size: 9, font: font, color: INK });
+        rec.drawText('The form has no signature box; the signature for page 1 is recorded on this page.',
+          { x: 50, y: PAGE_H - 150, size: 9, font: font, color: INK });
 
         var rows = [
           ['Signed by', signedBy(evidence)],
@@ -980,7 +763,7 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
           ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
           ['Integrity hash (SHA-256)', evidence.sha256]
         ];
-        var y = 165, labelW = 130, valW = 545 - 50 - labelW - 10;
+        var y = 170, labelW = 130, valW = 545 - 50 - labelW - 10;
         rows.forEach(function (r) {
           var vl = wrap(safe(r[1]), font, 9, valW);
           var hh = Math.max(1, vl.length) * 12 + 10;
@@ -998,33 +781,35 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
           var sd = sigImg.scaleToFit(260, 90);
           rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: L.rgb(0.8, 0.82, 0.88), borderWidth: 0.5 });
           rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105) + (90 - sd.height) / 2, width: sd.width, height: sd.height });
-          y += 125;
+          rec.drawText(safe('E-signed ' + ukTime(evidence.signatureCapturedAt, true) + '  |  Date: ' + answers.signDate),
+            { x: 190, y: PAGE_H - (y + 122), size: 7.5, font: font, color: INK });
+          y += 135;
         }
 
         var legal = 'This document was signed electronically. The signer consented to sign electronically, typed their name ' +
           'and confirmed it as their signature at the time shown; a name applied with the intention to authenticate is a ' +
-          'valid electronic signature in England and Wales. The signature is logically associated with the application data ' +
+          'valid electronic signature in England and Wales. The signature is logically associated with the form data ' +
           'above and is admissible as evidence under section 7 of the Electronic Communications Act 2000; under Article 25(1) ' +
           'of UK eIDAS it may not be denied legal effect solely because it is in electronic form. The integrity hash is ' +
           'calculated over the submitted answers and this record, so any later alteration can be detected.';
         wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
           rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: L.rgb(0.35, 0.37, 0.45) });
         });
-        rec.drawText('Parent SOP: SOP/SALE/0015  |  Form Number: ' + FORM_NUMBER + '  |  Appendix: signature record',
+        rec.drawText('Parent SOP: SOP/SALE/0017  |  Form Number: ' + FORM_NUMBER + '  |  Appendix: signature record',
           { x: 50, y: 40, size: 8, font: font, color: L.rgb(0.35, 0.37, 0.45) });
 
-        pdf.setTitle('Hospital Account Application Form - ' + safe(answers.tradeHospital));
-        pdf.setSubject('Syri Ltd. hospital account application (' + FORM_NUMBER + ')');
+        pdf.setTitle('Supplier Account Opening Form - ' + safe(answers.companyName));
+        pdf.setSubject('Syri Ltd. supplier account opening form (' + FORM_NUMBER + ')');
         pdf.setAuthor(safe(answers.signName));
-        pdf.setCreator('Syri Ltd. online account application');
+        pdf.setCreator('Syri Ltd. online supplier account opening form');
         pdf.setProducer('pdf-lib');
         pdf.setCreationDate(new Date(evidence.submittedAt));
 
         return pdf.save();
       }).then(function (bytes) {
-        var hospital = (answers.tradeHospital || 'Application').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        var company = (answers.companyName || 'Supplier').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
         return {
-          name: 'Syri-Hospital-Account-Application_' + hospital + '_' + evidence.submittedAt.slice(0, 10) + '.pdf',
+          name: 'Syri-Supplier-Account-Opening_' + company + '_' + evidence.submittedAt.slice(0, 10) + '.pdf',
           blob: new Blob([bytes], { type: 'application/pdf' })
         };
       });
@@ -1042,7 +827,7 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
     btn.disabled = false;
     btn.onclick = download;
     document.getElementById('pdfStatus').textContent =
-      'Your completed application form (' + result.name + ') has been downloaded. Keep it for your records.';
+      'Your completed form (' + result.name + ') has been downloaded. Keep it for your records.';
     download();
   }
 
@@ -1087,7 +872,7 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
       var evidence = {
         signerName: answers.signName,
         signerPosition: answers.signPosition,
-        signerCompany: answers.tradeHospital,
+        signerCompany: answers.companyName,
         signatureMethod: 'Typed name, confirmed by the signer ("Confirm signature")',
         typedSignature: answers.typedSignature,
         signatureCapturedAt: (signedAt || submittedAt).toISOString(),
