@@ -6,8 +6,12 @@ print, sign and scan Word form.
 
 **Live:** https://abdullahelsadek21-luxsh.github.io/syri-account-application-preview/
 
-- `index.html`: entry page (name + email, front end only), which opens the form
-- `syri-account-application-form.html`: the application form
+- `index.html`: entry page (name + email, front end only)
+- `select.html`: account type — Customer (UK / Hospital / Outside the UK); Supplier coming soon.
+  Sales/BD links can skip it: `?type=uk|hospital|export&sentBy=<name>`
+- `syri-account-application-form.html`: UK customer (F/SALE/0015/004)
+- `form-hospital.html`: Hospital (F/SALE/0015/003)
+- `form-export.html`: Export customer, 5 steps (F/SALE/0015/006 + 005 in one PDF)
 
 - **Section A**: company details, business address, trade references, business type,
   account details and the signed declaration

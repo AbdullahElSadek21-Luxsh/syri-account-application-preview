@@ -4,11 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Account Application &ndash; Syri Ltd.</title>
+<title>Choose Account Type &ndash; Syri Ltd.</title>
 <style>
-/* Syri Ltd. — entry page for the online Account Application Form.
-   Front end only: no account is created and nothing is sent anywhere.
-   A valid name and email simply open the form. */
+/* Syri Ltd. — account-type selection. Sends the applicant to the right form.
+   A link from Sales/BD with ?type=uk|hospital|export skips this page. */
 
 :root{
   --navy:#1C2E7A;
@@ -18,7 +17,7 @@
   --line:#D6E0EE;
   --sky-1:#E3F1FC;
   --sky-2:#C7E0F6;
-  --err:#B42318;
+  --accent:#3D7BC8;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -35,50 +34,47 @@ body{
   border-bottom:1px solid rgba(28,46,122,.08);
   box-shadow:0 2px 14px rgba(28,46,122,.08);
 }
-.topbar .inner{max-width:920px;margin:0 auto;padding:12px 16px;display:flex;align-items:center}
+.topbar .inner{padding-top:12px;padding-bottom:12px;display:flex;align-items:center}
 .topbar img{height:40px;width:auto;display:block}
 
-/* Content */
 main{flex:1}
 .inner{max-width:920px;margin:0 auto;padding:0 16px}
-.content{display:flex;gap:48px;align-items:flex-start;justify-content:space-between;padding-top:34px}
-.intro{flex:1;max-width:520px}
-.intro h1{margin:4px 0 12px;font-size:28px;font-weight:600;letter-spacing:-.3px;color:var(--navy)}
-.intro p{margin:0;font-size:15.5px;color:var(--muted)}
+.step{padding-top:34px}
+.step[hidden]{display:none}
+h1{margin:4px 0 8px;font-size:28px;font-weight:600;letter-spacing:-.3px;color:var(--navy)}
+.lede{margin:0 0 26px;font-size:15.5px;color:var(--muted)}
 
-/* Register card */
-.card{
-  flex:0 0 300px;background:#fff;border:1px solid var(--line);border-radius:6px;
-  box-shadow:0 8px 28px rgba(28,46,122,.12);
+/* Choice cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.choice{
+  display:flex;flex-direction:column;gap:6px;text-align:left;
+  font:inherit;color:inherit;cursor:pointer;text-decoration:none;
+  background:#fff;border:1px solid var(--line);border-radius:8px;padding:20px 20px 18px;
+  box-shadow:0 6px 20px rgba(28,46,122,.08);
+  transition:border-color .12s,box-shadow .12s,transform .06s;
 }
-.card-head{padding:14px 18px;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600}
-.card-head em{font-weight:400;color:#3D7BC8}
-.card-body{padding:18px}
-.field{margin-bottom:18px}
-label{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600}
-input{
-  width:100%;font:inherit;font-size:14px;color:var(--ink);background:#fff;
-  border:1px solid var(--line);border-radius:4px;padding:9px 11px;
+.choice:hover{border-color:var(--accent);box-shadow:0 8px 26px rgba(28,46,122,.16)}
+.choice:active{transform:translateY(1px)}
+.choice strong{font-size:17px;font-weight:600;color:var(--navy)}
+.choice span{font-size:13.5px;color:var(--muted)}
+.choice small{margin-top:6px;font-size:12px;color:#7A88A6}
+.choice[disabled]{cursor:not-allowed;opacity:.6;box-shadow:none}
+.choice[disabled]:hover{border-color:var(--line)}
+.tag{
+  align-self:flex-start;margin-top:4px;padding:2px 8px;border-radius:99px;
+  background:#EEF1F7;color:var(--muted);font-size:11.5px;font-weight:600;
 }
-input::placeholder{color:#9AA5BA}
-input:focus{outline:none;border-color:#3D7BC8;box-shadow:0 0 0 3px rgba(61,123,200,.18)}
-.error{display:none;margin-top:5px;font-size:12.5px;color:var(--err)}
-.invalid input{border-color:var(--err)}
-.invalid .error{display:block}
-.btn{
-  font:inherit;font-size:14px;font-weight:600;cursor:pointer;
-  background:var(--navy);color:#fff;border:0;border-radius:4px;padding:10px 20px;
-  box-shadow:0 2px 6px rgba(28,46,122,.25);
+.back{
+  display:inline-block;margin-bottom:10px;padding:0;border:0;background:none;cursor:pointer;
+  font:inherit;font-size:13.5px;color:var(--navy);text-decoration:underline;
 }
-.btn:hover{background:var(--navy-dark)}
 :focus-visible{outline:2px solid var(--navy);outline-offset:2px}
 
 footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
 
 @media (max-width:720px){
-  .content{flex-direction:column;gap:24px;padding-top:24px}
-  .card{flex:none;width:100%}
-  .intro h1{font-size:24px}
+  h1{font-size:24px}
+  .step{padding-top:24px}
 }
 </style>
 </head>
@@ -91,31 +87,46 @@ footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
 </header>
 
 <main>
-  <div class="inner content">
-    <div class="intro">
-      <h1>Account Application Form</h1>
-      <p>Please enter your name and email address to access the Account Application Form.</p>
+  <!-- Step 1: customer or supplier -->
+  <section class="inner step" id="stepAccount" aria-labelledby="accountTitle">
+    <h1 id="accountTitle">What would you like to open?</h1>
+    <p class="lede">Choose the type of account you are applying for.</p>
+    <div class="cards">
+      <button type="button" class="choice" id="pickCustomer">
+        <strong>Customer account</strong>
+        <span>You want to buy products from Syri Ltd.</span>
+      </button>
+      <button type="button" class="choice" disabled aria-describedby="supplierSoon">
+        <strong>Supplier account</strong>
+        <span>You want to supply goods or services to Syri Ltd.</span>
+        <em class="tag" id="supplierSoon">Coming soon</em>
+      </button>
     </div>
+  </section>
 
-    <section class="card" aria-labelledby="registerTitle">
-      <div class="card-head" id="registerTitle">Register <em>Panel</em></div>
-      <form class="card-body" id="registerForm" novalidate>
-        <div class="field">
-          <label for="regName">Name</label>
-          <input type="text" id="regName" name="name" placeholder="Name" autocomplete="name" required
-                 aria-describedby="regNameErr">
-          <div class="error" id="regNameErr">Please enter your name</div>
-        </div>
-        <div class="field">
-          <label for="regEmail">Email</label>
-          <input type="email" id="regEmail" name="email" placeholder="Email" autocomplete="email" required
-                 aria-describedby="regEmailErr">
-          <div class="error" id="regEmailErr">Please enter a valid email address</div>
-        </div>
-        <button type="submit" class="btn">Submit</button>
-      </form>
-    </section>
-  </div>
+  <!-- Step 2: type of customer -->
+  <section class="inner step" id="stepCustomer" aria-labelledby="customerTitle" hidden>
+    <button type="button" class="back" id="backToAccount">&larr; Back</button>
+    <h1 id="customerTitle">Which best describes your organisation?</h1>
+    <p class="lede">We&rsquo;ll show you only the questions that apply to you.</p>
+    <div class="cards">
+      <a class="choice" data-type="uk" href="syri-account-application-form.html">
+        <strong>UK pharmacy or wholesaler</strong>
+        <span>Pharmacies and WDA holders based in the United Kingdom.</span>
+        <small>Form F/SALE/0015/004</small>
+      </a>
+      <a class="choice" data-type="hospital" href="form-hospital.html">
+        <strong>Hospital</strong>
+        <span>NHS trusts and private hospitals.</span>
+        <small>Form F/SALE/0015/003</small>
+      </a>
+      <a class="choice" data-type="export" href="form-export.html">
+        <strong>Business outside the UK</strong>
+        <span>Export customers collecting goods from our Ruislip site.</span>
+        <small>Forms F/SALE/0015/005 and 006</small>
+      </a>
+    </div>
+  </section>
 </main>
 
 <footer>
@@ -125,43 +136,40 @@ footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
 <script>
 (function () {
   'use strict';
-  var form = document.getElementById('registerForm');
-  var nameInput = document.getElementById('regName');
-  var emailInput = document.getElementById('regEmail');
-  /* Next page is the account-type selection. A link from Sales/BD may carry
-     ?type=uk|hospital|export and ?sentBy=…, which are passed straight on. */
-  var NEXT_PAGE = 'select.html' + window.location.search;
+  var FORMS = {
+    uk: 'syri-account-application-form.html',
+    hospital: 'form-hospital.html',
+    export: 'form-export.html'
+  };
+  var params = new URLSearchParams(window.location.search);
+  var sentBy = params.get('sentBy');
+  var carry = sentBy ? '?sentBy=' + encodeURIComponent(sentBy) : '';
 
-  function check(input, ok) {
-    input.closest('.field').classList.toggle('invalid', !ok);
-    input.setAttribute('aria-invalid', ok ? 'false' : 'true');
-    return ok;
+  /* Link from Sales/BD with the type already chosen: go straight to the form */
+  var preset = (params.get('type') || '').toLowerCase();
+  if (FORMS[preset]) {
+    window.location.replace(FORMS[preset] + carry);
+    return;
   }
-  function nameOk() { return nameInput.value.trim().length >= 2; }
-  function emailOk() { return emailInput.value.trim() !== '' && emailInput.checkValidity(); }
 
-  [nameInput, emailInput].forEach(function (input) {
-    input.addEventListener('input', function () {
-      if (input.closest('.field').classList.contains('invalid')) {
-        check(input, input === nameInput ? nameOk() : emailOk());
-      }
-    });
+  /* Keep who sent the link when the applicant picks a form */
+  document.querySelectorAll('[data-type]').forEach(function (a) {
+    a.href = FORMS[a.getAttribute('data-type')] + carry;
   });
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var okName = check(nameInput, nameOk());
-    var okEmail = check(emailInput, emailOk());
-    if (!okName) { nameInput.focus(); return; }
-    if (!okEmail) { emailInput.focus(); return; }
+  var stepAccount = document.getElementById('stepAccount');
+  var stepCustomer = document.getElementById('stepCustomer');
 
-    /* No backend yet: keep the details for this browser tab only, then open the form. */
-    try {
-      sessionStorage.setItem('syri.registrant', JSON.stringify({
-        name: nameInput.value.trim(), email: emailInput.value.trim(), at: new Date().toISOString()
-      }));
-    } catch (err) { /* storage unavailable: carry on */ }
-    window.location.href = NEXT_PAGE;
+  document.getElementById('pickCustomer').addEventListener('click', function () {
+    stepAccount.hidden = true;
+    stepCustomer.hidden = false;
+    stepCustomer.querySelector('h1').setAttribute('tabindex', '-1');
+    stepCustomer.querySelector('h1').focus();
+  });
+  document.getElementById('backToAccount').addEventListener('click', function () {
+    stepCustomer.hidden = true;
+    stepAccount.hidden = false;
+    document.getElementById('pickCustomer').focus();
   });
 }());
 </script>

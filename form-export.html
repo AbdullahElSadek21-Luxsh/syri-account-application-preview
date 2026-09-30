@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Export Account Application &ndash; Syri Ltd.</title>
+<style>
+/* Syri Ltd. — Export Customer Account Application
+   Merges two controlled forms into one web form:
+   F/SALE/0015/006/v4 Account Opening Form - Export and
+   F/SALE/0015/005/v4 Company Details - Export · Parent SOP SOP/SALE/0015
+   Five short steps; one typed e-signature signs both forms. */
+
+:root{
+  --navy:#26358C;
+  --navy-dark:#1C2870;
+  --navy-soft:#F1F3FA;
+  --ink:#1A1D29;
+  --muted:#636A7E;
+  --line:#D9DDE7;
+  --bg:#F5F6FA;
+  --err:#B42318;
+  --ok:#1B6B47;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font:400 15px/1.6 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+.page{max-width:1000px;margin:0 auto;padding:32px 16px 64px}
+.sheet{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.back-link{display:inline-block;margin:0 0 12px;font-size:13.5px;color:var(--navy);text-decoration:none}
+.back-link:hover{text-decoration:underline}
+
+/* Header */
+header{padding:30px 36px 26px;border-top:4px solid var(--navy);border-bottom:1px solid var(--line)}
+.brand{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.brand img{width:140px;height:auto;display:block}
+.contact{font-size:12px;line-height:1.6;color:var(--muted);text-align:right}
+.contact a{color:var(--navy);text-decoration:none}
+h1{margin:24px 0 6px;font-size:26px;font-weight:600;letter-spacing:-.3px}
+.intro{margin:0;color:var(--muted);font-size:14.5px}
+.req{color:var(--err)}
+
+/* Steps: one short step visible at a time */
+.step{display:none}
+.step.active{display:block}
+.step-label{margin:0;padding:22px 36px 0;font-size:13.5px;font-weight:600;color:var(--muted)}
+.step-label:focus,.step-label:focus-visible{outline:none}
+
+/* Sections */
+fieldset{border:0;margin:0;padding:28px 36px 4px;min-width:0}
+fieldset + fieldset{border-top:1px solid var(--line)}
+.step > fieldset:first-child{padding-top:14px}
+legend{
+  float:left;width:100%;padding:0;margin:0 0 4px;
+  font-size:17px;font-weight:600;color:var(--navy);
+}
+legend + *{clear:both}
+.note{margin:0 0 18px;font-size:13.5px;color:var(--muted)}
+.note a{color:var(--navy)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:0 20px}
+.row.three{grid-template-columns:1fr 1fr 1fr}
+.sub{margin:6px 0 10px;font-size:13px;font-weight:600;color:var(--muted)}
+
+/* Fields */
+.field{margin-bottom:20px;min-width:0}
+label,.label{display:block;margin-bottom:6px;font-size:13.5px;font-weight:600}
+.hint{display:block;font-weight:400;font-size:12.5px;color:var(--muted)}
+input[type=text],input[type=tel],input[type=email],input[type=date],input[type=number],textarea{
+  width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;
+  border:1px solid var(--line);border-radius:6px;padding:10px 12px;
+}
+textarea{resize:vertical;min-height:88px}
+input:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(38,53,140,.14)}
+input[readonly]{background:var(--bg);color:var(--muted);cursor:not-allowed}
+input[readonly]:focus{border-color:var(--line);box-shadow:none}
+input[type=number]{-moz-appearance:textfield}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+
+/* Radio / checkbox */
+.options{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.options.inline{display:flex;gap:24px;flex-wrap:wrap}
+.opt{display:flex;align-items:center;gap:10px;font-weight:400;font-size:14.5px;margin:0;padding:4px 0;cursor:pointer}
+.opt input{width:18px;height:18px;margin:0;accent-color:var(--navy);cursor:pointer;flex:none}
+
+/* Follow-up questions shown only for some answers ("Other", "No", ...) */
+.cond{display:none;margin-top:12px}
+.cond.show{display:block}
+
+/* Errors */
+.error{display:none;margin-top:6px;font-size:13px;color:var(--err)}
+.invalid .error{display:block}
+.invalid input:not([type=radio]):not([type=checkbox]),.invalid textarea,.invalid .sig-preview{border-color:var(--err)}
+
+/* Declaration */
+.declaration{
+  background:var(--navy-soft);border-radius:8px;padding:18px 20px;margin-bottom:22px;
+  font-size:14px;line-height:1.65;color:#343A4D;
+}
+.declaration p{margin:0 0 10px}
+.declaration p:last-child{margin-bottom:0}
+
+/* Signature (typed, confirmed with a timestamp) */
+.sign-row{display:flex;gap:10px}
+.sign-row input{flex:1;min-width:0}
+.sign-row .btn{white-space:nowrap;padding:10px 20px}
+.btn:disabled{opacity:.55;cursor:default}
+.btn:disabled:hover{background:var(--navy)}
+.sig-preview{
+  margin-top:10px;min-height:78px;padding:8px 18px;display:flex;align-items:center;
+  border:1px dashed #AEB5C7;border-radius:6px;background:#fff;overflow:hidden;white-space:nowrap;
+  font-family:"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive;
+  font-size:30px;color:var(--ink);
+}
+.sig-preview.empty{font-family:inherit;font-size:13.5px;color:#9AA1B4}
+.sig-preview.signed{border-style:solid;border-color:var(--navy)}
+.sig-stamp{
+  display:none;align-items:center;gap:12px;flex-wrap:wrap;margin-top:8px;padding:9px 12px;
+  background:#EEF7F2;border:1px solid #BFE0CD;border-radius:6px;font-size:13px;color:var(--ok);font-weight:600;
+}
+.sig-stamp.show{display:flex}
+.sig-stamp .link{margin-left:auto}
+.sig-foot{display:flex;justify-content:space-between;margin-top:6px;font-size:12.5px;color:var(--muted)}
+.link{background:none;border:0;padding:0;font:inherit;font-size:13px;color:var(--navy);cursor:pointer;text-decoration:underline}
+.consent .opt{align-items:flex-start;font-size:14px}
+.consent .opt input{margin-top:2px}
+.evidence-note{
+  margin:-6px 0 20px;padding:12px 14px;border-left:3px solid var(--navy);
+  background:var(--navy-soft);border-radius:0 6px 6px 0;font-size:12.8px;color:#343A4D;
+}
+
+/* Footer + actions */
+.actions{
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:22px 36px;border-top:1px solid var(--line);background:#FAFBFD;
+}
+.actions p{margin:0;font-size:13.5px;color:var(--err);display:none}
+.actions p.show{display:block}
+.buttons{display:flex;gap:10px;margin-left:auto}
+.btn{
+  font:inherit;font-size:15px;font-weight:600;cursor:pointer;
+  background:var(--navy);color:#fff;border:0;border-radius:6px;padding:11px 24px;
+}
+.btn:hover{background:var(--navy-dark)}
+.btn[hidden]{display:none}
+.btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.secondary:hover{border-color:var(--navy);color:var(--navy)}
+.docfoot{margin-top:18px;text-align:center;font-size:11.5px;color:var(--muted);line-height:1.7}
+
+/* Thank-you */
+#done{display:none;padding:56px 36px;text-align:center}
+#done.show{display:block}
+#done h2{margin:0 0 10px;font-size:23px;font-weight:600;color:var(--ok)}
+#done p{margin:0 auto 10px;max-width:48ch;color:var(--muted)}
+.record{max-width:640px;margin:28px auto 0;text-align:left;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.record h3{margin:0;padding:12px 16px;font-size:14px;font-weight:600;color:var(--navy);background:var(--navy-soft);border-bottom:1px solid var(--line)}
+.record dl{margin:0;display:grid;grid-template-columns:180px 1fr}
+.record dt,.record dd{margin:0;padding:9px 16px;border-bottom:1px solid var(--line);font-size:13px}
+.record dt{color:var(--muted)}
+.record dd{word-break:break-all}
+.record dd img{max-height:60px;display:block}
+.record p{margin:0;padding:10px 16px;font-size:12px;max-width:none;color:var(--muted)}
+#done .btn{margin-top:22px}
+@media (max-width:640px){.record dl{grid-template-columns:1fr}.record dt{border-bottom:0;padding-bottom:0}}
+
+:focus-visible{outline:2px solid var(--navy);outline-offset:2px}
+
+@media (max-width:640px){
+  .page{padding:12px 10px 40px}
+  header,fieldset,.actions{padding-left:20px;padding-right:20px}
+  .step-label{padding-left:20px;padding-right:20px}
+  .contact{text-align:left}
+  .row,.row.three,.options{grid-template-columns:1fr}
+  .sign-row{flex-direction:column}
+  .buttons{width:100%;flex-direction:column-reverse}
+  .btn{width:100%}
+}
+
+@page{size:A4;margin:14mm}
+@media print{
+  body{background:#fff;font-size:10pt}
+  .page{max-width:none;padding:0}
+  .sheet{border:0}
+  .back-link,.actions,.link,#printRecord,#downloadPdf,#pdfStatus,#confirmSig{display:none!important}
+  fieldset{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <a class="back-link" href="select.html">&larr; Change account type</a>
+  <div class="sheet">
+
+    <header>
+      <div class="brand">
+        <img src="data:image/png;base64,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" alt="SyriMed – Syri Ltd.">
+        <div class="contact">
+          Syri Ltd. · Unit 4, Bradfield Road<br>
+          Ruislip, Middlesex, HA4 0NU<br>
+          Tel 0208 728 7800<br>
+          <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>
+        </div>
+      </div>
+      <h1>Export Account Application</h1>
+      <p class="intro">For businesses outside the UK. This application completes our Account Opening Form and Company Details form. Fields marked <span class="req">*</span> are mandatory.</p>
+    </header>
+
+    <form id="form" novalidate>
+
+      <p class="step-label" id="stepLabel" tabindex="-1">Step 1 of 5 – Company details</p>
+
+      <!-- ===== Step 1: Company details (006 Section A + 005 Section A) ===== -->
+      <div class="step active" data-title="Company details">
+        <fieldset>
+          <legend>Company details</legend>
+          <p class="note">To be completed by the Partner (Owner / Director / Responsible Person).</p>
+          <div class="row">
+            <div class="field">
+              <label for="companyRegNo">Company Registration Number <span class="req">*</span></label>
+              <input type="text" id="companyRegNo" name="companyRegNo" required>
+            </div>
+            <div class="field">
+              <label for="companyRegName">Company Registered Name <span class="req">*</span></label>
+              <input type="text" id="companyRegName" name="companyRegName" required autocomplete="organization">
+            </div>
+            <div class="field">
+              <label for="tradingName">Company Trading Name (if any)</label>
+              <input type="text" id="tradingName" name="tradingName">
+            </div>
+            <div class="field">
+              <label for="vatNumber">VAT Number <span class="req">*</span></label>
+              <input type="text" id="vatNumber" name="vatNumber" required>
+            </div>
+            <div class="field">
+              <label for="dateCommenced">Date Business Commenced <span class="req">*</span></label>
+              <input type="date" id="dateCommenced" name="dateCommenced" required>
+            </div>
+            <div class="field">
+              <label for="businessRegNo">Business Registration Number <span class="req">*</span></label>
+              <input type="text" id="businessRegNo" name="businessRegNo" required>
+            </div>
+            <div class="field">
+              <label for="establishedYear">Company Established Year <span class="req">*</span> <span class="hint">Filled from the date business commenced – change if different</span></label>
+              <input type="text" id="establishedYear" name="establishedYear" required inputmode="numeric" maxlength="4"
+                     pattern="(18|19|20)[0-9]{2}" placeholder="e.g. 2012" data-invalid-msg="Enter a 4-digit year, e.g. 2012">
+            </div>
+            <div class="field">
+              <label for="employees">Number of Employees <span class="req">*</span></label>
+              <input type="number" id="employees" name="employees" min="0" step="1" inputmode="numeric" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Business type <span class="req">*</span></legend>
+          <div class="field" data-group="businessType" data-msg="Select your business type">
+            <div class="options" role="radiogroup" aria-label="Business type">
+              <label class="opt"><input type="radio" name="businessType" value="Public Limited"> Public Limited</label>
+              <label class="opt"><input type="radio" name="businessType" value="Private Limited"> Private Limited</label>
+              <label class="opt"><input type="radio" name="businessType" value="Partnership"> Partnership</label>
+              <label class="opt"><input type="radio" name="businessType" value="Sole Trader"> Sole Trader</label>
+              <label class="opt"><input type="radio" name="businessType" value="Other"> Other</label>
+            </div>
+            <div class="cond" data-show-when="businessType=Other">
+              <label for="businessTypeOther">Please specify <span class="req">*</span></label>
+              <input type="text" id="businessTypeOther" name="businessTypeOther" data-other-for="businessType">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Business activity</legend>
+          <div class="field" data-group="businessActivity" data-msg="Select your business activity">
+            <span class="label">What does your business do? <span class="req">*</span></span>
+            <div class="options" role="radiogroup" aria-label="Business activity">
+              <label class="opt"><input type="radio" name="businessActivity" value="Distribution"> Distribution</label>
+              <label class="opt"><input type="radio" name="businessActivity" value="Manufacturing"> Manufacturing</label>
+              <label class="opt"><input type="radio" name="businessActivity" value="Both"> Both</label>
+              <label class="opt"><input type="radio" name="businessActivity" value="Other"> Other</label>
+            </div>
+            <div class="cond" data-show-when="businessActivity=Other">
+              <label for="businessActivityOther">Please specify <span class="req">*</span></label>
+              <input type="text" id="businessActivityOther" name="businessActivityOther" data-other-for="businessActivity">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="manufacturingSites">Number of Manufacturing Sites &amp; Locations <span class="hint">e.g. 2 – Mumbai, Pune</span></label>
+              <input type="text" id="manufacturingSites" name="manufacturingSites">
+            </div>
+            <div class="field">
+              <label for="distributionSites">Number of Distribution Sites &amp; Locations <span class="hint">e.g. 1 – Dubai</span></label>
+              <input type="text" id="distributionSites" name="distributionSites">
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 2: Addresses & director (006) ===== -->
+      <div class="step" data-title="Addresses &amp; director">
+        <fieldset>
+          <legend>Invoice address</legend>
+          <div class="field">
+            <label for="invCompany">Company Name <span class="req">*</span></label>
+            <input type="text" id="invCompany" name="invCompany" required autocomplete="organization">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="invAddr1">Address Line 1 <span class="req">*</span></label>
+              <input type="text" id="invAddr1" name="invAddr1" required autocomplete="address-line1">
+            </div>
+            <div class="field">
+              <label for="invAddr2">Address Line 2</label>
+              <input type="text" id="invAddr2" name="invAddr2" autocomplete="address-line2">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="invTown">Town / City <span class="req">*</span></label>
+              <input type="text" id="invTown" name="invTown" required autocomplete="address-level2">
+            </div>
+            <div class="field">
+              <label for="invRegion">State / Region</label>
+              <input type="text" id="invRegion" name="invRegion" autocomplete="address-level1">
+            </div>
+            <div class="field">
+              <label for="invPostcode">Post Code <span class="hint">If applicable</span></label>
+              <input type="text" id="invPostcode" name="invPostcode" autocomplete="postal-code">
+            </div>
+            <div class="field">
+              <label for="invCountry">Country <span class="req">*</span></label>
+              <input type="text" id="invCountry" name="invCountry" required autocomplete="country-name">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Finished product delivery address</legend>
+          <div class="field" data-group="deliverySame" data-msg="Choose Yes or No">
+            <span class="label">Is it the same as the invoice address? <span class="req">*</span></span>
+            <div class="options inline" role="radiogroup" aria-label="Delivery address same as invoice address">
+              <label class="opt"><input type="radio" name="deliverySame" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="deliverySame" value="No"> No</label>
+            </div>
+          </div>
+          <div class="cond" data-show-when="deliverySame=No">
+            <p class="note">Please provide the full delivery address.</p>
+            <div class="field">
+              <label for="delCompany">Company Name <span class="req">*</span></label>
+              <input type="text" id="delCompany" name="delCompany" required>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="delAddr1">Address Line 1 <span class="req">*</span></label>
+                <input type="text" id="delAddr1" name="delAddr1" required>
+              </div>
+              <div class="field">
+                <label for="delAddr2">Address Line 2</label>
+                <input type="text" id="delAddr2" name="delAddr2">
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label for="delTown">Town / City <span class="req">*</span></label>
+                <input type="text" id="delTown" name="delTown" required>
+              </div>
+              <div class="field">
+                <label for="delRegion">State / Region</label>
+                <input type="text" id="delRegion" name="delRegion">
+              </div>
+              <div class="field">
+                <label for="delPostcode">Post Code <span class="hint">If applicable</span></label>
+                <input type="text" id="delPostcode" name="delPostcode">
+              </div>
+              <div class="field">
+                <label for="delCountry">Country <span class="req">*</span></label>
+                <input type="text" id="delCountry" name="delCountry" required>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Director / CEO / Chairman</legend>
+          <div class="row">
+            <div class="field">
+              <label for="dirName">Name <span class="req">*</span></label>
+              <input type="text" id="dirName" name="dirName" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="dirAddr1">Address – First Line <span class="req">*</span></label>
+              <input type="text" id="dirAddr1" name="dirAddr1" required>
+            </div>
+          </div>
+          <div class="row three">
+            <div class="field">
+              <label for="dirTown">Town <span class="req">*</span></label>
+              <input type="text" id="dirTown" name="dirTown" required>
+            </div>
+            <div class="field">
+              <label for="dirPostcode">Post Code <span class="hint">If applicable</span></label>
+              <input type="text" id="dirPostcode" name="dirPostcode">
+            </div>
+            <div class="field">
+              <label for="dirCountry">Country <span class="req">*</span></label>
+              <input type="text" id="dirCountry" name="dirCountry" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="dirEmail">Email <span class="req">*</span></label>
+              <input type="email" id="dirEmail" name="dirEmail" required autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="dirPhone">Phone Number <span class="req">*</span> <span class="hint">Including country code</span></label>
+              <input type="tel" id="dirPhone" name="dirPhone" required autocomplete="tel">
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 3: Ownership & finances (005 Sections B, C, D) ===== -->
+      <div class="step" data-title="Ownership &amp; finances">
+        <fieldset>
+          <legend>Chairman, directors &amp; shareholders</legend>
+          <div class="row">
+            <div class="field">
+              <label for="chairmanName">Chairman / CEO Name <span class="hint">Holding more than 50% of shares</span></label>
+              <input type="text" id="chairmanName" name="chairmanName">
+            </div>
+            <div class="field">
+              <label for="otherShareholders">Other Shareholders <span class="hint">Holding more than 10% of shares – one name per line</span></label>
+              <textarea id="otherShareholders" name="otherShareholders" rows="2" style="min-height:48px"></textarea>
+            </div>
+            <div class="field">
+              <label for="detDirectorName">Director Name <span class="hint">Taken from Step 2 – change if different</span></label>
+              <input type="text" id="detDirectorName" name="detDirectorName">
+            </div>
+            <div class="field">
+              <label for="detDirectorEmail">Director Email <span class="hint">Taken from Step 2 – change if different</span></label>
+              <input type="email" id="detDirectorEmail" name="detDirectorEmail">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Revenue</legend>
+          <p class="note">Give the year, revenue and currency for up to three years. Year 1 is required.</p>
+          <p class="sub">Year 1 <span class="req">*</span></p>
+          <div class="row three">
+            <div class="field">
+              <label for="y1Year">Year <span class="req">*</span></label>
+              <input type="text" id="y1Year" name="y1Year" required placeholder="e.g. 2025">
+            </div>
+            <div class="field">
+              <label for="y1Revenue">Revenue <span class="req">*</span></label>
+              <input type="number" id="y1Revenue" name="y1Revenue" min="0" step="any" inputmode="decimal" required>
+            </div>
+            <div class="field">
+              <label for="y1Currency">Currency <span class="req">*</span></label>
+              <input type="text" id="y1Currency" name="y1Currency" required maxlength="12" placeholder="e.g. USD">
+            </div>
+          </div>
+          <p class="sub">Year 2</p>
+          <div class="row three">
+            <div class="field">
+              <label for="y2Year">Year</label>
+              <input type="text" id="y2Year" name="y2Year">
+            </div>
+            <div class="field">
+              <label for="y2Revenue">Revenue</label>
+              <input type="number" id="y2Revenue" name="y2Revenue" min="0" step="any" inputmode="decimal">
+            </div>
+            <div class="field">
+              <label for="y2Currency">Currency</label>
+              <input type="text" id="y2Currency" name="y2Currency" maxlength="12">
+            </div>
+          </div>
+          <p class="sub">Year 3</p>
+          <div class="row three">
+            <div class="field">
+              <label for="y3Year">Year</label>
+              <input type="text" id="y3Year" name="y3Year">
+            </div>
+            <div class="field">
+              <label for="y3Revenue">Revenue</label>
+              <input type="number" id="y3Revenue" name="y3Revenue" min="0" step="any" inputmode="decimal">
+            </div>
+            <div class="field">
+              <label for="y3Currency">Currency</label>
+              <input type="text" id="y3Currency" name="y3Currency" maxlength="12">
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Business engagement</legend>
+          <div class="row">
+            <div class="field">
+              <span class="label">Any existing business engagement in the UK?</span>
+              <div class="options inline" role="radiogroup" aria-label="Existing business engagement in the UK">
+                <label class="opt"><input type="radio" name="ukEngagement" value="Yes"> Yes</label>
+                <label class="opt"><input type="radio" name="ukEngagement" value="No"> No</label>
+              </div>
+            </div>
+            <div class="field">
+              <label for="maCount">Number of Marketing Authorisations (MAs) Held <span class="hint">If applicable</span></label>
+              <input type="text" id="maCount" name="maCount">
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 4: Licences & documents (006 + 005 Section E) ===== -->
+      <div class="step" data-title="Licences &amp; documents">
+        <fieldset>
+          <legend>Human medicines distribution permit</legend>
+          <div class="row">
+            <div class="field">
+              <label for="permitLicenceNo">Licence Number <span class="req">*</span> <span class="hint">Issued by the local authority</span></label>
+              <input type="text" id="permitLicenceNo" name="permitLicenceNo" required>
+            </div>
+            <div class="field">
+              <label for="permitAuthority">Regulatory Authority Name <span class="req">*</span></label>
+              <input type="text" id="permitAuthority" name="permitAuthority" required>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>EU-GMP</legend>
+          <div class="field">
+            <span class="label">Do you hold the EU-GMP? <span class="hint">Applicable to manufacturers only</span></span>
+            <div class="options inline" role="radiogroup" aria-label="EU-GMP held">
+              <label class="opt"><input type="radio" name="gmpHeld" value="Yes"> Yes</label>
+              <label class="opt"><input type="radio" name="gmpHeld" value="No"> No</label>
+              <label class="opt"><input type="radio" name="gmpHeld" value="Not applicable"> Not applicable</label>
+            </div>
+          </div>
+          <div class="cond" data-show-when="gmpHeld=Yes">
+            <div class="row">
+              <div class="field">
+                <label for="gmpLicenceNo">EU-GMP Licence Number</label>
+                <input type="text" id="gmpLicenceNo" name="gmpLicenceNo">
+              </div>
+              <div class="field">
+                <label for="gmpAuthority">Regulatory Authority Name</label>
+                <input type="text" id="gmpAuthority" name="gmpAuthority">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Document requirements</legend>
+          <p class="note">Please email copies to <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a> quoting your company name.</p>
+          <div class="row">
+            <div class="field" data-group="proofAttached" data-msg="Choose Yes or No">
+              <span class="label">Proof of Company Establishment <span class="req">*</span> <span class="hint">Have you attached the copy?</span></span>
+              <div class="options inline" role="radiogroup" aria-label="Proof of Company Establishment attached">
+                <label class="opt"><input type="radio" name="proofAttached" value="Yes"> Yes</label>
+                <label class="opt"><input type="radio" name="proofAttached" value="No"> No</label>
+              </div>
+            </div>
+            <div class="field" data-group="permitCertAttached" data-msg="Choose Yes or No">
+              <span class="label">Certificates of the ‘Human Medicines distribution permits License’ <span class="req">*</span> <span class="hint">Issued by the local authority. Have you attached the copy?</span></span>
+              <div class="options inline" role="radiogroup" aria-label="Distribution permit certificates attached">
+                <label class="opt"><input type="radio" name="permitCertAttached" value="Yes"> Yes</label>
+                <label class="opt"><input type="radio" name="permitCertAttached" value="No"> No</label>
+              </div>
+            </div>
+          </div>
+          <p class="note">Note: If the invoice and a delivery address are not the same, share the documents for both invoice and delivery site.</p>
+          <div class="field">
+            <label for="certVerification">Certification Verification Details <span class="req">*</span> <span class="hint">Web address (online) / regulatory body details / inspector details</span></label>
+            <textarea id="certVerification" name="certVerification" rows="3" required></textarea>
+          </div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 5: Declaration & signature ===== -->
+      <div class="step" data-title="Declaration &amp; signature">
+        <fieldset>
+          <legend>Declaration</legend>
+          <p class="note">A Company Director / GM / CEO must complete this section. (If the Director / CEO / GM is unable to complete it, a responsible person can sign with email authorisation from the Director / GM / CEO, which must be shared along with this form.)</p>
+          <div class="declaration">
+            <p>I am authorised to apply to open an account with Syrimed and I confirm that the information contained in this account application is accurate and correct. I confirm that I have read and accept the terms &amp; conditions of sales &amp; contract. I understand that all orders will be placed on those terms (or any terms later adopted by Syrimed and notified in writing).</p>
+          </div>
+
+          <div class="field consent" data-group="esignConsent" data-msg="Please tick this box before confirming your signature">
+            <label class="opt"><input type="checkbox" name="esignConsent" value="Yes">
+              <span>I agree to sign this application electronically. My signature applies to both the Account Opening Form (F/SALE/0015/006) and the Company Details form (F/SALE/0015/005). By typing my name and selecting “Confirm signature” I intend to sign and authenticate this application, and I understand this has the same effect as a handwritten signature. <span class="req">*</span></span>
+            </label>
+          </div>
+
+          <div class="field" data-group="signature" data-msg="Type your full name and select Confirm signature">
+            <label for="typedSignature">Proprietor’s / Director’s / GM / CEO Signature <span class="req">*</span></label>
+            <div class="sign-row">
+              <input type="text" id="typedSignature" name="typedSignature" autocomplete="name"
+                     placeholder="Type your full name" aria-describedby="sigHelp">
+              <button type="button" class="btn" id="confirmSig">Confirm signature</button>
+            </div>
+            <div class="sig-preview empty" id="sigPreview" aria-hidden="true">Your signature will appear here</div>
+            <div class="sig-stamp" id="sigStamp" role="status">
+              <span id="sigStampText"></span>
+              <button type="button" class="link" id="changeSig">Change</button>
+            </div>
+            <div class="sig-foot" id="sigHelp">Type your full name, then select Confirm signature. The date and time are recorded when you confirm.</div>
+            <input type="hidden" id="signatureData" name="signatureData">
+            <input type="hidden" id="signatureConfirmedAt" name="signatureConfirmedAt">
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="signName">Name</label>
+              <input type="text" id="signName" name="signName" readonly aria-readonly="true" aria-describedby="signNameHint">
+              <div class="sig-foot" id="signNameHint">Taken from your confirmed signature</div>
+            </div>
+            <div class="field">
+              <label for="signDate">Date</label>
+              <input type="text" id="signDate" name="signDate" readonly aria-readonly="true" aria-describedby="signDateHint">
+              <div class="sig-foot" id="signDateHint">Set automatically to today’s date</div>
+            </div>
+          </div>
+          <p class="evidence-note">When you confirm your signature and submit, we record the date and time, your IP address and your browser/device details. This is used only as evidence that you signed this application and is kept with your account records.</p>
+        </fieldset>
+      </div>
+
+      <div class="actions">
+        <p id="formMsg" role="alert">Please complete the highlighted fields.</p>
+        <div class="buttons">
+          <button type="button" class="btn secondary" id="backBtn" hidden>Back</button>
+          <button type="submit" class="btn" id="nextBtn">Continue</button>
+        </div>
+      </div>
+    </form>
+
+    <div id="done" tabindex="-1">
+      <h2>Thank you – application submitted</h2>
+      <p>Our credit control team will review your details and be in touch.</p>
+      <p>Questions? Email <a href="mailto:credit.control@syrimed.co.uk" style="color:#26358C">credit.control@syrimed.co.uk</a> or call +44 20 8728 7800.</p>
+
+      <div class="record">
+        <h3>Electronic signature record</h3>
+        <dl id="recordList"></dl>
+        <p>This record is logically associated with your signed application (Electronic Communications Act 2000, s.7; UK eIDAS Art. 25).</p>
+      </div>
+      <p id="pdfStatus" style="margin-top:22px">Preparing your completed application form (PDF)…</p>
+      <button type="button" class="btn" id="downloadPdf" disabled>Download completed form (PDF)</button>
+      <button type="button" class="btn secondary" id="printRecord">Print this record</button>
+    </div>
+
+  </div>
+
+  <div class="docfoot">
+    Parent SOP: SOP/SALE/0015 · Form Number: F/SALE/0015/006/v4 · Effective Date: 24 Jan 2025 · Review Date: 22 Jan 2027<br>
+    Form Number: F/SALE/0015/005/v4 · Effective Date: 12 Dec 2025 · Review Date: 10 Dec 2027
+  </div>
+</div>
+
+<script src="assets/pdf-lib.min.js"></script>
+<script src="assets/template-export-opening.js"></script>
+<script src="assets/template-export-details.js"></script>
+<script>
+(function () {
+  'use strict';
+  var form = document.getElementById('form');
+  var msg  = document.getElementById('formMsg');
+  var FORM_NUMBER = 'F/SALE/0015/006/v4 + F/SALE/0015/005/v4';
+
+  /* Who sent the customer this form (optional ?sentBy= in the link) */
+  var sentBy = (new URLSearchParams(location.search).get('sentBy') || '').trim().slice(0, 120);
+
+  /* ---------- Steps ----------
+     Five short steps. Continue checks only the step on screen; the last
+     step's button submits. Values stay in the page when going Back. */
+  var steps     = Array.prototype.slice.call(form.querySelectorAll('.step'));
+  var stepLabel = document.getElementById('stepLabel');
+  var backBtn   = document.getElementById('backBtn');
+  var nextBtn   = document.getElementById('nextBtn');
+  var current   = 0;
+  var LAST = steps.length - 1;
+
+  function showStep(n) {
+    current = n;
+    steps.forEach(function (s, i) { s.classList.toggle('active', i === n); });
+    stepLabel.textContent = 'Step ' + (n + 1) + ' of ' + steps.length + ' – ' + steps[n].getAttribute('data-title');
+    backBtn.hidden = n === 0;
+    nextBtn.textContent = n === LAST ? 'Submit application' : 'Continue';
+    msg.classList.remove('show');
+    if (n === LAST) { stampToday(); }
+    /* Back to the top of the sheet, so the new step starts in view */
+    var top = document.querySelector('.sheet').getBoundingClientRect().top + window.pageYOffset - 12;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    stepLabel.focus({ preventScroll: true });
+  }
+
+  backBtn.addEventListener('click', function () {
+    if (current > 0) { showStep(current - 1); }
+  });
+
+  /* ---------- Signature: typed name, confirmed with a timestamp ----------
+     The signer ticks consent, types their full name and selects
+     "Confirm signature". That click is the act of signing: the time is
+     recorded, the signature is locked and the printed Name is filled in.
+     The one signature is applied to both forms in the PDF. */
+  var typedSig   = document.getElementById('typedSignature');
+  var confirmBtn = document.getElementById('confirmSig');
+  var preview    = document.getElementById('sigPreview');
+  var stamp      = document.getElementById('sigStamp');
+  var sigInput   = document.getElementById('signatureData');
+  var sigAtInput = document.getElementById('signatureConfirmedAt');
+  var nameInput  = document.getElementById('signName');
+  var consentBox = form.querySelector('input[name=esignConsent]');
+  var SIG_FONT = '"Segoe Script","Brush Script MT","Lucida Handwriting","Apple Chancery","Snell Roundhand",cursive';
+  var PREVIEW_EMPTY = 'Your signature will appear here';
+  var signed = false;
+  var signedAt = null; /* when the signer confirmed the signature (UTC) */
+
+  function cleanName(v) { return v.replace(/\s+/g, ' ').trim(); }
+
+  typedSig.addEventListener('input', function () {
+    var v = cleanName(typedSig.value);
+    preview.textContent = v || PREVIEW_EMPTY;
+    preview.classList.toggle('empty', !v);
+  });
+
+  /* Enter confirms the signature instead of submitting the whole form */
+  typedSig.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (!signed) { confirmBtn.click(); } }
+  });
+
+  /* The typed name drawn in a script face, used as the signature image in the PDF */
+  function renderSignature(text) {
+    var c = document.createElement('canvas');
+    c.width = 900; c.height = 180;
+    var g = c.getContext('2d');
+    var size = 84;
+    g.font = size + 'px ' + SIG_FONT;
+    while (g.measureText(text).width > c.width - 40 && size > 30) {
+      size -= 4;
+      g.font = size + 'px ' + SIG_FONT;
+    }
+    g.fillStyle = '#1A1D29';
+    g.textBaseline = 'middle';
+    g.fillText(text, 20, c.height / 2);
+    return c.toDataURL('image/png');
+  }
+
+  confirmBtn.addEventListener('click', function () {
+    var v = cleanName(typedSig.value);
+    var sigField = typedSig.closest('.field');
+    var okConsent = consentBox.checked;
+    var okName = (v.match(/\p{L}/gu) || []).length >= 2;
+    mark(consentBox.closest('.field'), okConsent);
+    mark(sigField, okName);
+    if (!okConsent) { consentBox.focus(); return; }
+    if (!okName) { typedSig.focus(); return; }
+
+    signedAt = new Date();
+    signed = true;
+    typedSig.value = v;
+    typedSig.readOnly = true;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Signed';
+    preview.classList.add('signed');
+    sigInput.value = renderSignature(v);
+    sigAtInput.value = signedAt.toISOString();
+    nameInput.value = v;
+    document.getElementById('sigStampText').textContent =
+      '✓ Signed electronically by ' + v + ' on ' + ukTime(sigAtInput.value, true);
+    stamp.classList.add('show');
+    if (!form.querySelector('.step.active .invalid')) { msg.classList.remove('show'); }
+  });
+
+  function resetSignature() {
+    signed = false;
+    signedAt = null;
+    typedSig.readOnly = false;
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = 'Confirm signature';
+    preview.classList.remove('signed');
+    sigInput.value = '';
+    sigAtInput.value = '';
+    nameInput.value = '';
+    stamp.classList.remove('show');
+  }
+
+  document.getElementById('changeSig').addEventListener('click', function () {
+    resetSignature();
+    typedSig.focus();
+  });
+
+  /* Withdrawing consent withdraws the signature */
+  consentBox.addEventListener('change', function () {
+    if (!consentBox.checked && signed) { resetSignature(); }
+  });
+
+  /* ---------- Follow-up questions ----------
+     A .cond block with data-show-when="name=value" is shown only for that
+     answer ("Other – please specify", delivery address when "No", EU-GMP
+     details when "Yes"). Hidden blocks are skipped by validation and left
+     out of the submitted answers. */
+  var conds = Array.prototype.slice.call(form.querySelectorAll('.cond[data-show-when]'));
+  function updateConds() {
+    conds.forEach(function (c) {
+      var rule = c.getAttribute('data-show-when').split('=');
+      var picked = form.querySelector('input[name=' + rule[0] + ']:checked');
+      c.classList.toggle('show', !!picked && picked.value === rule[1]);
+    });
+  }
+  form.addEventListener('change', function (e) {
+    if (e.target.type === 'radio') { updateConds(); }
+  });
+
+  function isHidden(el) { return !!el.closest('.cond:not(.show)'); }
+
+  /* ---------- Values asked once, reused on the Company Details form ----------
+     The destination field is filled from its source until the customer
+     types their own value into it; clearing it re-links it. */
+  function prefill(srcId, dstId, transform) {
+    var src = document.getElementById(srcId), dst = document.getElementById(dstId);
+    dst.addEventListener('input', function () { dst.setAttribute('data-edited', dst.value ? '1' : ''); });
+    function sync() {
+      if (dst.getAttribute('data-edited') === '1') { return; }
+      dst.value = transform ? transform(src.value) : src.value.trim();
+      recheck(dst.closest('.field'));
+    }
+    src.addEventListener('input', sync);
+    src.addEventListener('change', sync);
+  }
+  prefill('dateCommenced', 'establishedYear', function (v) { return /^\d{4}-/.test(v) ? v.slice(0, 4) : ''; });
+  prefill('dirName', 'detDirectorName');
+  prefill('dirEmail', 'detDirectorEmail');
+
+  /* ---------- Validation ---------- */
+  function isValid(field) {
+    var group = field.getAttribute('data-group');
+    if (group === 'signature') { return signed; }
+    if (group) {
+      var picked = field.querySelector('input[name=' + group + ']:checked');
+      if (!picked) { return false; }
+      var other = field.querySelector('[data-other-for=' + group + ']');
+      if (other && picked.value === 'Other') { return other.value.trim() !== ''; }
+      return true;
+    }
+    var ok = true;
+    field.querySelectorAll('input,textarea').forEach(function (c) {
+      if (!c.checkValidity() || (c.required && !c.value.trim())) { ok = false; }
+    });
+    var yr = field.querySelector('#establishedYear');
+    if (yr && yr.value && Number(yr.value) > new Date().getFullYear()) { ok = false; }
+    return ok;
+  }
+
+  function message(field) {
+    if (field.getAttribute('data-msg')) { return field.getAttribute('data-msg'); }
+    var c = field.querySelector('input,textarea');
+    if (c && c.value.trim() && c.getAttribute('data-invalid-msg')) { return c.getAttribute('data-invalid-msg'); }
+    if (c && c.type === 'email' && c.value.trim()) { return 'Enter a valid email address'; }
+    if (c && c.type === 'number' && (c.value.trim() || c.validity.badInput)) { return 'Enter a number (0 or more)'; }
+    return 'This field is required';
+  }
+
+  function mark(field, ok) {
+    field.classList.toggle('invalid', !ok);
+    var err = field.querySelector(':scope > .error');
+    if (!ok) {
+      if (!err) { err = document.createElement('div'); err.className = 'error'; field.appendChild(err); }
+      err.textContent = message(field);
+    }
+    field.querySelectorAll('input,textarea').forEach(function (c) { c.setAttribute('aria-invalid', ok ? 'false' : 'true'); });
+  }
+
+  function recheck(field) {
+    if (field && field.classList.contains('invalid')) { mark(field, isValid(field)); }
+    if (!form.querySelector('.step.active .invalid')) { msg.classList.remove('show'); }
+  }
+  form.addEventListener('input', function (e) { recheck(e.target.closest('.field')); });
+  form.addEventListener('change', function (e) { recheck(e.target.closest('.field')); });
+
+  /* Checks every field in one step; returns the first field with a problem */
+  function checkStep(step) {
+    var first = null;
+    step.querySelectorAll('.field').forEach(function (field) {
+      if (isHidden(field)) { mark(field, true); return; }
+      var needsCheck = field.hasAttribute('data-group') || field.querySelector('[required],[type=email],[type=number],[pattern]');
+      if (!needsCheck) { return; }
+      var ok = isValid(field);
+      mark(field, ok);
+      if (!ok && !first) { first = field; }
+    });
+    return first;
+  }
+
+  function showProblem(field) {
+    msg.classList.add('show');
+    field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    var f = field.querySelector('input:not([type=hidden]),textarea');
+    if (f) { f.focus({ preventScroll: true }); }
+  }
+
+  /* ---------- Continue / Submit ---------- */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    if (current < LAST) {
+      var bad = checkStep(steps[current]);
+      if (bad) { showProblem(bad); return; }
+      showStep(current + 1);
+      return;
+    }
+
+    /* Final step: check every step again, in order */
+    for (var i = 0; i < steps.length; i++) {
+      var first = checkStep(steps[i]);
+      if (first) {
+        if (i !== current) { showStep(i); }
+        showProblem(first);
+        return;
+      }
+    }
+
+    nextBtn.disabled = true;
+    backBtn.disabled = true;
+    nextBtn.textContent = 'Submitting…';
+    stampToday();
+
+    var answers = {};
+    new FormData(form).forEach(function (v, k) { answers[k] = typeof v === 'string' ? v.trim() : v; });
+    /* Answers to follow-up questions that no longer apply are left out */
+    form.querySelectorAll('.cond:not(.show) [name]').forEach(function (el) { delete answers[el.name]; });
+
+    buildEvidence(answers).then(function (evidence) {
+      /* Not yet connected to a destination. `application` holds every
+         answer plus the signature evidence, ready to send to a backend. */
+      var application = { answers: answers, evidence: evidence };
+      console.log('Syri export account application', application);
+
+      showRecord(evidence);
+      form.style.display = 'none';
+      var done = document.getElementById('done');
+      done.classList.add('show');
+      done.focus();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      makeFilledPdf(answers, evidence).then(function (result) {
+        application.pdfFileName = result.name;
+        offerPdf(result);
+      }).catch(function (err) {
+        console.error('PDF generation failed', err);
+        document.getElementById('pdfStatus').textContent =
+          'Your application was submitted, but the PDF copy could not be created in this browser.';
+      });
+    });
+  });
+
+  /* =====================================================================
+     Completed-application PDF
+     The two controlled Word forms (exported to PDF, assets/template-
+     export-opening.js and assets/template-export-details.js) are the
+     background; answers are written into their cells. Output: the three
+     006 pages, then the 005 page, then the signature record.
+     Coordinates are in PDF points measured from the TOP-LEFT of an A4
+     page, taken from the exported templates. If a Word form layout
+     changes, re-export its template and re-measure these boxes.
+     ===================================================================== */
+  var PAGE_H = 841.92;
+  var LAYOUT = {
+    o1: {                                 /* 006 page 1: Section A */
+      companyRegNo:    [205.5, 175.6, 568.1, 201.3],
+      companyRegName:  [205.5, 201.3, 568.1, 226.8],
+      tradingName:     [205.5, 226.8, 568.1, 252.4],
+      businessType: {                     /* the ☐ after each option */
+        'Public Limited':  [264.2, 260.7, 272.2, 268.8],
+        'Private Limited': [338.0, 260.7, 346.0, 268.8],
+        'Partnership':     [397.5, 260.7, 405.5, 268.8],
+        'Sole Trader':     [454.8, 260.7, 462.8, 268.8],
+        'Other':           [465.6, 259.6, 492.0, 269.3]   /* the word "Other:" (no box) */
+      },
+      businessTypeOther: [492.5, 252.6, 568.1, 269.5],   /* written on the "Other: ____" line */
+      vatNumber:       [205.5, 278.1, 568.1, 303.7],
+      dateCommenced:   [205.5, 303.7, 568.1, 328.9],
+      businessRegNo:   [205.5, 328.9, 568.1, 354.4],
+      permitLicenceNo: [205.4, 354.4, 568.1, 388.5],
+      /* Invoice address (left) and delivery address (right) columns */
+      invCompany:      [110.0, 419.7, 295.9, 443.3],
+      invLines: [[79.0, 443.3, 295.9, 458.9], [42.7, 458.9, 295.9, 474.5], [42.7, 474.5, 295.9, 490.1],
+                 [42.7, 490.1, 295.9, 505.8], [42.7, 505.8, 295.9, 521.3], [42.7, 521.3, 295.9, 537.0]],
+      deliverySameYes: [459.5, 421.4, 467.5, 429.5],
+      deliverySameNo:  [495.2, 421.4, 503.3, 429.5],
+      delCompany:      [363.5, 443.3, 568.1, 458.9],
+      delLines: [[332.5, 458.9, 568.1, 474.5], [296.2, 474.5, 568.1, 490.1], [296.2, 490.1, 568.1, 505.8],
+                 [296.2, 505.8, 568.1, 521.3], [296.2, 521.3, 568.1, 537.0]],
+      dirName:         [205.5, 552.5, 568.1, 577.5],
+      dirAddress:      [205.5, 577.5, 568.1, 602.6],
+      dirEmail:        [205.5, 602.6, 568.1, 627.6],
+      dirPhone:        [205.5, 627.6, 568.1, 652.3],
+      proofYes:        [226.6, 694.2, 234.6, 702.3],
+      proofNo:         [261.0, 694.2, 269.1, 702.3]
+    },
+    o2: {                                 /* 006 page 2: documents, declaration */
+      permitCertYes:    [223.9, 127.6, 231.9, 135.7],
+      permitCertNo:     [255.4, 127.6, 263.5, 135.7],
+      certVerification: [205.5, 181.9, 568.1, 217.6],
+      signature:        [145.3, 358.5, 301.4, 401.7],
+      signName:         [329.7, 358.5, 457.7, 401.7],
+      signDate:         [485.6, 358.5, 556.5, 401.7]
+      /* Sections B and C (page 2) and page 3 are for Syrimed use: left blank */
+    },
+    d: {                                  /* 005 Company Details, one page */
+      regName:        [355.4, 128.7, 554.1, 144.1],
+      tradingName:    [355.4, 144.1, 554.1, 159.6],
+      address:        [355.4, 159.6, 554.1, 175.2],
+      establishedYear:[355.4, 175.2, 554.1, 190.7],
+      typeOfCompany:  [355.4, 190.7, 554.1, 206.2],
+      activity:       [355.4, 206.2, 554.1, 221.7],
+      manufacturing:  [355.4, 221.7, 554.1, 237.1],
+      distribution:   [355.4, 237.1, 554.1, 252.7],
+      employees:      [355.4, 252.7, 554.1, 268.2],
+      chairman:       [355.4, 309.4, 554.1, 324.9],
+      directorName:   [355.4, 324.9, 554.1, 340.4],
+      directorEmail:  [355.4, 340.4, 554.1, 355.8],
+      shareholders:   [[355.4, 355.8, 554.1, 369.8], [355.4, 369.8, 554.1, 382.6]],
+      revenue: [                          /* [year written over "Y1: ____", revenue / currency] */
+        [[54.0, 424.6, 180.0, 440.8], [355.4, 424.6, 554.1, 440.8]],
+        [[54.0, 440.8, 180.0, 457.0], [355.4, 440.8, 554.1, 457.0]],
+        [[54.0, 457.0, 180.0, 473.2], [355.4, 457.0, 554.1, 473.2]]
+      ],
+      ukYes:          [379.1, 519.6, 389.1, 529.6],
+      ukNo:           [410.0, 519.6, 419.9, 529.6],
+      maCount:        [355.4, 531.1, 558.5, 556.0],
+      permitYes:      [381.4, 611.5, 391.4, 621.4],
+      permitLicence:  [355.4, 622.9, 557.3, 636.1],
+      permitAuthority:[355.4, 636.1, 557.3, 651.2],
+      gmpHeld:        [355.4, 651.2, 557.3, 666.3],
+      gmpLicence:     [355.4, 666.3, 557.3, 681.5],
+      gmpAuthority:   [355.4, 681.5, 557.3, 696.6],
+      printName:      [36.4, 736.1, 200.0, 755.3],   /* Section F */
+      signature:      [200.0, 736.1, 426.2, 755.3],
+      date:           [426.2, 736.1, 553.9, 755.3]
+    }
+  };
+
+  /* 006 Business Type → 005 Type of company (Public / Private / Partnership / Other) */
+  var TYPE_OF_COMPANY = {
+    'Public Limited': 'Public', 'Private Limited': 'Private', 'Partnership': 'Partnership', 'Sole Trader': 'Other – Sole Trader'
+  };
+
+  function makeFilledPdf(answers, evidence) {
+    if (!window.PDFLib || !window.SYRI_EXPORT_OPENING_TEMPLATE || !window.SYRI_EXPORT_DETAILS_TEMPLATE) {
+      return Promise.reject(new Error('PDF library or templates not loaded'));
+    }
+    var L = window.PDFLib;
+    var INK = L.rgb(0.05, 0.05, 0.12);
+    var NAVY = L.rgb(0.149, 0.208, 0.549);
+    function bytesOf(b64) { return Uint8Array.from(atob(b64), function (c) { return c.charCodeAt(0); }); }
+
+    return Promise.all([
+      L.PDFDocument.load(bytesOf(window.SYRI_EXPORT_OPENING_TEMPLATE)),
+      L.PDFDocument.load(bytesOf(window.SYRI_EXPORT_DETAILS_TEMPLATE))
+    ]).then(function (docs) {
+      var pdf = docs[0], details = docs[1];
+      return Promise.all([
+        pdf.embedFont(L.StandardFonts.Helvetica),
+        pdf.embedFont(L.StandardFonts.HelveticaBold),
+        sigInput.value ? pdf.embedPng(sigInput.value) : null,
+        pdf.embedPng(document.querySelector('.brand img').src),
+        pdf.copyPages(details, [0])       /* the 005 page goes after the 006 pages */
+      ]).then(function (res) {
+        var font = res[0], bold = res[1], sigImg = res[2], logo = res[3];
+        pdf.addPage(res[4][0]);
+
+        /* Only characters the standard PDF font can encode */
+        function safe(s) {
+          return Array.from(String(s == null ? '' : s)).map(function (ch) {
+            if (ch === '\n') { return ch; }
+            try { font.encodeText(ch); return ch; } catch (e) { return '?'; }
+          }).join('');
+        }
+
+        /* Text in a cell: vertically centred, shrinks to fit (width and height), wraps up to maxLines */
+        function put(page, box, text, maxLines, f) {
+          f = f || font;
+          text = safe(text).replace(/\s*\n\s*/g, maxLines > 1 ? '\n' : ', ').trim();
+          if (!text) { return; }
+          var x = box[0] + 5, w = box[2] - box[0] - 10, h = box[3] - box[1];
+          var size = 9.5, lines;
+          for (;;) {
+            lines = wrap(text, f, size, w);
+            var fits = lines.length <= (maxLines || 1) && size * (1.25 * (lines.length - 1) + 0.95) <= h - 2 &&
+              lines.every(function (ln) { return f.widthOfTextAtSize(ln, size) <= w; });
+            if (fits || size <= 6) { break; }
+            size -= 0.5;
+          }
+          lines = lines.slice(0, maxLines || 1);
+          lines = lines.map(function (ln) {
+            while (f.widthOfTextAtSize(ln, size) > w && ln.length > 1) { ln = ln.slice(0, -2) + '…'; }
+            return ln;
+          });
+          var lh = size * 1.25, blockH = lh * (lines.length - 1) + size * 0.72;
+          var top = box[1] + (h - blockH) / 2 + size * 0.72;
+          lines.forEach(function (ln, i) {
+            page.drawText(ln, { x: x, y: PAGE_H - (top + i * lh), size: size, font: f, color: INK });
+          });
+        }
+
+        function wrap(text, f, size, width) {
+          var out = [];
+          text.split('\n').forEach(function (para) {
+            var line = '';
+            para.split(/\s+/).forEach(function (word) {
+              var tryLine = line ? line + ' ' + word : word;
+              if (f.widthOfTextAtSize(tryLine, size) <= width || !line) { line = tryLine; }
+              else { out.push(line); line = word; }
+            });
+            out.push(line);
+          });
+          return out;
+        }
+
+        function tick(page, cx, cy, s) {
+          s = s || 5;
+          var y = function (v) { return PAGE_H - v; };
+          page.drawLine({ start: { x: cx - s, y: y(cy) }, end: { x: cx - s * 0.3, y: y(cy + s * 0.75) }, thickness: 1.5, color: INK });
+          page.drawLine({ start: { x: cx - s * 0.3, y: y(cy + s * 0.75) }, end: { x: cx + s, y: y(cy - s * 0.9) }, thickness: 1.5, color: INK });
+        }
+
+        /* A tick inside a ☐ box */
+        function tickBox(page, box) {
+          tick(page, (box[0] + box[2]) / 2, (box[1] + box[3]) / 2, 4);
+        }
+
+        function ring(page, box) {
+          page.drawEllipse({
+            x: (box[0] + box[2]) / 2, y: PAGE_H - (box[1] + box[3]) / 2,
+            xScale: (box[2] - box[0]) / 2 + 3, yScale: (box[3] - box[1]) / 2 + 1.5,
+            borderColor: INK, borderWidth: 1
+          });
+        }
+
+        /* Typed signature image fitted in a cell, "E-signed <time>" beside or beneath it */
+        function signIn(page, box, beside) {
+          if (!sigImg) { return; }
+          var pad = beside ? 2 : 4, stampText = safe('E-signed ' + ukTime(evidence.signatureCapturedAt, true));
+          var cw = box[2] - box[0], ch = box[3] - box[1];
+          if (beside) {
+            var d1 = sigImg.scaleToFit(cw * 0.5, ch - pad * 2);
+            page.drawImage(sigImg, { x: box[0] + pad, y: PAGE_H - (box[1] + (ch + d1.height) / 2), width: d1.width, height: d1.height });
+            page.drawText(stampText, { x: box[0] + cw * 0.5 + 6, y: PAGE_H - (box[1] + ch / 2 + 2), size: 5.5, font: font, color: INK });
+            return;
+          }
+          var stampH = 9;
+          var d2 = sigImg.scaleToFit(cw - pad * 2, ch - pad * 2 - stampH);
+          page.drawImage(sigImg, { x: box[0] + pad, y: PAGE_H - (box[1] + pad + d2.height), width: d2.width, height: d2.height });
+          page.drawText(stampText, { x: box[0] + pad + 1, y: PAGE_H - (box[3] - 4), size: 5.5, font: font, color: INK });
+        }
+
+        /* Address lines, one per row: street lines, town, region + post code, country */
+        function addressLines(p) {
+          return [
+            answers[p + 'Addr1'], answers[p + 'Addr2'], answers[p + 'Town'],
+            [answers[p + 'Region'], answers[p + 'Postcode']].filter(Boolean).join(', '),
+            answers[p + 'Country']
+          ].filter(Boolean);
+        }
+
+        function ukDate(iso) {
+          if (!iso) { return ''; }
+          var p = iso.split('-');
+          return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : iso;
+        }
+        function amount(v, cur) {
+          if (v === '' || v == null) { return cur || ''; }
+          return Number(v).toLocaleString('en-GB', { maximumFractionDigits: 2 }) + (cur ? ' ' + cur.toUpperCase() : '');
+        }
+        function withOther(value, other) { return value === 'Other' && other ? 'Other – ' + other : (value || ''); }
+
+        var pages = pdf.getPages();
+        var O1 = LAYOUT.o1, O2 = LAYOUT.o2, D = LAYOUT.d;
+
+        /* ---- 006 page 1 ---- */
+        var p1 = pages[0];
+        put(p1, O1.companyRegNo, answers.companyRegNo, 1);
+        put(p1, O1.companyRegName, answers.companyRegName, 1);
+        put(p1, O1.tradingName, answers.tradingName, 1);
+        var bt = O1.businessType[answers.businessType];
+        if (bt) {
+          if (answers.businessType === 'Other') {
+            ring(p1, bt);
+            put(p1, O1.businessTypeOther, answers.businessTypeOther, 2);
+          } else {
+            tickBox(p1, bt);
+          }
+        }
+        put(p1, O1.vatNumber, answers.vatNumber, 1);
+        put(p1, O1.dateCommenced, ukDate(answers.dateCommenced), 1);
+        put(p1, O1.businessRegNo, answers.businessRegNo, 1);
+        put(p1, O1.permitLicenceNo, answers.permitLicenceNo, 2);
+
+        put(p1, O1.invCompany, answers.invCompany, 1);
+        addressLines('inv').forEach(function (ln, i) { if (O1.invLines[i]) { put(p1, O1.invLines[i], ln, 1); } });
+        if (answers.deliverySame === 'Yes') { tickBox(p1, O1.deliverySameYes); }
+        if (answers.deliverySame === 'No') {
+          tickBox(p1, O1.deliverySameNo);
+          put(p1, O1.delCompany, answers.delCompany, 1);
+          addressLines('del').forEach(function (ln, i) { if (O1.delLines[i]) { put(p1, O1.delLines[i], ln, 1); } });
+        }
+
+        put(p1, O1.dirName, answers.dirName, 1);
+        put(p1, O1.dirAddress, [answers.dirAddr1, answers.dirTown, answers.dirPostcode, answers.dirCountry].filter(Boolean).join(', '), 2);
+        put(p1, O1.dirEmail, answers.dirEmail, 1);
+        put(p1, O1.dirPhone, answers.dirPhone, 1);
+        if (answers.proofAttached === 'Yes') { tickBox(p1, O1.proofYes); }
+        if (answers.proofAttached === 'No') { tickBox(p1, O1.proofNo); }
+
+        /* ---- 006 page 2 ---- */
+        var p2 = pages[1];
+        if (answers.permitCertAttached === 'Yes') { tickBox(p2, O2.permitCertYes); }
+        if (answers.permitCertAttached === 'No') { tickBox(p2, O2.permitCertNo); }
+        put(p2, O2.certVerification, answers.certVerification, 3);
+        signIn(p2, O2.signature, false);
+        put(p2, O2.signName, answers.signName, 2);
+        put(p2, O2.signDate, answers.signDate, 1);
+
+        /* ---- 005 Company Details (last page so far, after the 006 pages) ---- */
+        var pd = pages[pages.length - 1];
+        put(pd, D.regName, answers.companyRegName, 1);
+        put(pd, D.tradingName, answers.tradingName, 1);
+        put(pd, D.address, addressLines('inv').join(', '), 2);
+        put(pd, D.establishedYear, answers.establishedYear, 1);
+        put(pd, D.typeOfCompany, answers.businessType === 'Other'
+          ? withOther('Other', answers.businessTypeOther) : TYPE_OF_COMPANY[answers.businessType], 2);
+        put(pd, D.activity, withOther(answers.businessActivity, answers.businessActivityOther), 2);
+        put(pd, D.manufacturing, answers.manufacturingSites, 2);
+        put(pd, D.distribution, answers.distributionSites, 2);
+        put(pd, D.employees, answers.employees, 1);
+
+        put(pd, D.chairman, answers.chairmanName, 1);
+        put(pd, D.directorName, answers.detDirectorName, 1);
+        put(pd, D.directorEmail, answers.detDirectorEmail, 1);
+        /* Other shareholders: two rows on the form, names shared between them */
+        var holders = (answers.otherShareholders || '').split(/\n+/).map(function (s) { return s.trim(); }).filter(Boolean);
+        var half = Math.ceil(holders.length / 2);
+        put(pd, D.shareholders[0], holders.slice(0, half).join(', '), 1);
+        put(pd, D.shareholders[1], holders.slice(half).join(', '), 1);
+
+        D.revenue.forEach(function (cells, i) {
+          var n = 'y' + (i + 1);
+          put(pd, cells[0], answers[n + 'Year'], 1);
+          put(pd, cells[1], amount(answers[n + 'Revenue'], answers[n + 'Currency']), 1);
+        });
+
+        if (answers.ukEngagement === 'Yes') { tickBox(pd, D.ukYes); }
+        if (answers.ukEngagement === 'No') { tickBox(pd, D.ukNo); }
+        put(pd, D.maCount, answers.maCount, 2);
+
+        /* A distribution permit licence number is required, so "Do you hold…" is Yes */
+        if (answers.permitLicenceNo) { tickBox(pd, D.permitYes); }
+        put(pd, D.permitLicence, answers.permitLicenceNo, 1);
+        put(pd, D.permitAuthority, answers.permitAuthority, 1);
+        put(pd, D.gmpHeld, answers.gmpHeld, 1);
+        put(pd, D.gmpLicence, answers.gmpLicenceNo, 1);
+        put(pd, D.gmpAuthority, answers.gmpAuthority, 1);
+
+        put(pd, D.printName, answers.signName, 1);
+        signIn(pd, D.signature, true);
+        put(pd, D.date, answers.signDate, 1);
+
+        /* ---- Appendix: electronic signature record ---- */
+        var rec = pdf.addPage([595.32, PAGE_H]);
+        var ld = logo.scaleToFit(110, 40);
+        rec.drawImage(logo, { x: 50, y: PAGE_H - 50 - ld.height, width: ld.width, height: ld.height });
+        rec.drawText('Electronic Signature Record', { x: 50, y: PAGE_H - 120, size: 16, font: bold, color: NAVY });
+        rec.drawText(safe('Appendix to Export Account Application ' + evidence.formNumber + ', generated automatically on submission.'),
+          { x: 50, y: PAGE_H - 138, size: 9, font: font, color: INK });
+
+        var rows = [
+          ['Signed by', evidence.signerName + (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
+          ['Documents signed', evidence.documentsSigned],
+          ['Signature method', evidence.signatureMethod],
+          ['Typed signature', evidence.typedSignature],
+          ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
+          ['Submitted', ukTime(evidence.submittedAt)],
+          ['Signer time zone', evidence.timeZone],
+          ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
+          ['Browser / device', evidence.userAgent],
+          ['Screen / language', evidence.screen + ' / ' + evidence.language],
+          ['Page', evidence.pageUrl]
+        ];
+        if (evidence.formSentBy) { rows.push(['Form sent by', evidence.formSentBy]); }
+        rows.push(
+          ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
+          ['Integrity hash (SHA-256)', evidence.sha256]
+        );
+        var y = 165, labelW = 130, valW = 545 - 50 - labelW - 10;
+        rows.forEach(function (r) {
+          var vl = wrap(safe(r[1]), font, 9, valW);
+          var hh = Math.max(1, vl.length) * 12 + 10;
+          rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
+          rec.drawText(r[0], { x: 50, y: PAGE_H - (y + 15), size: 9, font: bold, color: NAVY });
+          vl.forEach(function (ln, i) {
+            rec.drawText(ln, { x: 50 + labelW + 10, y: PAGE_H - (y + 15 + i * 12), size: 9, font: font, color: INK });
+          });
+          y += hh;
+        });
+        rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
+
+        if (sigImg) {
+          rec.drawText('Signature', { x: 50, y: PAGE_H - (y + 24), size: 9, font: bold, color: NAVY });
+          var sd = sigImg.scaleToFit(260, 90);
+          rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: L.rgb(0.8, 0.82, 0.88), borderWidth: 0.5 });
+          rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105), width: sd.width, height: sd.height });
+          y += 125;
+        }
+
+        var legal = 'This document was signed electronically. The signer consented to sign electronically, typed their name ' +
+          'and confirmed it as their signature at the time shown; one confirmed signature applies to both forms in this ' +
+          'document. A name applied with the intention to authenticate is a valid electronic signature in England and Wales. ' +
+          'The signature is logically associated with the application data above and is admissible as evidence under ' +
+          'section 7 of the Electronic Communications Act 2000; under Article 25(1) of UK eIDAS it may not be denied legal ' +
+          'effect solely because it is in electronic form. The integrity hash is calculated over the submitted answers and ' +
+          'this record, so any later alteration can be detected.';
+        wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
+          rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: L.rgb(0.35, 0.37, 0.45) });
+        });
+        rec.drawText('Parent SOP: SOP/SALE/0015  |  Form Numbers: F/SALE/0015/006/v4 + F/SALE/0015/005/v4  |  Appendix: signature record',
+          { x: 50, y: 40, size: 8, font: font, color: L.rgb(0.35, 0.37, 0.45) });
+
+        pdf.setTitle('Export Account Application - ' + safe(answers.companyRegName));
+        pdf.setSubject('Syri Ltd. export customer account application (' + FORM_NUMBER + ')');
+        pdf.setAuthor(safe(answers.signName));
+        pdf.setCreator('Syri Ltd. online account application');
+        pdf.setProducer('pdf-lib');
+        pdf.setCreationDate(new Date(evidence.submittedAt));
+
+        return pdf.save();
+      }).then(function (bytes) {
+        var company = (answers.companyRegName || 'Application').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        return {
+          name: 'Syri-Export-Account-Application_' + company + '_' + evidence.submittedAt.slice(0, 10) + '.pdf',
+          blob: new Blob([bytes], { type: 'application/pdf' })
+        };
+      });
+    });
+  }
+
+  function offerPdf(result) {
+    var url = URL.createObjectURL(result.blob);
+    var btn = document.getElementById('downloadPdf');
+    function download() {
+      var a = document.createElement('a');
+      a.href = url; a.download = result.name;
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+    btn.disabled = false;
+    btn.onclick = download;
+    document.getElementById('pdfStatus').textContent =
+      'Your completed application form (' + result.name + ') has been downloaded. Keep it for your records.';
+    download();
+  }
+
+  /* ---------- Signature evidence ----------
+     A typed name confirmed by the signer is a simple electronic signature.
+     It is valid where applied with intent to authenticate (Law Commission
+     2019), admissible (ECA 2000 s.7) and cannot be denied legal effect for
+     being electronic (UK eIDAS Art. 25). Its weight depends on showing who
+     signed, when, what they signed and that they intended to sign, so we
+     record that.
+     NOTE: a browser cannot see its own public IP. Here it is looked up
+     from a third-party service at submit time (client-reported). Once
+     submissions go to a server, record the IP and time server-side as
+     the authoritative values. */
+  var IP_LOOKUP_URL = 'https://api.ipify.org?format=json';
+
+  function lookupIp() {
+    var timeout = new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 4000); });
+    var lookup = fetch(IP_LOOKUP_URL, { cache: 'no-store' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return j && j.ip ? j.ip : null; })
+      .catch(function () { return null; });
+    return Promise.race([lookup, timeout]);
+  }
+
+  function sha256(text) {
+    if (!(window.crypto && crypto.subtle && window.TextEncoder)) { return Promise.resolve(null); }
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(text)).then(function (buf) {
+      return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+        return b.toString(16).padStart(2, '0');
+      }).join('');
+    }).catch(function () { return null; });
+  }
+
+  function canonical(obj) {
+    return JSON.stringify(Object.keys(obj).sort().reduce(function (o, k) { o[k] = obj[k]; return o; }, {}));
+  }
+
+  function buildEvidence(answers) {
+    var submittedAt = new Date();
+    return lookupIp().then(function (ip) {
+      var evidence = {
+        signerName: answers.signName,
+        signerCompany: answers.companyRegName,
+        documentsSigned: 'Account Opening Form - Export (F/SALE/0015/006/v4) and Company Details - Export (F/SALE/0015/005/v4)',
+        signatureMethod: 'Typed name, confirmed by the signer ("Confirm signature")',
+        typedSignature: answers.typedSignature,
+        signatureCapturedAt: (signedAt || submittedAt).toISOString(),
+        submittedAt: submittedAt.toISOString(),
+        timeZone: (Intl.DateTimeFormat().resolvedOptions().timeZone) || 'unknown',
+        ipAddress: ip || 'unavailable',
+        ipSource: ip ? 'client-reported via api.ipify.org' : 'lookup failed',
+        userAgent: navigator.userAgent,
+        language: navigator.language,
+        screen: screen.width + 'x' + screen.height,
+        pageUrl: location.href,
+        formNumber: FORM_NUMBER,
+        formSentBy: sentBy,
+        consentToSignElectronically: answers.esignConsent === 'Yes',
+        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim()
+      };
+      /* Hash of the answers + evidence, so any later change to the record is detectable */
+      return sha256(canonical(answers) + canonical(evidence)).then(function (hash) {
+        evidence.sha256 = hash || 'unavailable';
+        return evidence;
+      });
+    });
+  }
+
+  /* UK local time; the full form also shows the exact UTC value */
+  function ukTime(iso, short) {
+    var d = new Date(iso);
+    var local = d.toLocaleString('en-GB', {
+      timeZone: 'Europe/London', day: '2-digit', month: 'short', year: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', timeZoneName: 'short'
+    });
+    return short ? local : local + ' (' + iso + ')';
+  }
+
+  function showRecord(ev) {
+    var rows = [
+      ['Signed by', ev.signerName + (ev.signerCompany ? ', ' + ev.signerCompany : '')],
+      ['Signature', null],
+      ['Signature method', ev.signatureMethod],
+      ['Signature confirmed', ukTime(ev.signatureCapturedAt)],
+      ['Submitted', ukTime(ev.submittedAt)],
+      ['IP address', ev.ipAddress],
+      ['Browser / device', ev.userAgent],
+      ['Consent to e-sign', ev.consentToSignElectronically ? 'Given' : 'Not given'],
+      ['Forms', ev.formNumber],
+      ['Integrity hash (SHA-256)', ev.sha256]
+    ];
+    var dl = document.getElementById('recordList');
+    dl.innerHTML = '';
+    rows.forEach(function (row) {
+      var dt = document.createElement('dt'); dt.textContent = row[0];
+      var dd = document.createElement('dd');
+      if (row[1] === null) {
+        var img = document.createElement('img');
+        img.src = sigInput.value; img.alt = 'Captured signature';
+        dd.appendChild(img);
+      } else {
+        dd.textContent = row[1];
+      }
+      dl.appendChild(dt); dl.appendChild(dd);
+    });
+  }
+
+  document.getElementById('printRecord').addEventListener('click', function () { window.print(); });
+
+  /* Signing date is always today's date and cannot be edited.
+     It is set again at submission, so it reflects the day the form is sent. */
+  function stampToday() {
+    document.getElementById('signDate').value = new Date().toLocaleDateString('en-GB', {
+      timeZone: 'Europe/London', day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+  }
+  stampToday();
+  updateConds();
+}());
+</script>
+</body>
+</html>
