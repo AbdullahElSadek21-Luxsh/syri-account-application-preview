@@ -448,6 +448,12 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
         </div>
       </fieldset>
 
+      <!-- Attachments: optional licence copies, plus GDP / CD copies for each additional address -->
+      <fieldset id="attachments">
+        <legend>Attachments <span class="hint" style="display:inline">Optional</span></legend>
+        <p class="att-intro">Attach up to 5 PDF, JPG or PNG files in total, max 3 MB each. Large photos are resized automatically.</p>
+      </fieldset>
+
       <div class="actions">
         <p id="formMsg" role="alert">Please complete the highlighted fields.</p>
         <div class="buttons">
@@ -479,6 +485,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 </div>
 
 <script src="assets/pdf-lib.min.js"></script>
+<script src="assets/attachments.js"></script>
 <script src="assets/form-template.js"></script>
 <script>
 (function () {
@@ -646,10 +653,46 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   });
   depots.addEventListener('click', function (e) {
     if (!e.target.classList.contains('remove')) { return; }
-    e.target.closest('.depot').remove();
+    var card = e.target.closest('.depot');
+    var removed = Array.prototype.indexOf.call(depots.querySelectorAll('.depot'), card) + 1;
+    card.remove();
+    /* Attachments follow their address: address 2 moves up if address 1 is removed */
+    ['Gdp', 'Cd'].forEach(function (k) {
+      if (removed === 1) { att.setFiles('depot1' + k, att.getFiles('depot2' + k)); }
+      att.setFiles('depot2' + k, []);
+    });
     renumber();
     addDepotBtn.focus();
   });
+
+  /* ---------- Attachments: GDP / CD copies for each additional address ---------- */
+  function depotCard(n) { return depots.querySelectorAll('.depot')[n - 1] || null; }
+  function depotBox(n, suffix) {
+    var c = depotCard(n);
+    return c ? c.querySelector('[name$="' + suffix + '"]') : null;
+  }
+  /* Optional copies of the licences in Section A (QA also checks them on the MHRA register) */
+  var LICENCE_HINT = 'Optional. Our QA team also checks your licence numbers on the MHRA register.';
+  var ATT_ITEMS = [
+    { id: 'wdaLicence', label: 'WDA licence', hint: LICENCE_HINT, required: false },
+    { id: 'gdpCertificate', label: 'GDP certificate', hint: LICENCE_HINT, required: false },
+    { id: 'cdLicence', label: 'CD licence', hint: LICENCE_HINT, required: false }
+  ];
+  [1, 2].forEach(function (n) {
+    [['Gdp', 'GdpSupplied', 'copy of GDP certificate', '"Copy of GDP supplied"'],
+     ['Cd', 'CdSupplied', 'copy of CD licence (if applicable)', '"Copy of CD licence supplied"']].forEach(function (d) {
+      ATT_ITEMS.push({
+        id: 'depot' + n + d[0],
+        label: 'Additional address ' + n + ' – ' + d[2],
+        hint: 'Required if ' + d[3] + ' is ticked for this address.',
+        showIf: function () { return !!depotCard(n); },
+        required: function () { var b = depotBox(n, d[1]); return !!(b && b.checked); },
+        onChange: function (count) { var b = depotBox(n, d[1]); if (b && count) { b.checked = true; } }
+      });
+    });
+  });
+  var att = SyriAttachments.mount(document.getElementById('attachments'), ATT_ITEMS);
+  var attFailed = [];
 
   /* ---------- Validation ---------- */
   function isValid(field) {
@@ -707,6 +750,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       mark(field, ok);
       if (!ok && !first) { first = field; }
     });
+    var attBad = att.validate();
+    if (attBad && !first) { first = attBad; }
 
     if (first) {
       msg.classList.add('show');
@@ -1016,69 +1061,73 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
             });
           }
 
-          /* ---- Appendix: electronic signature record ---- */
-          var rec = pdf.addPage([595.32, PAGE_H]);
-          var ld = logo.scaleToFit(110, 40);
-          rec.drawImage(logo, { x: 50, y: PAGE_H - 50 - ld.height, width: ld.width, height: ld.height });
-          rec.drawText('Electronic Signature Record', { x: 50, y: PAGE_H - 120, size: 16, font: bold, color: NAVY });
-          rec.drawText(safe('Appendix to Account Application Form ' + evidence.formNumber + ', generated automatically on submission.'),
-            { x: 50, y: PAGE_H - 138, size: 9, font: font, color: INK });
+          /* ---- Attachments, then the electronic signature record ---- */
+          return att.appendToPdf(pdf, L, font, bold).then(function (failed) {
+            attFailed = failed;
+            var rec = pdf.addPage([595.32, PAGE_H]);
+            var ld = logo.scaleToFit(110, 40);
+            rec.drawImage(logo, { x: 50, y: PAGE_H - 50 - ld.height, width: ld.width, height: ld.height });
+            rec.drawText('Electronic Signature Record', { x: 50, y: PAGE_H - 120, size: 16, font: bold, color: NAVY });
+            rec.drawText(safe('Appendix to Account Application Form ' + evidence.formNumber + ', generated automatically on submission.'),
+              { x: 50, y: PAGE_H - 138, size: 9, font: font, color: INK });
 
-          var rows = [
-            ['Signed by', evidence.signerName + (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
-            ['Signature method', evidence.signatureMethod],
-            ['Typed signature', evidence.typedSignature],
-            ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
-            ['Submitted', ukTime(evidence.submittedAt)],
-            ['Signer time zone', evidence.timeZone],
-            ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
-            ['Browser / device', evidence.userAgent],
-            ['Screen / language', evidence.screen + ' / ' + evidence.language],
-            ['Page', evidence.pageUrl],
-            ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
-            ['Integrity hash (SHA-256)', evidence.sha256]
-          ];
-          var y = 165, labelW = 130, valW = 545 - 50 - labelW - 10;
-          rows.forEach(function (r) {
-            var vl = wrap(safe(r[1]), font, 9, valW);
-            var hh = Math.max(1, vl.length) * 12 + 10;
-            rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
-            rec.drawText(r[0], { x: 50, y: PAGE_H - (y + 15), size: 9, font: bold, color: NAVY });
-            vl.forEach(function (ln, i) {
-              rec.drawText(ln, { x: 50 + labelW + 10, y: PAGE_H - (y + 15 + i * 12), size: 9, font: font, color: INK });
+            var rows = [
+              ['Signed by', evidence.signerName + (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
+              ['Signature method', evidence.signatureMethod],
+              ['Typed signature', evidence.typedSignature],
+              ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
+              ['Submitted', ukTime(evidence.submittedAt)],
+              ['Signer time zone', evidence.timeZone],
+              ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
+              ['Browser / device', evidence.userAgent],
+              ['Screen / language', evidence.screen + ' / ' + evidence.language],
+              ['Page', evidence.pageUrl],
+              ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
+              ['Attachments', attachmentList(evidence.attachments, true)],
+              ['Integrity hash (SHA-256)', evidence.sha256]
+            ];
+            var y = 165, labelW = 130, valW = 545 - 50 - labelW - 10;
+            rows.forEach(function (r) {
+              var vl = wrap(safe(r[1]), font, 9, valW);
+              var hh = Math.max(1, vl.length) * 12 + 10;
+              rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
+              rec.drawText(r[0], { x: 50, y: PAGE_H - (y + 15), size: 9, font: bold, color: NAVY });
+              vl.forEach(function (ln, i) {
+                rec.drawText(ln, { x: 50 + labelW + 10, y: PAGE_H - (y + 15 + i * 12), size: 9, font: font, color: INK });
+              });
+              y += hh;
             });
-            y += hh;
+            rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
+
+            if (sigImg) {
+              rec.drawText('Signature', { x: 50, y: PAGE_H - (y + 24), size: 9, font: bold, color: NAVY });
+              var sd = sigImg.scaleToFit(260, 90);
+              rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: L.rgb(0.8, 0.82, 0.88), borderWidth: 0.5 });
+              rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105), width: sd.width, height: sd.height });
+              y += 125;
+            }
+
+            var legal = 'This document was signed electronically. The signer consented to sign electronically, typed their name ' +
+              'and confirmed it as their signature at the time shown; a name applied with the intention to authenticate is a ' +
+              'valid electronic signature in England and Wales. The signature is logically associated with the application data ' +
+              'above and is admissible as evidence under section 7 of the Electronic Communications Act 2000; under Article 25(1) ' +
+              'of UK eIDAS it may not be denied legal effect solely because it is in electronic form. The integrity hash is ' +
+              'calculated over the submitted answers and this record, so any later alteration can be detected.';
+            wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
+              rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: L.rgb(0.35, 0.37, 0.45) });
+            });
+            rec.drawText('Parent SOP: SOP/SALE/0015  |  Form Number: F/SALE/0015/004/V4  |  Appendix: signature record',
+              { x: 50, y: 40, size: 8, font: font, color: L.rgb(0.35, 0.37, 0.45) });
+
+            pdf.setTitle('Account Application Form - ' + safe(answers.companyRegName));
+            pdf.setSubject('Syri Ltd. new customer account application (F/SALE/0015/004/V4)');
+            pdf.setAuthor(safe(answers.signName));
+            pdf.setCreator('Syri Ltd. online account application');
+            pdf.setProducer('pdf-lib');
+            pdf.setCreationDate(new Date(evidence.submittedAt));
+
+            return pdf.save();
           });
-          rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: L.rgb(0.8, 0.82, 0.88) });
-
-          if (sigImg) {
-            rec.drawText('Signature', { x: 50, y: PAGE_H - (y + 24), size: 9, font: bold, color: NAVY });
-            var sd = sigImg.scaleToFit(260, 90);
-            rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: L.rgb(0.8, 0.82, 0.88), borderWidth: 0.5 });
-            rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105), width: sd.width, height: sd.height });
-            y += 125;
-          }
-
-          var legal = 'This document was signed electronically. The signer consented to sign electronically, typed their name ' +
-            'and confirmed it as their signature at the time shown; a name applied with the intention to authenticate is a ' +
-            'valid electronic signature in England and Wales. The signature is logically associated with the application data ' +
-            'above and is admissible as evidence under section 7 of the Electronic Communications Act 2000; under Article 25(1) ' +
-            'of UK eIDAS it may not be denied legal effect solely because it is in electronic form. The integrity hash is ' +
-            'calculated over the submitted answers and this record, so any later alteration can be detected.';
-          wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
-            rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: L.rgb(0.35, 0.37, 0.45) });
-          });
-          rec.drawText('Parent SOP: SOP/SALE/0015  |  Form Number: F/SALE/0015/004/V4  |  Appendix: signature record',
-            { x: 50, y: 40, size: 8, font: font, color: L.rgb(0.35, 0.37, 0.45) });
-
-          pdf.setTitle('Account Application Form - ' + safe(answers.companyRegName));
-          pdf.setSubject('Syri Ltd. new customer account application (F/SALE/0015/004/V4)');
-          pdf.setAuthor(safe(answers.signName));
-          pdf.setCreator('Syri Ltd. online account application');
-          pdf.setProducer('pdf-lib');
-          pdf.setCreationDate(new Date(evidence.submittedAt));
-
-          return pdf.save();
         }).then(function (bytes) {
           var company = (answers.companyRegName || 'Application').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
           return {
@@ -1101,7 +1150,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     btn.disabled = false;
     btn.onclick = download;
     document.getElementById('pdfStatus').textContent =
-      'Your completed application form (' + result.name + ') has been downloaded. Keep it for your records.';
+      'Your completed application form (' + result.name + ') has been downloaded. Keep it for your records.' +
+      (attFailed.length ? ' These attachments could not be added to the PDF: ' + attFailed.join(', ') + '.' : '');
     download();
   }
 
@@ -1142,7 +1192,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
   function buildEvidence(answers) {
     var submittedAt = new Date();
-    return lookupIp().then(function (ip) {
+    return Promise.all([lookupIp(), att.summary()]).then(function (res) {
+      var ip = res[0];
       var evidence = {
         signerName: answers.signName,
         signerCompany: answers.companyRegName,
@@ -1160,7 +1211,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
         formSentBy: new URLSearchParams(location.search).get('sentBy') || 'not specified',
         formNumber: 'F/SALE/0015/004/V4',
         consentToSignElectronically: answers.esignConsent === 'Yes',
-        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim()
+        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim(),
+        attachments: res[1]
       };
       /* Hash of the answers + evidence, so any later change to the record is detectable */
       return sha256(canonical(answers) + canonical(evidence)).then(function (hash) {
@@ -1180,6 +1232,14 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     return short ? local : local + ' (' + iso + ')';
   }
 
+  /* "label: file (SHA-256 …)" per attachment, or "None" */
+  function attachmentList(list, withHash) {
+    if (!list || !list.length) { return 'None'; }
+    return list.map(function (a) {
+      return a.label + ': ' + a.name + (withHash ? ' (SHA-256 ' + a.sha256.slice(0, 16) + '…)' : '');
+    }).join('; ');
+  }
+
   function showRecord(ev) {
     var rows = [
       ['Signed by', ev.signerName + (ev.signerCompany ? ', ' + ev.signerCompany : '')],
@@ -1191,6 +1251,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       ['Browser / device', ev.userAgent],
       ['Consent to e-sign', ev.consentToSignElectronically ? 'Given' : 'Not given'],
       ['Form', ev.formNumber],
+      ['Attachments', attachmentList(ev.attachments, false)],
       ['Integrity hash (SHA-256)', ev.sha256]
     ];
     var dl = document.getElementById('recordList');

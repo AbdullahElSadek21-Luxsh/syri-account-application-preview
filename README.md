@@ -24,6 +24,9 @@ print, sign and scan Word form.
 - **Electronic signature**: typed name, confirmed by the signer with a timestamp, after
   explicit consent to sign electronically, plus a signature record (UTC and UK timestamps, IP address, browser/device, SHA-256
   integrity hash) shown on submission
+- **Attachments**: an Attachments section on every form that asks for documents (max 5 documents,
+  3 MB each; large photos resized automatically), appended after the form and signature record,
+  one titled page per document
 - **Completed PDF**: on submission the answers are written into the real Word form
   (exported to PDF) and downloaded, with the signature record appended as a final page
 

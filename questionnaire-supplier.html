@@ -9,7 +9,8 @@
 /* Syri Ltd. — Supplier Assessment Questionnaire
    Web version of the controlled form F/QA/0014/005/v10 (B&S Group QA
    questionnaire for suppliers/providers of goods and services) ·
-   Parent SOP SOP/QA/0014. Six short steps; typed e-signature at the end. */
+   Parent SOP SOP/QA/0014. Seven short steps (attachments shared component
+   in assets/attachments.js); typed e-signature at the end. */
 
 :root{
   --navy:#26358C;
@@ -96,7 +97,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 .q .label{font-size:14.5px}
 .q textarea{min-height:60px}
 .attach{margin:0 0 14px;padding:10px 14px;background:var(--navy-soft);border-radius:6px;font-size:13.5px;color:#343A4D}
-.attach a{color:var(--navy)}
 
 /* Follow-up questions shown only for some answers ("Other", "No", ...) */
 .cond{display:none;margin-top:12px}
@@ -216,7 +216,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
     <form id="form" novalidate>
 
-      <p class="step-label" id="stepLabel" tabindex="-1">Step 1 of 6 – Company details</p>
+      <p class="step-label" id="stepLabel" tabindex="-1">Step 1 of 7 – Company details</p>
 
       <!-- ===== Step 1: Company details (page 1 of the form) ===== -->
       <div class="step active" data-title="Company details">
@@ -419,7 +419,19 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
         </fieldset>
       </div>
 
-      <!-- ===== Step 6: Declaration & signature (page 6) ===== -->
+      <!-- ===== Step 6: Attachments (documents the answers ask for) =====
+           Rows come from assets/attachments.js (ATTACHMENTS in the script)
+           and are shown only for the answers that ask for a document. -->
+      <div class="step" data-title="Attachments" id="attStep">
+        <fieldset>
+          <legend>Attachments</legend>
+          <p class="note" id="attIntro">Attach up to 5 PDF, JPG or PNG files in total, max 3 MB each. Large photos are resized automatically.</p>
+          <p class="note" id="attNone" hidden>No documents are needed based on your answers.</p>
+          <div id="attachments"></div>
+        </fieldset>
+      </div>
+
+      <!-- ===== Step 7: Declaration & signature (page 6) ===== -->
       <div class="step" data-title="Declaration &amp; signature">
         <fieldset>
           <legend>Declaration and signature</legend>
@@ -478,7 +490,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     <div id="done" tabindex="-1">
       <h2>Thank you – questionnaire submitted</h2>
       <p>Our team will review your answers and be in touch if we need anything else.</p>
-      <p id="attachReminder" hidden>Please remember to email the documents you said you would provide to <a href="mailto:credit.control@syrimed.co.uk" style="color:#26358C">credit.control@syrimed.co.uk</a>, quoting your company name.</p>
       <p>Questions? Email <a href="mailto:credit.control@syrimed.co.uk" style="color:#26358C">credit.control@syrimed.co.uk</a> or call +44 20 8728 7800.</p>
 
       <div class="record">
@@ -500,6 +511,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
 <script src="assets/pdf-lib.min.js"></script>
 <script src="assets/template-q-supplier.js"></script>
+<script src="assets/attachments.js"></script>
 <script>
 (function () {
   'use strict';
@@ -517,7 +529,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
      required, with that text as the prompt. The form asks for enough
      justification for every "No" or "N/A" answer; a few options ask for
      more detail of their own (e.g. Q13 "Some suppliers", Q18 "Yes").
-     `attach`: the form asks for a document when the answer is Yes.
+     `attach`: the form asks for a document when the answer is Yes; it is
+     uploaded in the Attachments step (ATTACHMENTS below).
      `pdf`: where the question sits on the exported form (see LAYOUT below)
      as [page index, top of the answer row, bottom of the answer row =
      top of the Comment row, bottom of the Comment row, answer cells]. */
@@ -537,7 +550,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   var QUESTIONS = [
     { n: 1, text: 'Will you provide a company brochure/another document presenting a general overview of the company?',
       opts: [opt('Yes', { label: 'Yes (if so, please attach)' }), NO],
-      attach: 'Please email the brochure/document to', pdf: [1, 356.3, 382.1, 407.9, CELLS2] },
+      attach: true, pdf: [1, 356.3, 382.1, 407.9, CELLS2] },
     { n: 2, text: 'Will you physically supply all your materials to B&S Group from the address mentioned above?',
       opts: [opt('Yes', { hint: '[If you have more than one supplying site, please provide list of sites and their individual roles]' }),
              opt('No', { hint: '[Please provide more detail in comment section/provide separate document]', explain: 'Please provide more detail' })],
@@ -546,7 +559,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     { n: 5, text: 'Would you be willing to sign a Quality Technical Agreement with B&S Group?', opts: YNA, pdf: [2, 89.7, 115.5, 141.1] },
     { n: 6, text: 'Would you be willing to accept an audit request from B&S Group?', opts: YNA, pdf: [2, 166.9, 192.7, 218.5] },
     { n: 7, text: 'Is your company certified (i.e. GMP, ISO, BRC, etc.)? If so, please provide latest accreditation certificate.',
-      opts: YNA, attach: 'Please email your latest accreditation certificate(s) to', pdf: [2, 258.3, 284.1, 309.9] },
+      opts: YNA, attach: true, pdf: [2, 258.3, 284.1, 309.9] },
     { n: 8, text: 'Do you have a Quality Management System for all the sites mentioned above?', opts: YNA, pdf: [2, 335.6, 361.4, 387.2] },
     { n: 9, text: 'Do you have a formal training program for your employees?', opts: YNA, pdf: [2, 413.0, 438.8, 464.5] },
     { n: 10, text: 'Do you have a formal programme to validate/qualify your premises and/or equipment (when applicable)?', opts: YNA, pdf: [2, 504.3, 530.1, 555.8] },
@@ -567,7 +580,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     { n: 22, text: 'Do you provide TSE/BSE certificate for your material?', opts: YNA, pdf: [4, 166.9, 192.7, 218.5] },
     { n: 23, text: 'Do you have your own warehouse?', opts: YNA, pdf: [4, 244.4, 270.0, 295.8] },
     { n: 24, text: 'Do you use a third-party warehouse to store materials? If so, please attach relevant certificates.',
-      opts: YNA, attach: 'Please email the relevant certificates to', pdf: [4, 335.6, 361.4, 387.2] },
+      opts: YNA, attach: true, pdf: [4, 335.6, 361.4, 387.2] },
     { n: 25, text: 'Is your own/third-party warehouse temperature controlled?',
       opts: [opt('Temperature controlled'), opt('Temperature monitored'), NA], pdf: [4, 413.0, 452.7, 478.5] },
     { n: 26, text: 'Do you use your own transport for shipping to customers or do you use Contractors?',
@@ -607,8 +620,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     });
     h += '</div></div>';
     if (q.attach) {
-      h += '<div class="cond" data-show-when="' + name + '=Yes"><p class="attach">' + esc(q.attach) +
-        ' <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a>, quoting your company name.</p></div>';
+      h += '<div class="cond" data-show-when="' + name + '=Yes"><p class="attach">Please attach it in the Attachments step.</p></div>';
     }
     if (q.retention) {
       var ifYes = q.retention === 'ifYes';
@@ -629,8 +641,35 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     box.outerHTML = QUESTIONS.filter(function (q) { return q.n >= range[0] && q.n <= range[1]; }).map(questionHtml).join('');
   });
 
+  /* ---------- Attachments ----------
+     One row per document the form asks for, shown (and required) only
+     when the matching question is answered Yes. Files stay in the browser;
+     they are hashed into the signature record and appended to the PDF. */
+  function answerOf(name) {
+    var picked = form.querySelector('input[name="' + name + '"]:checked');
+    return picked ? picked.value : '';
+  }
+  function whenYes(name) { return function () { return answerOf(name) === 'Yes'; }; }
+  var ATTACHMENTS = [
+    { id: 'brochure', label: 'Company brochure or overview document', hint: 'Asked for in question 1',
+      showIf: whenYes('q1'), required: whenYes('q1') },
+    { id: 'accreditation', label: 'Latest accreditation certificate (GMP, ISO, BRC etc.)', hint: 'Asked for in question 7',
+      showIf: whenYes('q7'), required: whenYes('q7') },
+    { id: 'warehouseCerts', label: 'Third-party warehouse certificates', hint: 'Asked for in question 24',
+      showIf: whenYes('q24'), required: whenYes('q24') }
+  ];
+  var attStep = document.getElementById('attStep');
+  var att = SyriAttachments.mount(document.getElementById('attachments'), ATTACHMENTS);
+
+  /* Rows for the current answers, or the "no documents needed" line */
+  function refreshAttachments() {
+    var any = att.refresh();
+    document.getElementById('attIntro').hidden = !any;
+    document.getElementById('attNone').hidden = any;
+  }
+
   /* ---------- Steps ----------
-     Six short steps. Continue checks only the step on screen; the last
+     Seven short steps. Continue checks only the step on screen; the last
      step's button submits. Values stay in the page when going Back. */
   var steps     = Array.prototype.slice.call(form.querySelectorAll('.step'));
   var stepLabel = document.getElementById('stepLabel');
@@ -646,6 +685,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     backBtn.hidden = n === 0;
     nextBtn.textContent = n === LAST ? 'Submit questionnaire' : 'Continue';
     msg.classList.remove('show');
+    if (steps[n] === attStep) { refreshAttachments(); }
     if (n === LAST) { stampToday(); }
     /* Back to the top of the sheet, so the new step starts in view */
     var top = document.querySelector('.sheet').getBoundingClientRect().top + window.pageYOffset - 12;
@@ -834,6 +874,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   }
 
   function recheck(field) {
+    /* Attachment rows mark themselves (assets/attachments.js) */
+    if (field && field.classList.contains('att-item')) { field = null; }
     if (field && field.classList.contains('invalid')) { mark(field, isValid(field)); }
     if (!form.querySelector('.step.active .invalid')) { msg.classList.remove('show'); }
   }
@@ -843,6 +885,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
   /* Checks every field in one step; returns the first field with a problem */
   function checkStep(step) {
     var first = null;
+    if (step === attStep) {
+      refreshAttachments();
+      return att.validate();   /* first row missing a required file, or null */
+    }
     step.querySelectorAll('.field').forEach(function (field) {
       if (isHidden(field)) { mark(field, true); return; }
       var needsCheck = field.hasAttribute('data-group') || field.querySelector('[required],[type=email],[type=number],[pattern]');
@@ -901,8 +947,6 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       console.log('Syri supplier assessment questionnaire', questionnaire);
 
       showRecord(evidence);
-      document.getElementById('attachReminder').hidden =
-        !(answers.q1 === 'Yes' || answers.q7 === 'Yes' || answers.q24 === 'Yes');
       form.style.display = 'none';
       var done = document.getElementById('done');
       done.classList.add('show');
@@ -926,7 +970,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
      is the background: a tick goes in the empty cell after the chosen
      option, text is written after the printed labels ("Comment:",
      "Address:", ...). Output: the six form pages, a continuation page if
-     any answer is too long for its box, then the signature record.
+     any answer is too long for its box, the attachments (index page, then
+     each document, added by assets/attachments.js), then the signature
+     record.
      Coordinates are in PDF points measured from the TOP-LEFT of an A4
      page, taken from the exported template (table lines and label
      positions). If the Word form layout changes, re-export the template
@@ -1165,74 +1211,89 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
           });
         }
 
-        /* ---- Appendix: electronic signature record ---- */
-        var rec = addPage('Electronic Signature Record',
-          'Appendix to Supplier Assessment Questionnaire ' + evidence.formNumber + ', generated automatically on submission.');
+        /* ---- Attachments, then the signature record ---- */
+        return att.appendToPdf(pdf, L, font, bold).then(function (failed) {
+          var REC_TITLE = 'Electronic Signature Record';
+          var rec = addPage(REC_TITLE,
+            'Appendix to Supplier Assessment Questionnaire ' + evidence.formNumber + ', generated automatically on submission.');
+          function recContinued() {
+            rec = addPage(REC_TITLE, 'Appendix to Supplier Assessment Questionnaire ' + evidence.formNumber + ' (continued).');
+            y = 165;
+          }
 
-        var rows = [
-          ['Signed by', evidence.signerName + (evidence.signerJobTitle ? ', ' + evidence.signerJobTitle : '') +
-            (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
-          ['Document signed', evidence.documentsSigned],
-          ['Signature method', evidence.signatureMethod],
-          ['Typed signature', evidence.typedSignature],
-          ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
-          ['Submitted', ukTime(evidence.submittedAt)],
-          ['Signer time zone', evidence.timeZone],
-          ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
-          ['Browser / device', evidence.userAgent],
-          ['Screen / language', evidence.screen + ' / ' + evidence.language],
-          ['Page', evidence.pageUrl]
-        ];
-        if (evidence.formSentBy) { rows.push(['Form sent by', evidence.formSentBy]); }
-        rows.push(
-          ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
-          ['Integrity hash (SHA-256)', evidence.sha256]
-        );
-        var y = 165, labelW = 130, valW = 545 - 50 - labelW - 10;
-        rows.forEach(function (r) {
-          var vl = wrap(safe(r[1]), font, 9, valW);
-          var hh = Math.max(1, vl.length) * 12 + 10;
-          rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: RULE });
-          rec.drawText(r[0], { x: 50, y: PAGE_H - (y + 15), size: 9, font: bold, color: NAVY });
-          vl.forEach(function (ln, i) {
-            rec.drawText(ln, { x: 50 + labelW + 10, y: PAGE_H - (y + 15 + i * 12), size: 9, font: font, color: INK });
+          var rows = [
+            ['Signed by', evidence.signerName + (evidence.signerJobTitle ? ', ' + evidence.signerJobTitle : '') +
+              (evidence.signerCompany ? ', ' + evidence.signerCompany : '')],
+            ['Document signed', evidence.documentsSigned],
+            ['Signature method', evidence.signatureMethod],
+            ['Typed signature', evidence.typedSignature],
+            ['Signature confirmed', ukTime(evidence.signatureCapturedAt)],
+            ['Submitted', ukTime(evidence.submittedAt)],
+            ['Signer time zone', evidence.timeZone],
+            ['IP address', evidence.ipAddress + ' (' + evidence.ipSource + ')'],
+            ['Browser / device', evidence.userAgent],
+            ['Screen / language', evidence.screen + ' / ' + evidence.language],
+            ['Page', evidence.pageUrl]
+          ];
+          if (evidence.formSentBy) { rows.push(['Form sent by', evidence.formSentBy]); }
+          rows.push(
+            ['Consent to e-sign', evidence.consentToSignElectronically ? 'Given: "' + evidence.consentText + '"' : 'Not given'],
+            /* One line per document: label, file name, start of its SHA-256 */
+            ['Attachments', (evidence.attachments || []).length ? evidence.attachments.map(function (a) {
+              return a.label + ': ' + a.name + ' (SHA-256 ' + String(a.sha256).slice(0, 16) + '...)';
+            }).join('\n') : 'None'],
+            ['Integrity hash (SHA-256)', evidence.sha256]
+          );
+          var y = 165, labelW = 130, valW = 545 - 50 - labelW - 10;
+          rows.forEach(function (r) {
+            var vl = wrap(safe(r[1]), font, 9, valW);
+            var hh = Math.max(1, vl.length) * 12 + 10;
+            if (y + hh > PAGE_H - 60) { recContinued(); }
+            rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: RULE });
+            rec.drawText(r[0], { x: 50, y: PAGE_H - (y + 15), size: 9, font: bold, color: NAVY });
+            vl.forEach(function (ln, i) {
+              rec.drawText(ln, { x: 50 + labelW + 10, y: PAGE_H - (y + 15 + i * 12), size: 9, font: font, color: INK });
+            });
+            y += hh;
           });
-          y += hh;
+          rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: RULE });
+
+          /* Signature box and legal note stay together on one page */
+          if (y + 125 + 100 > PAGE_H - 60) { recContinued(); }
+          if (sigImg) {
+            rec.drawText('Signature', { x: 50, y: PAGE_H - (y + 24), size: 9, font: bold, color: NAVY });
+            var sd = sigImg.scaleToFit(260, 90);
+            rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: RULE, borderWidth: 0.5 });
+            rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105), width: sd.width, height: sd.height });
+            y += 125;
+          }
+
+          var legal = 'This document was signed electronically. The signer confirmed that the answers are accurate and that ' +
+            'they are authorised to complete the questionnaire on behalf of the company, consented to sign electronically, ' +
+            'typed their name and confirmed it as their signature at the time shown. A name applied with the intention to ' +
+            'authenticate is a valid electronic signature in England and Wales. The signature is logically associated with ' +
+            'the questionnaire data above and is admissible as evidence under section 7 of the Electronic Communications Act ' +
+            '2000; under Article 25(1) of UK eIDAS it may not be denied legal effect solely because it is in electronic form. ' +
+            'The integrity hash is calculated over the submitted answers and this record, so any later alteration can be detected.';
+          wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
+            rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: GREY });
+          });
+
+          pdf.setTitle('Supplier Assessment Questionnaire - ' + safe(answers.companyName));
+          pdf.setSubject('Syri Ltd. supplier assessment questionnaire (' + FORM_NUMBER + ')');
+          pdf.setAuthor(safe(answers.signName));
+          pdf.setCreator('Syri Ltd. online supplier questionnaire');
+          pdf.setProducer('pdf-lib');
+          pdf.setCreationDate(new Date(evidence.submittedAt));
+
+          return pdf.save().then(function (bytes) { return { bytes: bytes, failed: failed }; });
         });
-        rec.drawLine({ start: { x: 50, y: PAGE_H - y }, end: { x: 545, y: PAGE_H - y }, thickness: 0.5, color: RULE });
-
-        if (sigImg) {
-          rec.drawText('Signature', { x: 50, y: PAGE_H - (y + 24), size: 9, font: bold, color: NAVY });
-          var sd = sigImg.scaleToFit(260, 90);
-          rec.drawRectangle({ x: 190, y: PAGE_H - (y + 110), width: 270, height: 100, borderColor: RULE, borderWidth: 0.5 });
-          rec.drawImage(sigImg, { x: 195, y: PAGE_H - (y + 105), width: sd.width, height: sd.height });
-          y += 125;
-        }
-
-        var legal = 'This document was signed electronically. The signer confirmed that the answers are accurate and that ' +
-          'they are authorised to complete the questionnaire on behalf of the company, consented to sign electronically, ' +
-          'typed their name and confirmed it as their signature at the time shown. A name applied with the intention to ' +
-          'authenticate is a valid electronic signature in England and Wales. The signature is logically associated with ' +
-          'the questionnaire data above and is admissible as evidence under section 7 of the Electronic Communications Act ' +
-          '2000; under Article 25(1) of UK eIDAS it may not be denied legal effect solely because it is in electronic form. ' +
-          'The integrity hash is calculated over the submitted answers and this record, so any later alteration can be detected.';
-        wrap(legal, font, 8.5, 495).forEach(function (ln, i) {
-          rec.drawText(ln, { x: 50, y: PAGE_H - (y + 20 + i * 11.5), size: 8.5, font: font, color: GREY });
-        });
-
-        pdf.setTitle('Supplier Assessment Questionnaire - ' + safe(answers.companyName));
-        pdf.setSubject('Syri Ltd. supplier assessment questionnaire (' + FORM_NUMBER + ')');
-        pdf.setAuthor(safe(answers.signName));
-        pdf.setCreator('Syri Ltd. online supplier questionnaire');
-        pdf.setProducer('pdf-lib');
-        pdf.setCreationDate(new Date(evidence.submittedAt));
-
-        return pdf.save();
-      }).then(function (bytes) {
+      }).then(function (out) {
         var company = (answers.companyName || 'Supplier').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
         return {
           name: 'Syri-Supplier-Assessment-Questionnaire_' + company + '_' + evidence.submittedAt.slice(0, 10) + '.pdf',
-          blob: new Blob([bytes], { type: 'application/pdf' })
+          blob: new Blob([out.bytes], { type: 'application/pdf' }),
+          failed: out.failed
         };
       });
     });
@@ -1249,7 +1310,10 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
     btn.disabled = false;
     btn.onclick = download;
     document.getElementById('pdfStatus').textContent =
-      'Your completed questionnaire (' + result.name + ') has been downloaded. Keep it for your records.';
+      'Your completed questionnaire (' + result.name + ') has been downloaded. Keep it for your records.' +
+      (result.failed && result.failed.length
+        ? ' These attachments could not be added to the PDF (protected or unreadable): ' + result.failed.join(', ') + '.'
+        : '');
     download();
   }
 
@@ -1290,7 +1354,8 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
 
   function buildEvidence(answers) {
     var submittedAt = new Date();
-    return lookupIp().then(function (ip) {
+    return Promise.all([lookupIp(), att.summary()]).then(function (res) {
+      var ip = res[0];
       var evidence = {
         signerName: answers.signName,
         signerJobTitle: answers.jobTitle,
@@ -1310,7 +1375,9 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
         formNumber: FORM_NUMBER,
         formSentBy: sentBy,
         consentToSignElectronically: answers.esignConsent === 'Yes',
-        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim()
+        consentText: document.querySelector('.consent .opt span').textContent.replace('*', '').trim(),
+        /* [{ label, name, size, type, sha256 }] - hashed below with the answers */
+        attachments: res[1]
       };
       /* Hash of the answers + evidence, so any later change to the record is detectable */
       return sha256(canonical(answers) + canonical(evidence)).then(function (hash) {
@@ -1340,6 +1407,7 @@ input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-
       ['IP address', ev.ipAddress],
       ['Browser / device', ev.userAgent],
       ['Consent to e-sign', ev.consentToSignElectronically ? 'Given' : 'Not given'],
+      ['Attachments', ev.attachments.length ? ev.attachments.map(function (a) { return a.name; }).join(', ') : 'None'],
       ['Form', ev.formNumber],
       ['Integrity hash (SHA-256)', ev.sha256]
     ];
