@@ -7,7 +7,7 @@ print, sign and scan Word form.
 **Live:** https://abdullahelsadek21-luxsh.github.io/syri-account-application-preview/
 
 - `index.html`: entry page (name + email, front end only)
-- `select.html`: account type — Customer (UK / Hospital / Outside the UK) or Supplier, plus a separate
+- `select.html`: account type — Customer (UK / Hospital / International) or Supplier, plus a separate
   optional route "Have you been asked to complete a questionnaire?".
   Direct links: `?type=uk|hospital|export|supplier|q-wda|q-manufacturer|q-supplier&sentBy=<name>`
 - `syri-account-application-form.html`: UK customer (F/SALE/0015/004)
