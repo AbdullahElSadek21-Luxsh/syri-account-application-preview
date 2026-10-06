@@ -574,18 +574,18 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     var first = null;
-    att.validate();                     /* marks missing attachments */
+    var attBad = att.validate();        /* marks missing attachments; first row missing a file, or null */
     form.querySelectorAll('.field').forEach(function (field) {
-      if (field.classList.contains('att-item')) {
-        if (field.classList.contains('invalid') && !first) { first = field; }
-        return;
-      }
       var needsCheck = field.hasAttribute('data-group') || field.querySelector('[required],[type=email]');
       if (!needsCheck) { return; }
       var ok = isValid(field);
       mark(field, ok);
       if (!ok && !first) { first = field; }
     });
+    /* the attachments sit before Authorisation, so go to whichever problem comes first on the page */
+    if (attBad && (!first || (attBad.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING))) {
+      first = attBad;
+    }
 
     if (first) {
       msg.classList.add('show');
@@ -1019,5 +1019,6 @@ input[readonly]:focus{border-color:var(--line);box-shadow:none}
   stampToday();
 }());
 </script>
+<script src="assets/application-link.js"></script>
 </body>
 </html>

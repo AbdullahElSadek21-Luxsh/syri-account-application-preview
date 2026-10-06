@@ -388,7 +388,17 @@
           return a.file.arrayBuffer().then(function (buf) {
             if (typeOf(a.file) === 'application/pdf') {
               return L.PDFDocument.load(buf).then(function (src) {
-                return pdf.embedPdf(src, src.getPageIndices());
+                /* pdf-lib only embeds pages when the final PDF is saved, so a page it cannot embed
+                   (for example a blank page with no content stream) would break the whole PDF.
+                   Embed into a scratch document first: a failure here is caught for this file only. */
+                var idx = src.getPageIndices();
+                return L.PDFDocument.create().then(function (probe) {
+                  return probe.embedPdf(src, idx);
+                }).then(function (eps) {
+                  return Promise.all(eps.map(function (ep) { return ep.embed(); }));
+                }).then(function () {
+                  return pdf.embedPdf(src, idx);
+                });
               }).then(function (embedded) {
                 embedded.forEach(function (ep, i) {
                   var t = titledPage(a, n, embedded.length > 1 ? 'page ' + (i + 1) + ' of ' + embedded.length : '');
