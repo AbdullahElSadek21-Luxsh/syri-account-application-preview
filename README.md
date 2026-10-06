@@ -6,19 +6,19 @@ print, sign and scan Word form.
 
 **Live:** https://abdullahelsadek21-luxsh.github.io/syri-account-application-preview/
 
-- `index.html`: start page with two doors: **Internal** (Syri staff) and **External** (customers and suppliers).
-  Older shared links carrying `?type=` / `?sentBy=` are forwarded to `customer.html`.
+**Access rule:** customer and supplier forms open **only from the personal link** that Syri staff send. There is no
+public sign-up and no name/email page. Opened without a valid link for that exact form, a form shows only a
+"This form opens only from your personal link" notice.
+
+- `index.html`: start page. **Internal** opens the staff area. **External** explains link-only access (no button).
 - `syri-requests.html` (internal): staff request an application. They enter the company, contact and email, tick the
   forms (account type pre-ticks its form; questionnaires optional) and the mailboxes that receive the completed
   application. A personal link and an email are generated. The Mailboxes tab adds, edits or removes Syri mailboxes
   and sets a default per form. A tracker exists in the code but is hidden (not in V.1).
 - `application.html` (external): the checklist opened by the personal link. Each requested form is ticked off when
   submitted, and "Submit application" sends them together.
-- `assets/application-link.js`: shared logic for the personal link and the checklist; loaded by every form.
-- `customer.html`: customer entry page (name + email, front end only)
-- `select.html`: account type — Customer (UK / Hospital / International) or Supplier, plus a separate
-  optional route "Have you been asked to complete a questionnaire?".
-  Direct links: `?type=uk|hospital|export|supplier|q-wda|q-manufacturer|q-supplier&sentBy=<name>`
+- `assets/application-link.js`: shared logic for the personal link and the checklist. It is loaded by every form, blocks
+  a form opened without a valid link, and points each form's back link to the checklist.
 - `syri-account-application-form.html`: UK customer (F/SALE/0015/004)
 - `form-hospital.html`: Hospital (F/SALE/0015/003)
 - `form-export.html`: International customer, 6 steps (F/SALE/0015/006 + 005 in one PDF)

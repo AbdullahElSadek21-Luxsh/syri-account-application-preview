@@ -116,16 +116,39 @@
     markSubmitted: markSubmitted, status: status, ukTime: ukTime
   };
 
-  /* ---------- on a form page opened from a personal link ---------- */
+  /* ---------- on a form page: it opens only from a personal link sent by Syri staff ---------- */
   var doneBox = document.getElementById('done');
   if (!doneBox) { return; }
   var params = new URLSearchParams(global.location.search);
   var app = readApp(global.location.search);
   var key = params.get('form');
-  if (!app || !FORMS[key] || app.forms.indexOf(key) < 0) { return; }
+  var thisPage = decodeURIComponent(global.location.pathname.split('/').pop() || '').toLowerCase();
+  if (!app || !FORMS[key] || app.forms.indexOf(key) < 0 || FORMS[key].page !== thisPage) {
+    blockForm();
+    return;
+  }
+
+  function blockForm() {
+    var form = document.getElementById('form');
+    [form, doneBox].forEach(function (el) { if (el) { el.style.display = 'none'; } });
+    document.querySelectorAll('a[data-app-back], .sheet > header .intro').forEach(function (el) {
+      el.style.display = 'none';
+    });
+    var note = document.createElement('div');
+    note.setAttribute('role', 'alert');
+    note.style.cssText = 'margin:8px 28px 28px;padding:18px 20px;border:1px solid #D6E0EE;border-left:4px solid #1C2E7A;' +
+      'border-radius:6px;background:#F6F9FE;font-size:15px;line-height:1.6';
+    note.innerHTML = '<strong style="display:block;margin-bottom:4px;color:#1C2E7A">This form opens only from your personal link</strong>' +
+      'When Syri Ltd needs you to complete this form, we email you a personal link. Please open the link in that email. ' +
+      'If you were expecting one, contact <a href="mailto:credit.control@syrimed.co.uk">credit.control@syrimed.co.uk</a> ' +
+      'or call 0208 728 7800.';
+    var header = document.querySelector('.sheet > header');
+    if (header && header.parentNode) { header.parentNode.insertBefore(note, header.nextSibling); }
+    else if (form && form.parentNode) { form.parentNode.insertBefore(note, form); }
+  }
 
   var back = 'application.html?' + appQuery(app);
-  document.querySelectorAll('a[href^="select.html"]').forEach(function (a) {
+  document.querySelectorAll('a[data-app-back]').forEach(function (a) {
     a.href = back;
     a.innerHTML = '&larr; Back to your application';
   });

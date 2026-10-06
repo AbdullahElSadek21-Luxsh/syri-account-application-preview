@@ -50,7 +50,11 @@ h1{margin:0 0 8px;font-size:30px;font-weight:600;letter-spacing:-.3px;color:var(
   align-self:flex-start;margin-top:10px;font-size:14.5px;font-weight:600;
   background:var(--navy);color:#fff;border-radius:4px;padding:9px 18px;
 }
-.door.ext .go{background:#fff;color:var(--navy);border:1px solid var(--navy)}
+.door.static{cursor:default}
+.door.static:hover{border-color:var(--line);box-shadow:0 8px 26px rgba(28,46,122,.10)}
+.door.static:active{transform:none}
+.how{margin-top:10px;padding:10px 12px;border-radius:6px;background:#F3F7FD;font-size:13.5px;color:var(--muted)}
+.how b{color:var(--navy);font-weight:600}
 :focus-visible{outline:2px solid var(--navy);outline-offset:3px}
 footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
 @media (max-width:680px){
@@ -71,7 +75,7 @@ footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
 <main>
   <section class="inner page" aria-labelledby="title">
     <h1 id="title">Digital Account Opening and Qualification</h1>
-    <p class="lede">Choose how you want to use the portal.</p>
+    <p class="lede">Syri staff request the forms a customer or supplier needs. The customer or supplier then completes them from a personal link.</p>
     <div class="cards">
       <a class="door int" href="syri-requests.html">
         <span class="tag int">Internal</span>
@@ -79,12 +83,12 @@ footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
         <p>Ask a customer or supplier to complete their forms, and choose the mailboxes that receive completed applications.</p>
         <span class="go">Open staff area</span>
       </a>
-      <a class="door ext" href="customer.html" id="externalDoor">
+      <div class="door ext static">
         <span class="tag ext">External</span>
         <strong>Customers and suppliers</strong>
-        <p>Complete an account opening form or a questionnaire for Syri Ltd.</p>
-        <span class="go">Open application forms</span>
-      </a>
+        <p>Customers and suppliers open their forms only from the personal link that Syri staff send them by email. There is no public sign-up.</p>
+        <span class="how">To try it: open the staff area, send a request, then select <b>Open their link</b>.</span>
+      </div>
     </div>
   </section>
 </main>
@@ -93,16 +97,5 @@ footer{padding:24px 16px;text-align:center;font-size:11.5px;color:var(--muted)}
   Syri Ltd. · Unit 4, Bradfield Road, Ruislip, Middlesex, HA4 0NU · Tel 0208 728 7800
 </footer>
 
-<script>
-(function () {
-  'use strict';
-  /* Links shared before this page existed (…/?type=uk&sentBy=…) still go straight to the customer side */
-  var q = window.location.search;
-  if (q) {
-    var p = new URLSearchParams(q);
-    if (p.has('type') || p.has('sentBy') || p.has('view')) { window.location.replace('customer.html' + q); return; }
-  }
-}());
-</script>
 </body>
 </html>
